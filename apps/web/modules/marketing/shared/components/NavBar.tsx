@@ -3,10 +3,8 @@
 import { LocaleLink, useLocalePathname } from "@i18n/routing";
 import { config } from "@repo/config";
 import { useSession } from "@saas/auth/hooks/use-session";
-import { ColorModeToggle } from "@shared/components/ColorModeToggle";
-import { LocaleSwitch } from "@shared/components/LocaleSwitch";
-import { Logo } from "@shared/components/Logo";
 import { Button } from "@ui/components/button";
+import { Input } from "@ui/components/input";
 import {
 	Sheet,
 	SheetContent,
@@ -14,14 +12,12 @@ import {
 	SheetTrigger,
 } from "@ui/components/sheet";
 import { cn } from "@ui/lib";
-import { MenuIcon } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { MenuIcon, PlusCircle, Search } from "lucide-react";
 import NextLink from "next/link";
-import { Suspense, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDebounceCallback } from "usehooks-ts";
 
 export function NavBar() {
-	const t = useTranslations();
 	const { user } = useSession();
 	const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 	const localePathname = useLocalePathname();
@@ -51,38 +47,12 @@ export function NavBar() {
 
 	const isDocsPage = localePathname.startsWith("/docs");
 
-	const menuItems: {
-		label: string;
-		href: string;
-	}[] = [
-		{
-			label: t("common.menu.pricing"),
-			href: "/#pricing",
-		},
-		{
-			label: t("common.menu.faq"),
-			href: "/#faq",
-		},
-		{
-			label: t("common.menu.blog"),
-			href: "/blog",
-		},
-		{
-			label: t("common.menu.changelog"),
-			href: "/changelog",
-		},
-		...(config.contactForm.enabled
-			? [
-					{
-						label: t("common.menu.contact"),
-						href: "/contact",
-					},
-				]
-			: []),
-		{
-			label: t("common.menu.docs"),
-			href: "/docs",
-		},
+	const menuItems = [
+		{ label: "Home", href: "/" },
+		{ label: "Browse Listings", href: "/listings" },
+		{ label: "Categories", href: "/categories" },
+		{ label: "How It Works", href: "/#how-it-works" },
+		{ label: "FAQ", href: "/#faq" },
 	];
 
 	const isMenuItemActive = (href: string) => localePathname.startsWith(href);
@@ -90,124 +60,124 @@ export function NavBar() {
 	return (
 		<nav
 			className={cn(
-				"fixed top-0 left-0 z-50 w-full transition-shadow duration-200",
+				"fixed top-0 left-0 z-50 w-full transition-all duration-200",
 				!isTop || isDocsPage
-					? "bg-card/80 shadow-sm backdrop-blur-lg"
-					: "shadow-none",
+					? "bg-card/80 shadow-sm backdrop-blur-lg py-2"
+					: "bg-transparent py-4",
 			)}
 			data-test="navigation"
 		>
 			<div className="container">
-				<div
-					className={cn(
-						"flex items-center justify-stretch gap-6 transition-[padding] duration-200",
-						!isTop || isDocsPage ? "py-4" : "py-6",
-					)}
-				>
-					<div className="flex flex-1 justify-start">
-						<LocaleLink
-							href="/"
-							className="block hover:no-underline active:no-underline"
-						>
-							<Logo />
-						</LocaleLink>
+				<div className="flex items-center justify-between gap-2">
+					{/* Logo */}
+					<LocaleLink
+						href="/"
+						className="flex items-center gap-2 hover:no-underline shrink-0"
+					>
+						<div className="h-8 w-8 rounded-full bg-primary flex items-center justify-center text-white font-bold">
+							ID
+						</div>
+						<span className="font-bold text-lg hidden md:block">
+							IDiplomat Marketplace
+						</span>
+					</LocaleLink>
+
+					{/* Search Bar - Centered in navbar */}
+					<div className="flex-1 max-w-xl mx-auto px-4">
+						<div className="relative">
+							<Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+							<Input
+								placeholder="Search listings by category, location or keyword..."
+								className="pl-10 h-9 w-full rounded-full bg-muted/50 focus:bg-muted focus:ring-1 focus:ring-primary/20 border-none"
+							/>
+						</div>
 					</div>
 
-					<div className="hidden flex-1 items-center justify-center lg:flex">
-						{menuItems.map((menuItem) => (
-							<LocaleLink
-								key={menuItem.href}
-								href={menuItem.href}
-								className={cn(
-									"block px-3 py-2 font-medium text-foreground/80 text-sm",
-									isMenuItemActive(menuItem.href)
-										? "font-bold text-foreground"
-										: "",
-								)}
+					{/* Right Side Actions */}
+					<div className="flex items-center gap-2">
+						{/* Login/Dashboard Button */}
+						{config.ui.saas.enabled && (
+							<Button
+								variant="ghost"
+								size="sm"
+								className="hidden md:flex"
+								asChild
 							>
-								{menuItem.label}
-							</LocaleLink>
-						))}
-					</div>
-
-					<div className="flex flex-1 items-center justify-end gap-3">
-						<ColorModeToggle />
-						{config.i18n.enabled && (
-							<Suspense>
-								<LocaleSwitch />
-							</Suspense>
+								<NextLink href={user ? "/app" : "/auth/login"}>
+									{user ? "Dashboard" : "Login"}
+								</NextLink>
+							</Button>
 						)}
 
+						{/* Post Listing Button */}
+						<Button
+							variant="primary"
+							size="sm"
+							className="hidden md:flex"
+							asChild
+						>
+							<NextLink href="/create-listing">
+								<PlusCircle className="mr-2 h-4 w-4" />
+								Post Listing
+							</NextLink>
+						</Button>
+
+						{/* Mobile Menu Trigger */}
 						<Sheet
 							open={mobileMenuOpen}
-							onOpenChange={(open) => setMobileMenuOpen(open)}
+							onOpenChange={setMobileMenuOpen}
 						>
 							<SheetTrigger asChild>
 								<Button
-									className="lg:hidden"
+									className="md:hidden"
 									size="icon"
-									variant="light"
+									variant="ghost"
 									aria-label="Menu"
 								>
-									<MenuIcon className="size-4" />
+									<MenuIcon className="h-5 w-5" />
 								</Button>
 							</SheetTrigger>
-							<SheetContent className="w-[280px]" side="right">
-								<SheetTitle />
-								<div className="flex flex-col items-start justify-center">
-									{menuItems.map((menuItem) => (
+							<SheetContent className="w-64" side="right">
+								<SheetTitle className="text-left mb-6">
+									Menu
+								</SheetTitle>
+								<div className="flex flex-col space-y-3">
+									{menuItems.map((item) => (
 										<LocaleLink
-											key={menuItem.href}
-											href={menuItem.href}
+											key={item.href}
+											href={item.href}
 											className={cn(
-												"block px-3 py-2 font-medium text-base text-foreground/80",
-												isMenuItemActive(menuItem.href)
-													? "font-bold text-foreground"
-													: "",
+												"px-3 py-2 rounded-md text-base",
+												isMenuItemActive(item.href)
+													? "font-semibold bg-primary/5"
+													: "text-foreground/70",
 											)}
 										>
-											{menuItem.label}
+											{item.label}
 										</LocaleLink>
 									))}
-
+									<hr className="my-2 border-muted" />
 									<NextLink
-										key={user ? "start" : "login"}
 										href={user ? "/app" : "/auth/login"}
-										className="block px-3 py-2 text-base"
-										prefetch={!user}
+										className="px-3 py-2 rounded-md text-base"
 									>
-										{user
-											? t("common.menu.dashboard")
-											: t("common.menu.login")}
+										{user ? "Dashboard" : "Login"}
+									</NextLink>
+									<NextLink
+										href="/contact"
+										className="px-3 py-2 rounded-md text-base text-foreground/70"
+									>
+										Contact
+									</NextLink>
+									<NextLink
+										href="/create-listing"
+										className="mt-4 w-full flex justify-center px-3 py-2 bg-primary text-primary-foreground rounded-md font-medium"
+									>
+										Post Listing
 									</NextLink>
 								</div>
 							</SheetContent>
 						</Sheet>
-
-						{config.ui.saas.enabled &&
-							(user ? (
-								<Button
-									key="dashboard"
-									className="hidden lg:flex"
-									asChild
-									variant="secondary"
-								>
-									<NextLink href="/app">
-										{t("common.menu.dashboard")}
-									</NextLink>
-								</Button>
-							) : (
-								<Button
-									key="login"
-									className="hidden lg:flex"
-									asChild
-									variant="secondary"
-								>
-									<NextLink href="/auth/login">
-										{t("common.menu.login")}
-									</NextLink>
-								</Button>
-							))}
 					</div>
 				</div>
 			</div>
