@@ -1,6 +1,7 @@
 "use client";
 import { BadgeCheck, MessageCircle, Search, Upload } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import howItWorksImage from "../../../../public/images/hero.svg";
 
 export const howItWorksSteps = [
@@ -21,6 +22,7 @@ export const howItWorksSteps = [
 		title: "Browse Listings",
 		description: "Find items from other diplomats in Israel",
 		icon: Search,
+		href: "/listings",
 	},
 	{
 		id: "step4",
@@ -81,12 +83,25 @@ export function Features() {
 							<div className="mb-4 p-2 w-fit rounded-full bg-primary/10">
 								<step.icon className="h-6 w-6 text-primary" />
 							</div>
-							<h3 className="text-xl font-bold mb-2">
-								{step.title}
-							</h3>
-							<p className="text-foreground/60">
-								{step.description}
-							</p>
+							{step.href ? (
+								<Link href={step.href} className="group">
+									<h3 className="text-xl font-bold mb-2 group-hover:text-primary transition-colors">
+										{step.title}
+									</h3>
+									<p className="text-foreground/60">
+										{step.description}
+									</p>
+								</Link>
+							) : (
+								<>
+									<h3 className="text-xl font-bold mb-2">
+										{step.title}
+									</h3>
+									<p className="text-foreground/60">
+										{step.description}
+									</p>
+								</>
+							)}
 						</div>
 					))}
 				</div>

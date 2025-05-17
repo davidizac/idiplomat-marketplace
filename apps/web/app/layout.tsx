@@ -3,6 +3,7 @@ import type { PropsWithChildren } from "react";
 import "./globals.css";
 import "cropperjs/dist/cropper.css";
 import { config } from "@repo/config";
+import { Document } from "@shared/components/Document";
 
 export const metadata: Metadata = {
 	title: {
@@ -13,5 +14,6 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: PropsWithChildren) {
-	return children;
+	// Use default locale for top-level document; sub-layouts handle real locale
+	return <Document locale={config.i18n.defaultLocale}>{children}</Document>;
 }

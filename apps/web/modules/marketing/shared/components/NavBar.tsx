@@ -22,6 +22,7 @@ export function NavBar() {
 	const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 	const localePathname = useLocalePathname();
 	const [isTop, setIsTop] = useState(true);
+	const [searchQuery, setSearchQuery] = useState("");
 
 	const debouncedScrollHandler = useDebounceCallback(
 		() => {
@@ -57,6 +58,15 @@ export function NavBar() {
 
 	const isMenuItemActive = (href: string) => localePathname.startsWith(href);
 
+	// Handle search submission
+	const handleSearchSubmit = (e: React.FormEvent) => {
+		e.preventDefault();
+		// Navigate to listings page with search query if provided
+		window.location.href = searchQuery
+			? `/listings?search=${encodeURIComponent(searchQuery)}`
+			: "/listings";
+	};
+
 	return (
 		<nav
 			className={cn(
@@ -84,13 +94,19 @@ export function NavBar() {
 
 					{/* Search Bar - Centered in navbar */}
 					<div className="flex-1 max-w-xl mx-auto px-4">
-						<div className="relative">
-							<Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-							<Input
-								placeholder="Search listings by category, location or keyword..."
-								className="pl-10 h-9 w-full rounded-full bg-muted/50 focus:bg-muted focus:ring-1 focus:ring-primary/20 border-none"
-							/>
-						</div>
+						<form onSubmit={handleSearchSubmit}>
+							<div className="relative">
+								<Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+								<Input
+									placeholder="Search listings by category, location or keyword..."
+									className="pl-10 h-9 w-full rounded-full bg-muted/50 focus:bg-muted focus:ring-1 focus:ring-primary/20 border-none"
+									value={searchQuery}
+									onChange={(e) =>
+										setSearchQuery(e.target.value)
+									}
+								/>
+							</div>
+						</form>
 					</div>
 
 					{/* Right Side Actions */}
