@@ -1,9 +1,10 @@
 "use client";
 
+import { type ListingData, getImageUrl, useListings } from "@marketplace/api";
 import { Card } from "@ui/components/card";
-import Image from "next/image";
+import { Skeleton } from "@ui/components/skeleton";
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { SortFilter, type SortOption } from "./filters/SortFilter";
 
 interface FilterState {
@@ -38,13 +39,13 @@ function ListingCard({
 		<Link href={`/listings/${id}`}>
 			<Card className="overflow-hidden hover:shadow-lg transition-shadow h-full">
 				<div className="relative h-48">
-					<Image
+					{/* <Image
 						src={imageUrl || "/images/hero-image.png"}
 						alt={title}
 						fill
 						className="object-cover"
 						sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-					/>
+					/> */}
 				</div>
 				<div className="p-4">
 					<div className="flex items-start justify-between">
@@ -70,217 +71,151 @@ function ListingCard({
 	);
 }
 
+// Loading skeleton for listings
+function ListingCardSkeleton() {
+	return (
+		<Card className="overflow-hidden h-full">
+			<div className="relative h-48">
+				<Skeleton className="h-full w-full" />
+			</div>
+			<div className="p-4">
+				<div className="flex items-start justify-between">
+					<Skeleton className="h-6 w-3/4" />
+					<Skeleton className="h-6 w-1/5 ml-2" />
+				</div>
+				<div className="mt-2">
+					<Skeleton className="h-4 w-1/3" />
+				</div>
+				<div className="mt-3 flex gap-2">
+					<Skeleton className="h-6 w-20 rounded-full" />
+					<Skeleton className="h-6 w-20 rounded-full" />
+				</div>
+			</div>
+		</Card>
+	);
+}
+
 interface ListingsGridProps {
 	filters?: FilterState;
 }
 
 export function ListingsGrid({ filters }: ListingsGridProps) {
-	// Memoize the sample listings data so that its reference is stable across renders
-	const allListings: ListingCardProps[] = useMemo(
-		() => [
-			{
-				id: "1",
-				title: "Modern Dining Table",
-				price: 599,
-				location: "Tel Aviv",
-				category: "Furniture",
-				condition: "Like New",
-				imageUrl: "/images/hero-image.png",
-				createdAt: new Date(2023, 11, 15),
-			},
-			{
-				id: "2",
-				title: "MacBook Pro 2022",
-				price: 1299,
-				location: "Jerusalem",
-				category: "Electronics",
-				condition: "New",
-				imageUrl: "/images/hero-image.png",
-				createdAt: new Date(2023, 11, 20),
-			},
-			{
-				id: "3",
-				title: "Leather Couch",
-				price: 850,
-				location: "Haifa",
-				category: "Furniture",
-				condition: "Good",
-				imageUrl: "/images/hero-image.png",
-				createdAt: new Date(2023, 10, 5),
-			},
-			{
-				id: "4",
-				title: "iPhone 14 Pro",
-				price: 899,
-				location: "Tel Aviv",
-				category: "Electronics",
-				condition: "Like New",
-				imageUrl: "/images/hero-image.png",
-				createdAt: new Date(2023, 11, 25),
-			},
-			{
-				id: "5",
-				title: "Dining Chairs (Set of 4)",
-				price: 299,
-				location: "Beer Sheva",
-				category: "Furniture",
-				condition: "Good",
-				imageUrl: "/images/hero-image.png",
-				createdAt: new Date(2023, 9, 10),
-			},
-			{
-				id: "6",
-				title: "Nespresso Coffee Machine",
-				price: 149,
-				location: "Jerusalem",
-				category: "Appliances",
-				condition: "New",
-				imageUrl: "/images/hero-image.png",
-				createdAt: new Date(2023, 11, 1),
-			},
-			{
-				id: "7",
-				title: "Diplomatic License Plates",
-				price: 200,
-				location: "Tel Aviv",
-				category: "Vehicles",
-				condition: "New",
-				imageUrl: "/images/hero-image.png",
-				createdAt: new Date(2023, 11, 28),
-			},
-			{
-				id: "8",
-				title: "Persian Rug - Handmade 6x9",
-				price: 1250,
-				location: "Haifa",
-				category: "Furniture",
-				condition: "Like New",
-				imageUrl: "/images/hero-image.png",
-				createdAt: new Date(2023, 10, 22),
-			},
-			{
-				id: "9",
-				title: 'Sony Bravia 65" TV',
-				price: 780,
-				location: "Tel Aviv",
-				category: "Electronics",
-				condition: "Good",
-				imageUrl: "/images/hero-image.png",
-				createdAt: new Date(2023, 11, 5),
-			},
-			{
-				id: "10",
-				title: "Toyota Land Cruiser 2020",
-				price: 45000,
-				location: "Jerusalem",
-				category: "Vehicles",
-				condition: "Like New",
-				imageUrl: "/images/hero-image.png",
-				createdAt: new Date(2023, 10, 15),
-			},
-			{
-				id: "11",
-				title: "Bosch Dishwasher",
-				price: 350,
-				location: "Beer Sheva",
-				category: "Appliances",
-				condition: "Good",
-				imageUrl: "/images/hero-image.png",
-				createdAt: new Date(2023, 9, 25),
-			},
-			{
-				id: "12",
-				title: "Formal Diplomatic Attire",
-				price: 450,
-				location: "Tel Aviv",
-				category: "Clothing",
-				condition: "Like New",
-				imageUrl: "/images/hero-image.png",
-				createdAt: new Date(2023, 11, 10),
-			},
-		],
-		[],
-	);
-
 	const [sortOption, setSortOption] = useState<SortOption>("newest");
-	const [filteredListings, setFilteredListings] =
-		useState<ListingCardProps[]>(allListings);
+	const [currentPage, setCurrentPage] = useState<number>(1);
 
-	// Apply filters and sorting whenever filters change
-	useEffect(() => {
-		let result = [...allListings];
+	// Convert filters to Strapi format
+	const strapiFilters: Record<string, any> = {};
 
-		// Apply category filter
-		if (filters?.categories && filters.categories.length > 0) {
-			result = result.filter((listing) =>
-				filters.categories.includes(listing.category.toLowerCase()),
-			);
-		}
-
-		// Apply price filter
-		if (filters?.priceRange) {
-			const [min, max] = filters.priceRange;
-			result = result.filter(
-				(listing) => listing.price >= min && listing.price <= max,
-			);
-		}
-
-		// Apply location filter
-		if (filters?.location && filters.location !== "all") {
-			result = result.filter(
-				(listing) =>
-					listing.location.toLowerCase() === filters.location,
-			);
-		}
-
-		// Apply condition filter
-		if (filters?.conditions && filters.conditions.length > 0) {
-			result = result.filter((listing) =>
-				filters.conditions.includes(
-					listing.condition.toLowerCase().replace(" ", "-"),
+	if (filters?.categories && filters.categories.length > 0) {
+		strapiFilters.categories = {
+			name: {
+				$in: filters.categories.map(
+					(c) => c.charAt(0).toUpperCase() + c.slice(1),
 				),
-			);
+			},
+		};
+	}
+
+	if (filters?.conditions && filters.conditions.length > 0) {
+		strapiFilters.condition = {
+			$in: filters.conditions.map((c) =>
+				c
+					.split("-")
+					.map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+					.join(" "),
+			),
+		};
+	}
+
+	if (filters?.location && filters.location !== "all") {
+		strapiFilters.location = {
+			$eq:
+				filters.location.charAt(0).toUpperCase() +
+				filters.location.slice(1),
+		};
+	}
+
+	if (filters?.priceRange) {
+		const [min, max] = filters.priceRange;
+		if (min > 0) {
+			strapiFilters.price = { $gte: min };
 		}
+		if (max < 5000) {
+			// Assuming 5000 is the max in your range
+			strapiFilters.price = { ...strapiFilters.price, $lte: max };
+		}
+	}
 
-		// Apply sorting
+	// Convert sort option to Strapi format
+	let strapiSort = "createdAt:desc"; // default newest first
+
+	if (filters?.sort || sortOption) {
 		const sortBy = filters?.sort || sortOption;
-
 		switch (sortBy) {
 			case "price-low-high":
-				result.sort((a, b) => a.price - b.price);
+				strapiSort = "price:asc";
 				break;
 			case "price-high-low":
-				result.sort((a, b) => b.price - a.price);
+				strapiSort = "price:desc";
 				break;
 			default:
-				// newest first
-				result.sort(
-					(a, b) => b.createdAt.getTime() - a.createdAt.getTime(),
-				);
+				strapiSort = "createdAt:desc";
 				break;
 		}
+	}
 
-		setFilteredListings(result);
-
-		// Only update the sort option if it's coming from filters and is different
-		if (filters?.sort && filters.sort !== sortOption) {
-			setSortOption(filters.sort);
-		}
-	}, [filters, sortOption, allListings]);
+	// Fetch listings from Strapi
+	const { data, isLoading, isError } = useListings({
+		page: currentPage,
+		pageSize: 12,
+		sort: strapiSort,
+		filters:
+			Object.keys(strapiFilters).length > 0 ? strapiFilters : undefined,
+	});
 
 	// Handle sort change from the sort dropdown
 	const handleSortChange = (value: SortOption) => {
 		setSortOption(value);
 	};
 
+	// Convert Strapi data to our component format
+	const listings: ListingCardProps[] =
+		data?.data.map((item: ListingData) => {
+			const listing = item;
+
+			const mainCategory =
+				listing?.categories[0]?.name || "Uncategorized";
+
+			return {
+				id: item.id.toString(),
+				title: listing.title,
+				price: listing.price || 0,
+				location: listing.location || "Unknown",
+				category: mainCategory,
+				condition: listing.condition || "Unspecified",
+				imageUrl:
+					listing.images?.length > 0
+						? getImageUrl(listing.images[0])
+						: "/images/hero-image.png",
+				createdAt: new Date(listing.createdAt),
+			};
+		}) || [];
+
+	// Only update the sort option if it's coming from filters and is different
+	useEffect(() => {
+		if (filters?.sort && filters.sort !== sortOption) {
+			setSortOption(filters.sort);
+		}
+	}, [filters?.sort, sortOption]);
+
 	return (
 		<div className="flex-1">
 			{/* Header with sort and results count */}
 			<div className="flex justify-between items-center mb-6">
 				<p className="text-sm text-muted-foreground">
-					{filteredListings.length}{" "}
-					{filteredListings.length === 1 ? "listing" : "listings"}{" "}
-					found
+					{isLoading
+						? "Loading listings..."
+						: `${data?.meta.pagination?.total || 0} ${(data?.meta.pagination?.total || 0) === 1 ? "listing" : "listings"} found`}
 				</p>
 				<SortFilter
 					selectedSort={sortOption}
@@ -289,9 +224,25 @@ export function ListingsGrid({ filters }: ListingsGridProps) {
 			</div>
 
 			{/* Results grid */}
-			{filteredListings.length > 0 ? (
+			{isLoading ? (
 				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-					{filteredListings.map((listing) => (
+					{Array.from({ length: 6 }).map((_, index) => (
+						<ListingCardSkeleton key={index} />
+					))}
+				</div>
+			) : isError ? (
+				<div className="py-20 text-center">
+					<h3 className="text-lg font-medium mb-2">
+						Error loading listings
+					</h3>
+					<p className="text-muted-foreground">
+						There was a problem fetching the listings. Please try
+						again.
+					</p>
+				</div>
+			) : listings.length > 0 ? (
+				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+					{listings.map((listing) => (
 						<ListingCard key={listing.id} {...listing} />
 					))}
 				</div>

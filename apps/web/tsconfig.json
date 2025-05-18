@@ -10,6 +10,7 @@
 			"@i18n": ["./modules/i18n"],
 			"@i18n/*": ["./modules/i18n/*"],
 			"@shared/*": ["./modules/shared/*"],
+			"@marketplace/*": ["./modules/marketplace/*"],
 			"content-collections": ["./.content-collections/generated"]
 		}
 	},

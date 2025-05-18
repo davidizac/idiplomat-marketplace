@@ -1,5 +1,4 @@
 "use client";
-
 import { Button } from "@ui/components/button";
 import { Input } from "@ui/components/input";
 import { Label } from "@ui/components/label";
@@ -7,6 +6,8 @@ import { useState } from "react";
 
 interface FormState {
 	price: number;
+	location?: string;
+	condition?: string;
 	[key: string]: any;
 }
 
@@ -23,7 +24,7 @@ export default function PricingStep({
 	onNext,
 	onBack,
 }: PricingStepProps) {
-	const [error, setError] = useState<string>("");
+	const [errors, setErrors] = useState<Record<string, string>>({});
 
 	// Handle price change
 	const handlePriceChange = (value: string) => {
@@ -37,20 +38,29 @@ export default function PricingStep({
 		}
 	};
 
-	// Validate price before proceeding
-	const validatePrice = () => {
+	// Validate form before proceeding
+	const validateForm = () => {
+		const newErrors: Record<string, string> = {};
+
 		if (!formState.price || formState.price <= 0) {
-			setError("Please enter a valid price greater than zero");
-			return false;
+			newErrors.price = "Please enter a valid price greater than zero";
 		}
 
-		setError("");
-		return true;
+		if (!formState.location) {
+			newErrors.location = "Please select a location";
+		}
+
+		if (!formState.condition) {
+			newErrors.condition = "Please select the item's condition";
+		}
+
+		setErrors(newErrors);
+		return Object.keys(newErrors).length === 0;
 	};
 
 	// Handle next button click
 	const handleNext = () => {
-		if (validatePrice()) {
+		if (validateForm()) {
 			onNext();
 		}
 	};
@@ -58,13 +68,15 @@ export default function PricingStep({
 	return (
 		<div className="space-y-6">
 			<div className="space-y-2">
-				<h2 className="text-2xl font-bold">Pricing</h2>
+				<h2 className="text-2xl font-bold">Pricing & Details</h2>
 				<p className="text-muted-foreground">
-					Set a competitive price for your listing.
+					Set a competitive price and provide additional details for
+					your listing.
 				</p>
 			</div>
 
 			<div className="bg-muted/30 p-6 rounded-lg space-y-6 max-w-md mx-auto">
+				{/* Price Input */}
 				<div className="space-y-2">
 					<Label htmlFor="price">Price ($)</Label>
 					<div className="relative">
@@ -81,8 +93,10 @@ export default function PricingStep({
 							placeholder="0.00"
 						/>
 					</div>
-					{error && (
-						<p className="text-sm text-destructive">{error}</p>
+					{errors.price && (
+						<p className="text-sm text-destructive">
+							{errors.price}
+						</p>
 					)}
 				</div>
 

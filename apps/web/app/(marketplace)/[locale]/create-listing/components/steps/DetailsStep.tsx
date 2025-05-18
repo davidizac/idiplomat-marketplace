@@ -1,5 +1,6 @@
 "use client";
 
+import { useCategories } from "@marketplace/api";
 import { Button } from "@ui/components/button";
 import { Input } from "@ui/components/input";
 import { Label } from "@ui/components/label";
@@ -10,6 +11,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@ui/components/select";
+import { Skeleton } from "@ui/components/skeleton";
 import { Textarea } from "@ui/components/textarea";
 import { useState } from "react";
 
@@ -27,8 +29,8 @@ interface DetailsStepProps {
 	onNext: () => void;
 }
 
-// Sample category data
-const categories = [
+// Fallback category data in case API fails
+const fallbackCategories = [
 	{
 		id: "furniture",
 		name: "Furniture",
@@ -78,6 +80,29 @@ export default function DetailsStep({
 }: DetailsStepProps) {
 	const [errors, setErrors] = useState<Record<string, string>>({});
 
+	// Fetch categories from Strapi
+	const { data: categoriesData, isLoading, isError } = useCategories();
+
+	// Process categories from Strapi to match our structure
+	const categories =
+		!isLoading && !isError && categoriesData?.data
+			? categoriesData.data.map((category) => {
+					const subcategories =
+						category.attributes.categories?.data?.map(
+							(subcategory) => ({
+								id: subcategory.attributes.slug,
+								name: subcategory.attributes.name,
+							}),
+						) || [];
+
+					return {
+						id: category.attributes.slug,
+						name: category.attributes.name,
+						subCategories: subcategories,
+					};
+				})
+			: fallbackCategories;
+
 	// Get subcategories based on selected category
 	const getSubCategories = () => {
 		const selectedCategory = categories.find(
@@ -94,7 +119,7 @@ export default function DetailsStep({
 			newErrors.category = "Category is required";
 		}
 
-		if (!formState.subCategory) {
+		if (!formState.subCategory && getSubCategories().length > 0) {
 			newErrors.subCategory = "Sub-category is required";
 		}
 
@@ -134,27 +159,31 @@ export default function DetailsStep({
 			<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 				<div className="space-y-2">
 					<Label htmlFor="category">Category</Label>
-					<Select
-						value={formState.category}
-						onValueChange={(value) => {
-							updateField("category", value);
-							updateField("subCategory", ""); // Reset subcategory when category changes
-						}}
-					>
-						<SelectTrigger id="category" className="w-full">
-							<SelectValue placeholder="Select a category" />
-						</SelectTrigger>
-						<SelectContent>
-							{categories.map((category) => (
-								<SelectItem
-									key={category.id}
-									value={category.id}
-								>
-									{category.name}
-								</SelectItem>
-							))}
-						</SelectContent>
-					</Select>
+					{isLoading ? (
+						<Skeleton className="h-10 w-full" />
+					) : (
+						<Select
+							value={formState.category}
+							onValueChange={(value) => {
+								updateField("category", value);
+								updateField("subCategory", ""); // Reset subcategory when category changes
+							}}
+						>
+							<SelectTrigger id="category" className="w-full">
+								<SelectValue placeholder="Select a category" />
+							</SelectTrigger>
+							<SelectContent>
+								{categories.map((category) => (
+									<SelectItem
+										key={category.id}
+										value={category.id}
+									>
+										{category.name}
+									</SelectItem>
+								))}
+							</SelectContent>
+						</Select>
+					)}
 					{errors.category && (
 						<p className="text-sm text-destructive">
 							{errors.category}
@@ -164,27 +193,40 @@ export default function DetailsStep({
 
 				<div className="space-y-2">
 					<Label htmlFor="subCategory">Sub-Category</Label>
-					<Select
-						value={formState.subCategory}
-						onValueChange={(value) =>
-							updateField("subCategory", value)
-						}
-						disabled={!formState.category}
-					>
-						<SelectTrigger id="subCategory" className="w-full">
-							<SelectValue placeholder="Select a sub-category" />
-						</SelectTrigger>
-						<SelectContent>
-							{getSubCategories().map((subCategory) => (
-								<SelectItem
-									key={subCategory.id}
-									value={subCategory.id}
-								>
-									{subCategory.name}
-								</SelectItem>
-							))}
-						</SelectContent>
-					</Select>
+					{isLoading ? (
+						<Skeleton className="h-10 w-full" />
+					) : (
+						<Select
+							value={formState.subCategory}
+							onValueChange={(value) =>
+								updateField("subCategory", value)
+							}
+							disabled={
+								!formState.category ||
+								getSubCategories().length === 0
+							}
+						>
+							<SelectTrigger id="subCategory" className="w-full">
+								<SelectValue
+									placeholder={
+										getSubCategories().length > 0
+											? "Select a sub-category"
+											: "No subcategories available"
+									}
+								/>
+							</SelectTrigger>
+							<SelectContent>
+								{getSubCategories().map((subCategory) => (
+									<SelectItem
+										key={subCategory.id}
+										value={subCategory.id}
+									>
+										{subCategory.name}
+									</SelectItem>
+								))}
+							</SelectContent>
+						</Select>
+					)}
 					{errors.subCategory && (
 						<p className="text-sm text-destructive">
 							{errors.subCategory}

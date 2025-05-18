@@ -26,9 +26,12 @@ interface FormState {
 
 	// Pricing step
 	price: number;
+	location: string;
+	condition: string;
 
 	// Photos step
 	photos: File[];
+
 	[key: string]: any; // Add index signature to allow string indexing
 }
 
@@ -40,6 +43,8 @@ export default function ListingForm({ userId }: ListingFormProps) {
 		title: "",
 		description: "",
 		price: 0,
+		location: "",
+		condition: "",
 		photos: [],
 	});
 
@@ -69,7 +74,58 @@ export default function ListingForm({ userId }: ListingFormProps) {
 	// Handle submission
 	const handleSubmit = async () => {
 		// Here you would typically submit the form data to your API
-		console.log("Form submitted:", { ...formState, userId });
+		console.log("Form submitted:", {
+			...formState,
+			userId,
+			// Transform data as needed for the API
+			categoryId: formState.category,
+			subcategoryId: formState.subCategory,
+			locationValue: formState.location,
+			conditionValue: formState.condition,
+		});
+
+		// In a real implementation, you would use the Strapi API to create a listing:
+		// Example:
+		// try {
+		//   const formData = new FormData();
+		//
+		//   // Add basic data
+		//   formData.append('data.title', formState.title);
+		//   formData.append('data.description', formState.description);
+		//   formData.append('data.price', formState.price.toString());
+		//   formData.append('data.condition', formState.condition);
+		//   formData.append('data.location', formState.location);
+		//   formData.append('data.slug', formState.title.toLowerCase().replace(/\s+/g, '-'));
+		//
+		//   // Add categories
+		//   formData.append('data.categories[0]', formState.category);
+		//   if(formState.subCategory) {
+		//     formData.append('data.categories[1]', formState.subCategory);
+		//   }
+		//
+		//   // Add images
+		//   formState.photos.forEach((photo, index) => {
+		//     formData.append(`files.images`, photo);
+		//   });
+		//
+		//   const response = await fetch(`${process.env.NEXT_PUBLIC_STRAPI_URL}/api/listings`, {
+		//     method: 'POST',
+		//     headers: {
+		//       'Authorization': `Bearer ${process.env.NEXT_PUBLIC_STRAPI_TOKEN}`,
+		//     },
+		//     body: formData
+		//   });
+		//
+		//   if (!response.ok) {
+		//     throw new Error('Failed to create listing');
+		//   }
+		//
+		//   // Handle success - redirect to the new listing page or show success message
+		// } catch (error) {
+		//   console.error('Error creating listing:', error);
+		//   // Handle error - show error message
+		// }
+
 		// Redirect or show success message
 	};
 

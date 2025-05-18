@@ -61,10 +61,13 @@ export function NavBar() {
 	// Handle search submission
 	const handleSearchSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
-		// Navigate to listings page with search query if provided
-		window.location.href = searchQuery
-			? `/listings?search=${encodeURIComponent(searchQuery)}`
-			: "/listings";
+		if (searchQuery) {
+			// Navigate to listings page with search query
+			window.location.href = `/listings?search=${encodeURIComponent(searchQuery)}`;
+		} else {
+			// Just go to listings page
+			window.location.href = "/listings";
+		}
 	};
 
 	return (
@@ -88,7 +91,7 @@ export function NavBar() {
 							ID
 						</div>
 						<span className="font-bold text-lg hidden md:block">
-							IDiplomat Marketplace
+							IDiplomat
 						</span>
 					</LocaleLink>
 

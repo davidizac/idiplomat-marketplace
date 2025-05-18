@@ -3,6 +3,7 @@
 import { Button } from "@ui/components/button";
 import { Card } from "@ui/components/card";
 import { useEffect, useState } from "react";
+import type { CategoryData } from "../../api/types";
 import { CategoryFilter } from "./filters/CategoryFilter";
 import { ConditionFilter } from "./filters/ConditionFilter";
 import { LocationFilter } from "./filters/LocationFilter";
@@ -20,11 +21,13 @@ export interface FilterState {
 interface ListingsSidebarProps {
 	onChange: (filters: FilterState) => void;
 	initialFilters?: Partial<FilterState>;
+	selectedCategory?: CategoryData;
 }
 
 export function ListingsSidebar({
 	onChange,
 	initialFilters = {},
+	selectedCategory,
 }: ListingsSidebarProps) {
 	// Create default filters
 	const defaultFilters: FilterState = {
@@ -74,6 +77,17 @@ export function ListingsSidebar({
 	return (
 		<Card className="h-fit w-64 flex-shrink-0 p-6">
 			<div className="space-y-6">
+				{selectedCategory && (
+					<div className="pb-2">
+						<h3 className="font-medium text-sm text-muted-foreground mb-1">
+							Selected Category
+						</h3>
+						<div className="font-medium">
+							{selectedCategory.name}
+						</div>
+					</div>
+				)}
+
 				<CategoryFilter
 					selectedCategories={filters.categories}
 					onChange={(value) => updateFilter("categories", value)}
