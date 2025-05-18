@@ -9,6 +9,7 @@ import {
 	BotMessageSquareIcon,
 	ChevronRightIcon,
 	HomeIcon,
+	ListIcon,
 	SettingsIcon,
 	UserCog2Icon,
 	UserCogIcon,
@@ -44,6 +45,12 @@ export function NavBar() {
 				: "/app/chatbot",
 			icon: BotMessageSquareIcon,
 			isActive: pathname.includes("/chatbot"),
+		},
+		{
+			label: t("app.menu.myListings"),
+			href: "/app/my-listings",
+			icon: ListIcon,
+			isActive: pathname.startsWith("/app/my-listings"),
 		},
 		...(activeOrganization
 			? [

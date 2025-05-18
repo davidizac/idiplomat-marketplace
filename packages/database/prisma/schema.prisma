@@ -44,6 +44,7 @@ model User {
     members            Member[]
     twofactors         TwoFactor[]
     aiChats            AiChat[]
+    listings           Listing[]
 
     @@unique([email])
     @@unique([username])
@@ -211,3 +212,28 @@ model AiChat {
     @@map("ai_chat")
 }
 
+enum ListingStatus {
+    DRAFT
+    ACTIVE
+    SOLD
+    ARCHIVED
+}
+
+model Listing {
+    id          String        @id @default(cuid())
+    title       String
+    description String        @db.Text
+    price       Float
+    category    String
+    subCategory String?
+    condition   String?
+    location    String?
+    userId      String
+    user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+    status      ListingStatus @default(ACTIVE)
+    images      String[]
+    createdAt   DateTime      @default(now())
+    updatedAt   DateTime      @updatedAt
+
+    @@map("listing")
+}
