@@ -32,17 +32,15 @@ export default async function ListingDetailPage({ params }: PageProps) {
 		// Format the data for the ListingDetail component
 		listing = {
 			id: strapiListing.id.toString(),
-			title: strapiListing.attributes.title,
-			price: strapiListing.attributes.price || 0,
+			title: strapiListing.title,
+			price: strapiListing.price || 0,
 			author: "Listing Owner", // This might need to come from user data
-			description: strapiListing.attributes.description,
+			description: strapiListing.description,
 			authorEmail: "contact@example.com", // This might need to come from user data
 			authorPhone: "+1234567890", // This might need to come from user data
-			images: strapiListing.attributes.images.data.map((img) =>
-				getImageUrl(img),
-			),
-			location: strapiListing.attributes.location || "Unknown",
-			createdAt: new Date(strapiListing.attributes.createdAt),
+			images: strapiListing.images.map((img) => getImageUrl(img)),
+			location: strapiListing.location || "Unknown",
+			createdAt: new Date(strapiListing.createdAt),
 		};
 	} catch (error) {
 		// Fallback to mock data if the API fails

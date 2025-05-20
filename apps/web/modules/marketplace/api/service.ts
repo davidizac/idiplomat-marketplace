@@ -1,4 +1,4 @@
-import { getStrapiImageUrl, strapiFetch } from "@repo/utils";
+import { strapiFetch } from "@repo/utils";
 import * as queryString from "qs";
 import type {
 	CategoriesResponse,
@@ -299,23 +299,5 @@ export async function getListingBySlug(slug: string): Promise<ListingResponse> {
  * Helper to get a processed image URL from Strapi
  */
 export function getImageUrl(image: any): string {
-	if (!image) return "";
-
-	if (typeof image === "string") {
-		return getStrapiImageUrl(image);
-	}
-
-	if (image.data?.attributes?.url) {
-		return getStrapiImageUrl(image.data.attributes.url);
-	}
-
-	if (image.attributes?.url) {
-		return getStrapiImageUrl(image.attributes.url);
-	}
-
-	if (image.url) {
-		return getStrapiImageUrl(image.url);
-	}
-
-	return "";
+	return `http://localhost:1337${image.url}`;
 }

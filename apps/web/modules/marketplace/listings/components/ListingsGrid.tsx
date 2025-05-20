@@ -8,6 +8,7 @@ import {
 } from "@marketplace/api";
 import { Card } from "@ui/components/card";
 import { Skeleton } from "@ui/components/skeleton";
+import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import type { AttributeFilterValues } from "./filters/AttributeFilter";
@@ -22,51 +23,37 @@ interface FilterState {
 interface ListingCardProps {
 	id: string;
 	title: string;
-	price: number;
-	location: string;
 	category: string;
-	condition: string;
 	imageUrl: string;
 	createdAt: Date;
 }
 
-function ListingCard({
-	id,
-	title,
-	price,
-	location,
-	category,
-	condition,
-	imageUrl,
-}: ListingCardProps) {
+function ListingCard({ id, title, category, imageUrl }: ListingCardProps) {
 	return (
 		<Link href={`/listings/${id}`}>
 			<Card className="overflow-hidden hover:shadow-lg transition-shadow h-full">
 				<div className="relative h-48">
-					{/* <Image
+					<Image
 						src={imageUrl || "/images/hero-image.png"}
 						alt={title}
 						fill
 						className="object-cover"
 						sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-					/> */}
+					/>
 				</div>
 				<div className="p-4">
 					<div className="flex items-start justify-between">
 						<h3 className="font-semibold truncate flex-1">
 							{title}
 						</h3>
-						<span className="font-bold text-lg ml-2">${price}</span>
+						<span className="font-bold text-lg ml-2">$12</span>
 					</div>
 					<div className="mt-2 flex items-center text-sm text-muted-foreground">
-						<span>{location}</span>
+						{/* <span>{location}</span> */}
 					</div>
 					<div className="mt-3 flex gap-2">
 						<div className="bg-secondary text-xs px-2 py-1 rounded-full">
 							{category}
-						</div>
-						<div className="border text-xs px-2 py-1 rounded-full">
-							{condition}
 						</div>
 					</div>
 				</div>
@@ -254,10 +241,7 @@ export function ListingsGrid({ filters, categorySlug }: ListingsGridProps) {
 			return {
 				id: item.id.toString(),
 				title: listing.title,
-				price: listing.price || 0,
-				location: listing.location || "Unknown",
 				category: mainCategory,
-				condition: listing.condition || "Unspecified",
 				imageUrl:
 					listing.images?.length > 0
 						? getImageUrl(listing.images[0])

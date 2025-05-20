@@ -18,6 +18,13 @@ const nextConfig: NextConfig = {
 				protocol: "https",
 				hostname: "avatars.githubusercontent.com",
 			},
+			{
+				// local development server
+				protocol: "http",
+				hostname: "localhost",
+				port: "1337",
+				pathname: "/uploads/**",
+			},
 		],
 	},
 	async redirects() {
