@@ -93,34 +93,6 @@ const queryBuilder = {
 			query.sort = params.sort;
 		}
 
-		// Initialize filters array if we have filters to apply
-		if (
-			(params.attributeFilters && params.attributeFilters.length > 0) ||
-			(params.subCategories && params.subCategories.length > 0)
-		) {
-			query.filters = { $and: [] };
-		}
-
-		// Handle subcategory filters
-		if (params.subCategories && params.subCategories.length > 0) {
-			if (params.subCategories.length === 1) {
-				// Single subcategory filter
-				query.filters.$and.push({
-					categories: {
-						slug: { $eq: params.subCategories[0] },
-					},
-				});
-			} else {
-				// Multiple subcategories (use OR logic between subcategories)
-				const subCategoryFilters = params.subCategories.map((slug) => ({
-					categories: {
-						slug: { $eq: slug },
-					},
-				}));
-				query.filters.$and.push({ $or: subCategoryFilters });
-			}
-		}
-
 		// Handle attribute filters
 		if (params.attributeFilters && params.attributeFilters.length > 0) {
 			// Group attributes by name and operator for proper filtering
@@ -149,9 +121,7 @@ const queryBuilder = {
 			});
 
 			// Build the filter structure using $and/$or logic
-			if (!query.filters) {
-				query.filters = { $and: [] };
-			}
+			query.filters = { $and: [] };
 
 			attributeGroups.forEach((group, attributeName) => {
 				if (group.operator === "or" && group.values.length > 1) {

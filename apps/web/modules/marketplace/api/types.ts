@@ -13,6 +13,11 @@ type ImageFormat = {
 	url: string;
 };
 
+// Define Metadata type or use any
+interface Metadata {
+	[key: string]: any;
+}
+
 export interface StrapiImagesData {
 	id: number;
 	name: string;
@@ -34,6 +39,7 @@ export interface AttributeData {
 	id: number;
 	documentId: string;
 	name: string;
+	metadata: Metadata;
 	type: "text" | "number" | "boolean" | "date" | "select" | "multi-select";
 	options?: string[] | null;
 	createdAt: string;

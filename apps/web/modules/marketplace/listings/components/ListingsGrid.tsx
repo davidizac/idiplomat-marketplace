@@ -1,18 +1,22 @@
 "use client";
 
-import { type ListingData, getImageUrl, useListings } from "@marketplace/api";
+import {
+	type ListingData,
+	getImageUrl,
+	useCategoryBySlug,
+	useListings,
+} from "@marketplace/api";
 import { Card } from "@ui/components/card";
 import { Skeleton } from "@ui/components/skeleton";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import type { AttributeFilterValues } from "./filters/AttributeFilter";
 import { SortFilter, type SortOption } from "./filters/SortFilter";
 
 interface FilterState {
-	categories: string[];
-	priceRange: [number, number];
-	location: string;
-	conditions: string[];
 	sort: SortOption;
+	attributes?: AttributeFilterValues;
+	subcategories?: string[] | null;
 }
 
 interface ListingCardProps {
@@ -97,53 +101,104 @@ function ListingCardSkeleton() {
 
 interface ListingsGridProps {
 	filters?: FilterState;
+	categorySlug: string;
 }
 
-export function ListingsGrid({ filters }: ListingsGridProps) {
+export function ListingsGrid({ filters, categorySlug }: ListingsGridProps) {
 	const [sortOption, setSortOption] = useState<SortOption>("newest");
 	const [currentPage, setCurrentPage] = useState<number>(1);
 
-	// Convert filters to Strapi format
-	const strapiFilters: Record<string, any> = {};
+	// Fetch category data to get attribute information if a category is selected
+	const { data: categoryData } = useCategoryBySlug(
+		categorySlug,
+		!!categorySlug,
+	);
+	const selectedCategory = categoryData?.data;
 
-	if (filters?.categories && filters.categories.length > 0) {
-		strapiFilters.categories = {
-			name: {
-				$in: filters.categories.map(
-					(c) => c.charAt(0).toUpperCase() + c.slice(1),
-				),
-			},
-		};
-	}
+	// Create attributeFilters array for the new API parameter
+	const attributeFilters: Array<{
+		attribute: string;
+		value: string;
+		operator?: "and" | "or";
+	}> = [];
 
-	if (filters?.conditions && filters.conditions.length > 0) {
-		strapiFilters.condition = {
-			$in: filters.conditions.map((c) =>
-				c
-					.split("-")
-					.map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-					.join(" "),
-			),
-		};
-	}
+	// Add attribute filters if any are set
+	if (filters?.attributes && Object.keys(filters.attributes).length > 0) {
+		// Create a map of attribute IDs to their names from the category data
+		const attributeMap = new Map<number, string>();
 
-	if (filters?.location && filters.location !== "all") {
-		strapiFilters.location = {
-			$eq:
-				filters.location.charAt(0).toUpperCase() +
-				filters.location.slice(1),
-		};
-	}
-
-	if (filters?.priceRange) {
-		const [min, max] = filters.priceRange;
-		if (min > 0) {
-			strapiFilters.price = { $gte: min };
+		// Populate the attribute map from the selected category's attributes
+		if (selectedCategory?.attributes) {
+			selectedCategory.attributes.forEach((attr) => {
+				attributeMap.set(attr.id, attr.name);
+			});
 		}
-		if (max < 5000) {
-			// Assuming 5000 is the max in your range
-			strapiFilters.price = { ...strapiFilters.price, $lte: max };
-		}
+
+		// Track which attributes have multiple values (for OR filtering)
+		const multiSelectAttributes = new Set<string>();
+
+		// For each attribute, add to the attributeFilters array
+		Object.entries(filters.attributes).forEach(([attributeId, value]) => {
+			// Skip empty values
+			if (
+				value === null ||
+				value === undefined ||
+				value === "" ||
+				(Array.isArray(value) && value.length === 0)
+			) {
+				return;
+			}
+
+			// Get attribute name from the map or use common values for demo
+			const attributeIdNum = Number(attributeId);
+			let attributeName = attributeMap.get(attributeIdNum);
+
+			// If we can't find the name in our map, use a fallback
+			if (!attributeName) {
+				// Instead of using hardcoded names, we'll use the attribute ID directly
+				// This ensures at least the filter will work even if we don't have the name
+				attributeName = `attribute_${attributeId}`;
+
+				// Log a warning for debugging
+				console.warn(
+					`Could not find name for attribute ID ${attributeId}`,
+				);
+			}
+
+			// Handle different types of attribute values
+			if (typeof value === "string") {
+				attributeFilters.push({
+					attribute: attributeName,
+					value: value,
+				});
+			} else if (typeof value === "number") {
+				attributeFilters.push({
+					attribute: attributeName,
+					value: value.toString(),
+				});
+			} else if (typeof value === "boolean") {
+				attributeFilters.push({
+					attribute: attributeName,
+					value: value.toString(),
+				});
+			} else if (value instanceof Date) {
+				attributeFilters.push({
+					attribute: attributeName,
+					value: value.toISOString(),
+				});
+			} else if (Array.isArray(value) && value.length > 0) {
+				// For multi-select values, add each value with an OR operator
+				multiSelectAttributes.add(attributeName);
+
+				value.forEach((option) => {
+					attributeFilters.push({
+						attribute: attributeName,
+						value: option,
+						operator: "or", // Use OR for multi-select values
+					});
+				});
+			}
+		});
 	}
 
 	// Convert sort option to Strapi format
@@ -164,13 +219,23 @@ export function ListingsGrid({ filters }: ListingsGridProps) {
 		}
 	}
 
-	// Fetch listings from Strapi
+	// Log the query parameters for debugging
+	useEffect(() => {
+		if (attributeFilters.length > 0) {
+			console.log("Attribute filters:", attributeFilters);
+		}
+	}, [attributeFilters]);
+
+	// Fetch listings from Strapi with the new attributeFilters parameter
 	const { data, isLoading, isError } = useListings({
 		page: currentPage,
 		pageSize: 12,
 		sort: strapiSort,
-		filters:
-			Object.keys(strapiFilters).length > 0 ? strapiFilters : undefined,
+		attributeFilters:
+			attributeFilters.length > 0 ? attributeFilters : undefined,
+		subCategories: filters?.subcategories
+			? filters.subcategories
+			: undefined,
 	});
 
 	// Handle sort change from the sort dropdown

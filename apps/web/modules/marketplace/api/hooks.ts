@@ -67,7 +67,12 @@ export function useListings(
 		page?: number;
 		pageSize?: number;
 		sort?: string;
-		filters?: Record<string, any>;
+		subCategories?: string[];
+		attributeFilters?: Array<{
+			attribute: string;
+			value: string;
+			operator?: "and" | "or";
+		}>;
 		enabled?: boolean;
 	} = {},
 ) {

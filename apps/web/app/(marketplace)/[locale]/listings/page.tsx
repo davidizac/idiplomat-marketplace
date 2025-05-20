@@ -15,6 +15,7 @@ export default function ListingsPage() {
 	const searchParams = useSearchParams();
 	const searchQuery = searchParams.get("search");
 	const categorySlug = searchParams.get("category");
+	const subcategorySlug = searchParams.get("subcategory");
 
 	// State for the category modal
 	const [showCategoryModal, setShowCategoryModal] = useState(false);
@@ -26,6 +27,7 @@ export default function ListingsPage() {
 		location: "all",
 		conditions: [],
 		sort: "newest",
+		subcategories: subcategorySlug ? [subcategorySlug] : null,
 	};
 
 	const [activeFilters, setActiveFilters] =
@@ -59,14 +61,25 @@ export default function ListingsPage() {
 		(filters: FilterState) => {
 			setActiveFilters(filters);
 
-			// Update URL with the selected category
-			if (filters.categories && filters.categories.length > 0) {
-				const urlParams = new URLSearchParams(searchParams.toString());
-				urlParams.set("category", filters.categories[0]);
+			// Update URL with the selected category and subcategory
+			const urlParams = new URLSearchParams(searchParams.toString());
 
-				// Replace the current URL with the new one
-				router.replace(`/listings?${urlParams.toString()}`);
+			// Update category param
+			if (filters.categories && filters.categories.length > 0) {
+				urlParams.set("category", filters.categories[0]);
+			} else {
+				urlParams.delete("category");
 			}
+
+			// Update subcategory param
+			if (filters.subcategories && filters.subcategories.length > 0) {
+				urlParams.set("subcategory", filters.subcategories[0]);
+			} else {
+				urlParams.delete("subcategory");
+			}
+
+			// Replace the current URL with the new one
+			router.replace(`/listings?${urlParams.toString()}`);
 		},
 		[router, searchParams],
 	);
@@ -129,7 +142,10 @@ export default function ListingsPage() {
 								selectedCategory={categoryData?.data}
 							/>
 						</div>
-						<ListingsGrid filters={activeFilters} />
+						<ListingsGrid
+							filters={activeFilters}
+							categorySlug={categorySlug!}
+						/>
 					</div>
 				</div>
 			</div>
