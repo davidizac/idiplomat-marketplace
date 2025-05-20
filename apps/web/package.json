@@ -27,6 +27,7 @@
 		"@repo/database": "workspace:*",
 		"@repo/i18n": "workspace:*",
 		"@repo/logs": "workspace:*",
+		"@repo/cms": "workspace:*",
 		"@repo/mail": "workspace:*",
 		"@repo/payments": "workspace:*",
 		"@repo/storage": "workspace:*",

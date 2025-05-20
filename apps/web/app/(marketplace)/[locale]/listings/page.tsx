@@ -1,14 +1,13 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useCategoryBySlug } from "../../../../modules/marketplace/api";
 import { CategorySelectionModal } from "../../../../modules/marketplace/listings/components/CategorySelectionModal";
 import { ListingsGrid } from "../../../../modules/marketplace/listings/components/ListingsGrid";
-import {
-	type FilterState,
-	ListingsSidebar,
-} from "../../../../modules/marketplace/listings/components/ListingsSidebar";
+import { ListingsSidebar } from "../../../../modules/marketplace/listings/components/ListingsSidebar";
+import type { SortOption } from "../../../../modules/marketplace/listings/components/filters/SortFilter";
+import { useFilterManager } from "../../../../modules/marketplace/listings/hooks/useFilterManager";
 
 export default function ListingsPage() {
 	const router = useRouter();
@@ -20,18 +19,20 @@ export default function ListingsPage() {
 	// State for the category modal
 	const [showCategoryModal, setShowCategoryModal] = useState(false);
 
-	// Initial filters
-	const initialFilters: FilterState = {
-		categories: categorySlug ? [categorySlug] : [],
-		priceRange: [0, 5000],
-		location: "all",
-		conditions: [],
-		sort: "newest",
-		subcategories: subcategorySlug ? [subcategorySlug] : null,
-	};
-
-	const [activeFilters, setActiveFilters] =
-		useState<FilterState>(initialFilters);
+	// Use the filter manager hook to manage all filters
+	const {
+		filterManager,
+		strapiQuery,
+		updateAttributeFilter,
+		updateSubcategory,
+		updateSort,
+		clearAllFilters,
+		filterVersion,
+	} = useFilterManager({
+		categorySlug: categorySlug || null,
+		subcategorySlug: subcategorySlug || null,
+		sortOption: "newest",
+	});
 
 	// Check if a category is selected
 	const { data: categoryData, isLoading: isCategoryLoading } =
@@ -47,42 +48,15 @@ export default function ListingsPage() {
 	// Apply search query from URL parameters if available
 	useEffect(() => {
 		if (searchQuery) {
-			// We could use the search query to filter categories or other fields
-			// For now, just logging to show it's capturing the query
 			console.log("Search query:", searchQuery);
-
-			// In a real implementation, we might call an API with the search term
-			// or update other filter parameters based on the search query
+			// We could use the search query to filter categories or other fields
 		}
 	}, [searchQuery]);
 
-	// Memoize the filter change handler to prevent unnecessary re-renders
-	const handleFilterChange = useCallback(
-		(filters: FilterState) => {
-			setActiveFilters(filters);
-
-			// Update URL with the selected category and subcategory
-			const urlParams = new URLSearchParams(searchParams.toString());
-
-			// Update category param
-			if (filters.categories && filters.categories.length > 0) {
-				urlParams.set("category", filters.categories[0]);
-			} else {
-				urlParams.delete("category");
-			}
-
-			// Update subcategory param
-			if (filters.subcategories && filters.subcategories.length > 0) {
-				urlParams.set("subcategory", filters.subcategories[0]);
-			} else {
-				urlParams.delete("subcategory");
-			}
-
-			// Replace the current URL with the new one
-			router.replace(`/listings?${urlParams.toString()}`);
-		},
-		[router, searchParams],
-	);
+	// Handle sort changes from the grid
+	const handleSortChange = (sort: SortOption) => {
+		updateSort(sort);
+	};
 
 	// If no category is set and we're still loading, show loading state
 	if (!categorySlug && isCategoryLoading) {
@@ -94,7 +68,7 @@ export default function ListingsPage() {
 	}
 
 	// If we have a category slug but it's invalid, show error
-	if (categorySlug && !isCategoryLoading && !categoryData?.data) {
+	if (categorySlug && !isCategoryLoading && !categoryData) {
 		return (
 			<div className="container py-16 text-center">
 				<h2 className="text-2xl font-bold text-red-500">
@@ -127,8 +101,8 @@ export default function ListingsPage() {
 			<div className="py-8">
 				<div className="container">
 					<h1 className="text-3xl font-bold mb-8">
-						{categoryData?.data?.name
-							? `${categoryData.data.name} Listings`
+						{categoryData?.name
+							? `${categoryData.name} Listings`
 							: searchQuery
 								? `Search Results: ${searchQuery}`
 								: "Browse Listings"}
@@ -137,14 +111,17 @@ export default function ListingsPage() {
 					<div className="flex flex-col md:flex-row gap-8">
 						<div className="w-full md:w-auto">
 							<ListingsSidebar
-								onChange={handleFilterChange}
-								initialFilters={initialFilters}
-								selectedCategory={categoryData?.data}
+								selectedCategory={categoryData}
+								filterManager={filterManager}
+								onUpdateAttributeFilter={updateAttributeFilter}
+								onUpdateSubcategory={updateSubcategory}
+								onClearFilters={clearAllFilters}
 							/>
 						</div>
 						<ListingsGrid
-							filters={activeFilters}
-							categorySlug={categorySlug!}
+							key={`listings-${filterVersion}`}
+							strapiQuery={strapiQuery}
+							onSortChange={handleSortChange}
 						/>
 					</div>
 				</div>

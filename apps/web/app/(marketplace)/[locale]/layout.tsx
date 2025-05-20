@@ -16,8 +16,8 @@ export function generateStaticParams() {
 export default async function MarketplaceLayout({
 	children,
 	params,
-}: PropsWithChildren<{ params: Promise<{ locale: string }> }>) {
-	const { locale } = await params;
+}: PropsWithChildren<{ params: { locale: string } }>) {
+	const { locale } = params;
 
 	setRequestLocale(locale);
 

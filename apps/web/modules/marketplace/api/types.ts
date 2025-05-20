@@ -1,105 +1,77 @@
-import type { StrapiResponse } from "@repo/utils";
+/**
+ * API Types
+ * Export types from the CMS package and additional API-specific types
+ */
 
-type ImageFormat = {
-	name: string;
-	hash: string;
-	ext: string;
-	mime: string;
-	path: string | null;
-	width: number;
-	height: number;
-	size: number;
-	sizeInBytes: number;
-	url: string;
+import type {
+	Attribute,
+	AttributeValue,
+	Category,
+	Listing,
+	ListingFilterParams,
+	PaginationParams,
+	SortParams,
+} from "@repo/cms/types";
+
+// Re-export CMS types
+export type {
+	Attribute,
+	AttributeValue,
+	Category,
+	Listing,
+	ListingFilterParams,
+	PaginationParams,
+	SortParams,
 };
 
-// Define Metadata type or use any
-interface Metadata {
-	[key: string]: any;
-}
-
-export interface StrapiImagesData {
-	id: number;
-	name: string;
-	alternativeText?: string | null;
-	caption?: string | null;
-	width?: number | null;
-	height?: number | null;
-	formats?: {
-		thumbnail?: ImageFormat;
-		small?: ImageFormat;
-		medium?: ImageFormat;
-		large?: ImageFormat;
+// Common response types
+export interface Response<T> {
+	data: T;
+	meta: {
+		pagination?: {
+			page: number;
+			pageSize: number;
+			pageCount: number;
+			total: number;
+		};
 	};
-	url: string;
 }
 
-// Attribute entity
-export interface AttributeData {
-	id: number;
-	documentId: string;
-	name: string;
-	metadata: Metadata;
-	type: "text" | "number" | "boolean" | "date" | "select" | "multi-select";
-	options?: string[] | null;
-	createdAt: string;
-	updatedAt: string;
-	publishedAt: string;
+// Listing response format
+export interface ListingResponse {
+	data: Listing;
 }
 
-// Category entity
-export interface CategoryData {
-	id: number;
-	documentId: string;
-	name: string;
-	slug: string;
-	description?: string;
-	image?: StrapiImagesData;
-	parent?: CategoryData;
-	categories?: CategoryData[];
-	createdAt: string;
-	updatedAt: string;
-	publishedAt: string;
-	attributes?: AttributeData[]; // add this line
+// Listings response format
+export interface ListingsResponse {
+	data: Listing[];
+	meta: {
+		pagination: {
+			page: number;
+			pageSize: number;
+			pageCount: number;
+			total: number;
+		};
+	};
 }
 
-// Listing entity
-export interface ListingData {
-	id: number;
-	documentId: string;
-	title: string;
-	description: string;
-	price?: number;
-	location?: string;
-	condition?: string;
-	images: StrapiImagesData[];
-	categories: CategoryData[];
-	productAttributeValues?: ProductAttributeValueData[];
-	slug: string;
-	createdAt: string;
-	updatedAt: string;
-	publishedAt: string;
+// Category response format
+export interface CategoryResponse {
+	data: Category;
 }
 
-// ProductAttributeValue entity
-export interface ProductAttributeValueData {
-	id: number;
-	documentId: string;
-	listing: ListingData;
-	attribute: AttributeData;
-	stringValue?: string;
-	numberValue?: number;
-	booleanValue?: boolean;
-	dateValue?: string;
-	createdAt: string;
-	updatedAt: string;
-	locale?: string;
+// Categories response format
+export interface CategoriesResponse {
+	data: Category[];
+	meta: {
+		pagination: {
+			page: number;
+			pageSize: number;
+			pageCount: number;
+			total: number;
+		};
+	};
 }
 
-// Response types
-export type CategoriesResponse = StrapiResponse<CategoryData[]>;
-export type CategoryResponse = StrapiResponse<CategoryData>;
-export type ListingsResponse = StrapiResponse<ListingData[]>;
-export type ListingResponse = StrapiResponse<ListingData>;
-export type AttributesResponse = StrapiResponse<AttributeData[]>;
-export type AttributeResponse = StrapiResponse<AttributeData>;
+// Use for strongly typing listing data in Components
+export type ListingData = Listing;

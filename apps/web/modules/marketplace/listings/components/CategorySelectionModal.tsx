@@ -1,5 +1,6 @@
 "use client";
 
+import { getStrapiImageUrl } from "@repo/cms";
 import { Button } from "@ui/components/button";
 import {
 	Dialog,
@@ -11,8 +12,7 @@ import {
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { getImageUrl, useCategories } from "../../api";
-import type { CategoryData } from "../../api/types";
+import { type Category, useCategories } from "../../api";
 
 interface CategorySelectionModalProps {
 	isOpen: boolean;
@@ -29,6 +29,7 @@ export function CategorySelectionModal({
 	const { data: categoriesResponse, isLoading } = useCategories({
 		pageSize: 8, // Get only top categories for the modal
 	});
+
 	const [selectedCategorySlug, setSelectedCategorySlug] = useState<
 		string | null
 	>(null);
@@ -36,7 +37,7 @@ export function CategorySelectionModal({
 	// Filter root categories (those without a parent)
 	const rootCategories =
 		categoriesResponse?.data?.filter(
-			(category: CategoryData) => !category.parent,
+			(category: Category) => !category.parent,
 		) || [];
 
 	const handleCategorySelect = (categorySlug: string) => {
@@ -86,7 +87,7 @@ export function CategorySelectionModal({
 				) : (
 					<>
 						<div className="grid grid-cols-2 sm:grid-cols-4 gap-4 py-4">
-							{rootCategories.map((category: CategoryData) => (
+							{rootCategories.map((category: Category) => (
 								<button
 									key={category.id}
 									type="button"
@@ -103,8 +104,8 @@ export function CategorySelectionModal({
 									<div className="aspect-square relative">
 										{category.image ? (
 											<Image
-												src={getImageUrl(
-													category.image,
+												src={getStrapiImageUrl(
+													category.image.url,
 												)}
 												alt={category.name}
 												fill

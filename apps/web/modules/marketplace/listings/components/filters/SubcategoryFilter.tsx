@@ -1,5 +1,6 @@
 "use client";
 
+import type { Category } from "@repo/cms";
 import { Label } from "@ui/components/label";
 import {
 	Select,
@@ -9,10 +10,9 @@ import {
 	SelectValue,
 } from "@ui/components/select";
 import { useEffect, useState } from "react";
-import type { CategoryData } from "../../../api/types";
 
 interface SubcategoryFilterProps {
-	parentCategory: CategoryData;
+	parentCategory: Category;
 	selectedSubcategory: string | null;
 	onChange: (subcategorySlug: string | null) => void;
 }
@@ -22,7 +22,7 @@ export function SubcategoryFilter({
 	selectedSubcategory,
 	onChange,
 }: SubcategoryFilterProps) {
-	const [subcategories, setSubcategories] = useState<CategoryData[]>([]);
+	const [subcategories, setSubcategories] = useState<Category[]>([]);
 
 	// Load subcategories when the parent category changes
 	useEffect(() => {

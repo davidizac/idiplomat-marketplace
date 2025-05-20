@@ -1,0 +1,27 @@
+{
+	"name": "@repo/cms",
+	"version": "0.1.0",
+	"private": true,
+	"main": "./src/index.ts",
+	"types": "./src/index.ts",
+	"exports": {
+		".": "./src/index.ts",
+		"./clients": "./src/clients/index.ts",
+		"./query": "./src/query/index.ts",
+		"./services": "./src/services/index.ts",
+		"./types": "./src/types/index.ts"
+	},
+	"dependencies": {
+		"qs": "^6.11.2",
+		"server-only": "^0.0.1"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "1.9.4",
+		"@types/node": "^22.15.14",
+		"@types/qs": "^6.9.10",
+		"@repo/tsconfig": "workspace:*"
+	},
+	"scripts": {
+		"type-check": "tsc --noEmit"
+	}
+}

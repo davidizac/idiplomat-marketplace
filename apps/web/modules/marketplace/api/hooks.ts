@@ -1,4 +1,8 @@
-import { useQuery } from "@tanstack/react-query";
+/**
+ * API Hooks
+ * React hooks for API data fetching using the CMS package
+ */
+
 import {
 	getCategories,
 	getCategoryById,
@@ -6,11 +10,11 @@ import {
 	getListingById,
 	getListingBySlug,
 	getListings,
-} from "./service";
+} from "@repo/cms/services";
+import { useQuery } from "@tanstack/react-query";
 
 // Query keys
 const CATEGORIES_KEY = "marketplace-categories";
-const ATTRIBUTES_KEY = "marketplace-attributes";
 const LISTINGS_KEY = "marketplace-listings";
 
 /**
@@ -68,6 +72,8 @@ export function useListings(
 		pageSize?: number;
 		sort?: string;
 		subCategories?: string[];
+		/** Optional category slug to filter listings */
+		category?: string;
 		attributeFilters?: Array<{
 			attribute: string;
 			value: string;

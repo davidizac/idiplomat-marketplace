@@ -1,24 +1,19 @@
 "use client";
 
+import {
+	type AttributeValue,
+	type Category,
+	type Listing,
+	type Image as StrapiImage,
+	getStrapiImageUrl,
+} from "@repo/cms";
+import { Badge } from "@ui/components/badge";
 import { Button } from "@ui/components/button";
 import { Card } from "@ui/components/card";
 import { Separator } from "@ui/components/separator";
-import { ChevronLeft, ChevronRight, User, X } from "lucide-react";
+import { ChevronLeft, ChevronRight, Tag, User, X } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-
-interface Listing {
-	id: string;
-	title: string;
-	price: number;
-	author: string;
-	description: string;
-	authorEmail: string;
-	authorPhone: string;
-	images: string[];
-	location: string;
-	createdAt: Date;
-}
 
 interface ListingDetailProps {
 	listing: Listing;
@@ -32,7 +27,7 @@ function ImageGallery({
 	setSelectedImage,
 	onOpenModal,
 }: {
-	images: string[];
+	images: StrapiImage[];
 	title: string;
 	selectedImage: number;
 	setSelectedImage: (index: number) => void;
@@ -47,7 +42,7 @@ function ImageGallery({
 				aria-label="View larger image"
 			>
 				<Image
-					src={images[selectedImage]}
+					src={getStrapiImageUrl(images[selectedImage].url)}
 					alt={title}
 					fill
 					className="object-cover hover:scale-105 transition-transform duration-300"
@@ -75,7 +70,7 @@ function ImageGallery({
 						onClick={() => setSelectedImage(index)}
 					>
 						<Image
-							src={image}
+							src={getStrapiImageUrl(image.url)}
 							alt={`Thumbnail ${index + 1}`}
 							fill
 							className="object-cover"
@@ -99,7 +94,7 @@ function ImageModal({
 }: {
 	isOpen: boolean;
 	onClose: () => void;
-	images: string[];
+	images: StrapiImage[];
 	title: string;
 	currentImage: number;
 	onNavigate: (direction: number) => void;
@@ -140,7 +135,7 @@ function ImageModal({
 				{/* Main image */}
 				<div className="relative w-full h-full">
 					<Image
-						src={images[currentImage]}
+						src={getStrapiImageUrl(images[currentImage].url)}
 						alt={`Image ${currentImage + 1} of ${title}`}
 						fill
 						className="object-contain"
@@ -153,6 +148,65 @@ function ImageModal({
 				<div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/50 text-white px-4 py-2 rounded-full text-sm">
 					{currentImage + 1} / {images.length}
 				</div>
+			</div>
+		</div>
+	);
+}
+
+// Categories and Attributes Component
+function CategoriesAttributes({
+	categories,
+	attributes,
+}: {
+	categories: Category[];
+	attributes: AttributeValue[];
+}) {
+	if (categories.length === 0 && attributes.length === 0) {
+		return null;
+	}
+
+	return (
+		<div className="mb-8">
+			<h2 className="text-2xl font-semibold mb-4">Details</h2>
+			<div className="bg-muted/20 p-6 rounded-lg space-y-6">
+				{/* Categories */}
+				{categories.length > 0 && (
+					<div>
+						<h3 className="font-medium mb-3 flex items-center">
+							<Tag className="h-4 w-4 mr-2" />
+							Categories
+						</h3>
+						<div className="flex flex-wrap gap-2">
+							{categories.map((category) => (
+								<Badge key={category.id} variant="secondary">
+									{category.name}
+								</Badge>
+							))}
+						</div>
+					</div>
+				)}
+
+				{/* Attributes */}
+				{attributes.length > 0 && (
+					<div>
+						<h3 className="font-medium mb-3">Specifications</h3>
+						<div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-3">
+							{attributes.map((attr) => (
+								<div
+									key={attr.id}
+									className="flex justify-between border-b border-border pb-2"
+								>
+									<span className="text-muted-foreground">
+										{attr.attribute.name}
+									</span>
+									<span className="font-medium">
+										{attr.value}
+									</span>
+								</div>
+							))}
+						</div>
+					</div>
+				)}
 			</div>
 		</div>
 	);
@@ -172,14 +226,25 @@ function ListingInfo({
 }: {
 	title: string;
 	price: number;
-	author: string;
+	author: string | undefined;
 	location: string;
-	createdAt: Date;
-	authorEmail: string;
-	authorPhone: string;
+	createdAt: string | Date;
+	authorEmail: string | undefined;
+	authorPhone: string | undefined;
 	showContact: boolean;
 	setShowContact: (value: boolean) => void;
 }) {
+	// Provide fallbacks for optional fields
+	const displayAuthor = author || "Listing Owner";
+	const displayEmail = authorEmail || "N/A";
+	const displayPhone = authorPhone || "N/A";
+
+	// Format date
+	const formattedDate =
+		typeof createdAt === "string"
+			? new Date(createdAt).toLocaleDateString()
+			: (createdAt as Date).toLocaleDateString();
+
 	return (
 		<div className="space-y-8">
 			<div className="space-y-3">
@@ -192,7 +257,7 @@ function ListingInfo({
 					<User className="h-6 w-6 text-secondary-foreground" />
 				</div>
 				<div>
-					<p className="font-medium text-lg">{author}</p>
+					<p className="font-medium text-lg">{displayAuthor}</p>
 					<p className="text-sm text-muted-foreground">{location}</p>
 				</div>
 			</div>
@@ -213,11 +278,11 @@ function ListingInfo({
 					<div className="space-y-2">
 						<p className="flex items-center">
 							<span className="font-medium w-16">Email:</span>
-							<span>{authorEmail}</span>
+							<span>{displayEmail}</span>
 						</p>
 						<p className="flex items-center">
 							<span className="font-medium w-16">Phone:</span>
-							<span>{authorPhone}</span>
+							<span>{displayPhone}</span>
 						</p>
 					</div>
 				</Card>
@@ -225,7 +290,7 @@ function ListingInfo({
 
 			<div className="pt-2">
 				<p className="text-sm text-muted-foreground">
-					Listed on {createdAt.toLocaleDateString()}
+					Listed on {formattedDate}
 				</p>
 			</div>
 		</div>
@@ -326,15 +391,21 @@ export default function ListingDetail({ listing }: ListingDetailProps) {
 				<ListingInfo
 					title={listing.title}
 					price={listing.price}
-					author={listing.author}
+					author={"David"}
 					location={listing.location}
 					createdAt={listing.createdAt}
-					authorEmail={listing.authorEmail}
-					authorPhone={listing.authorPhone}
+					authorEmail={"davidgahnassia@gmail.com"}
+					authorPhone={"0586275174"}
 					showContact={showContact}
 					setShowContact={setShowContact}
 				/>
 			</div>
+
+			{/* Categories and Attributes Section */}
+			<CategoriesAttributes
+				categories={listing.categories || []}
+				attributes={listing.product_attribute_values || []}
+			/>
 
 			{/* Description Section */}
 			<DescriptionSection description={listing.description} />

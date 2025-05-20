@@ -1,9 +1,9 @@
 "use client";
 
+import type { Category, FilterManager } from "@repo/cms";
 import { Button } from "@ui/components/button";
 import { Card } from "@ui/components/card";
 import { useEffect, useState } from "react";
-import type { CategoryData } from "../../api/types";
 import {
 	AttributeFilter,
 	type AttributeFilterValues,
@@ -12,147 +12,104 @@ import {
 import type { SortOption } from "./filters/SortFilter";
 import { SubcategoryFilter } from "./filters/SubcategoryFilter";
 
-export interface FilterState {
-	sort: SortOption;
+// Legacy filter state interface for backward compatibility
+export interface SidebarFilters {
+	sort?: SortOption;
 	attributes?: AttributeFilterValues;
 	subcategories?: string[] | null;
 }
 
 interface ListingsSidebarProps {
-	onChange: (filters: FilterState) => void;
-	initialFilters?: Partial<FilterState>;
-	selectedCategory?: CategoryData;
+	selectedCategory?: Category;
+	filterManager: FilterManager;
+	onUpdateAttributeFilter: (
+		attributeId: number,
+		attributeName: string,
+		value: AttributeValue,
+	) => void;
+	onUpdateSubcategory: (subcategorySlug: string | null) => void;
+	onClearFilters: () => void;
 }
 
 export function ListingsSidebar({
-	onChange,
-	initialFilters = {},
 	selectedCategory,
+	filterManager,
+	onUpdateAttributeFilter,
+	onUpdateSubcategory,
+	onClearFilters,
 }: ListingsSidebarProps) {
-	// Create default filters
-	const defaultFilters: FilterState = {
-		sort: "newest",
-		attributes: {},
-		subcategories: null,
-	};
-
-	// Initialize state with defaults + any provided initial values
-	const [filters, setFilters] = useState<FilterState>({
-		...defaultFilters,
-		...initialFilters,
-	});
-
-	// Initialize attribute values
-	const [attributeValues, setAttributeValues] =
-		useState<AttributeFilterValues>(initialFilters.attributes || {});
-
-	// Initialize subcategory value
+	// Selected subcategory state (derived from FilterManager)
 	const [selectedSubcategory, setSelectedSubcategory] = useState<
 		string | null
-	>(
-		initialFilters.subcategories && initialFilters.subcategories.length > 0
-			? initialFilters.subcategories[0]
-			: null,
-	);
+	>(null);
 
-	// Update attribute filters whenever selected category changes
+	// Get current subcategory from the FilterManager
 	useEffect(() => {
-		if (selectedCategory?.attributes) {
-			setAttributeValues((prevValues) => {
-				// Initialize empty values for any new attributes
-				const newAttributeValues = { ...prevValues };
-				let hasNewAttributes = false;
-
-				// Safe access to attributes with optional chaining
-				selectedCategory?.attributes?.forEach((attr) => {
-					if (!(attr.id in newAttributeValues)) {
-						hasNewAttributes = true;
-						// Set default values based on attribute type
-						switch (attr.type) {
-							case "text":
-							case "select":
-								newAttributeValues[attr.id] = "";
-								break;
-							case "number":
-								newAttributeValues[attr.id] = 0;
-								break;
-							case "boolean":
-								newAttributeValues[attr.id] = false;
-								break;
-							case "date":
-								newAttributeValues[attr.id] = null;
-								break;
-							case "multi-select":
-								newAttributeValues[attr.id] = [];
-								break;
-							default:
-								newAttributeValues[attr.id] = null;
-						}
-					}
-				});
-
-				// Only return new values if we actually added new attributes
-				return hasNewAttributes ? newAttributeValues : prevValues;
-			});
+		const subcategoryFilter = filterManager.getFilter("subcategory");
+		if (subcategoryFilter) {
+			setSelectedSubcategory(subcategoryFilter.value as string);
+		} else {
+			setSelectedSubcategory(null);
 		}
-	}, [selectedCategory]); // Remove attributeValues from dependencies
-
-	// Update local filters when props change (initial render only)
-	useEffect(() => {
-		if (Object.keys(initialFilters).length > 0) {
-			setFilters((prev) => ({
-				...prev,
-				...initialFilters,
-			}));
-		}
-	}, []); // Run only once on mount
-
-	const updateFilter = <K extends keyof FilterState>(
-		key: K,
-		value: FilterState[K],
-	) => {
-		setFilters((prev) => ({
-			...prev,
-			[key]: value,
-		}));
-	};
+	}, [filterManager]);
 
 	// Handler for attribute changes
 	const handleAttributeChange = (
 		attributeId: number,
 		value: AttributeValue,
 	) => {
-		const newValues = {
-			...attributeValues,
-			[attributeId]: value,
-		};
-		setAttributeValues(newValues);
-		updateFilter("attributes", newValues);
+		const attributeName =
+			selectedCategory?.attributes?.find(
+				(attr) => attr.id === attributeId,
+			)?.name || `attribute_${attributeId}`;
+
+		onUpdateAttributeFilter(attributeId, attributeName, value);
 	};
 
 	// Handler for subcategory changes
 	const handleSubcategoryChange = (subcategorySlug: string | null) => {
 		setSelectedSubcategory(subcategorySlug);
-		updateFilter(
-			"subcategories",
-			subcategorySlug ? [subcategorySlug] : null,
-		);
+		onUpdateSubcategory(subcategorySlug);
 	};
 
-	const handleApply = () => {
-		onChange({
-			...filters,
-			attributes: attributeValues,
-			subcategories: selectedSubcategory ? [selectedSubcategory] : null,
-		});
-	};
+	// Get attribute values from FilterManager for display
+	const getAttributeValue = (attributeId: string): AttributeValue => {
+		const filterId = `attr_${attributeId}`;
+		const filter = filterManager.getFilter(filterId);
 
-	const handleReset = () => {
-		const resetFilters = { ...defaultFilters };
-		setFilters(resetFilters);
-		setAttributeValues({});
-		setSelectedSubcategory(null);
-		onChange(resetFilters);
+		if (filter) {
+			// Return the filter value based on the type
+			if (
+				filter.valueType === "date" &&
+				typeof filter.value === "string"
+			) {
+				// Convert string date back to Date object for the UI
+				return new Date(filter.value);
+			}
+
+			return filter.value as AttributeValue;
+		}
+
+		// Return appropriate default value based on attribute type
+		const attributeType = selectedCategory?.attributes?.find(
+			(attr) => attr.id.toString() === attributeId,
+		)?.type;
+
+		switch (attributeType) {
+			case "text":
+			case "select":
+				return "";
+			case "number":
+				return 0;
+			case "boolean":
+				return false;
+			case "date":
+				return null;
+			case "multi-select":
+				return [];
+			default:
+				return null;
+		}
 	};
 
 	return (
@@ -183,22 +140,14 @@ export function ListingsSidebar({
 					<AttributeFilter
 						key={attribute.id}
 						attribute={attribute}
-						metadata={attribute.metadata}
-						value={attributeValues[attribute.id] || null}
+						value={getAttributeValue(attribute.id.toString())}
 						onChange={handleAttributeChange}
 					/>
 				))}
 
 				<div className="space-y-2 pt-2">
-					<Button className="w-full" onClick={handleApply}>
-						Apply Filters
-					</Button>
-					<Button
-						variant="outline"
-						className="w-full"
-						onClick={handleReset}
-					>
-						Reset
+					<Button className="w-full" onClick={onClearFilters}>
+						Reset Filters
 					</Button>
 				</div>
 			</div>

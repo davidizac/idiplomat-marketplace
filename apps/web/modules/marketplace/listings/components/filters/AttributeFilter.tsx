@@ -1,5 +1,6 @@
 "use client";
 
+import type { Attribute } from "@repo/cms";
 import { Button } from "@ui/components/button";
 import { Calendar } from "@ui/components/calendar";
 import { Checkbox } from "@ui/components/checkbox";
@@ -21,7 +22,6 @@ import { Switch } from "@ui/components/switch";
 import { cn } from "@ui/lib";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
-import type { AttributeData } from "../../../api/types";
 
 // Types for the different attribute values
 export type AttributeValue = string | string[] | number | boolean | Date | null;
@@ -30,19 +30,16 @@ export type AttributeValue = string | string[] | number | boolean | Date | null;
 export type AttributeFilterValues = Record<number, AttributeValue>;
 
 interface AttributeFilterProps {
-	attribute: AttributeData;
+	attribute: Attribute;
 	value: AttributeValue;
-	metadata: Record<string, any>;
 	onChange: (attributeId: number, value: AttributeValue) => void;
 }
 
 export function AttributeFilter({
 	attribute,
 	value,
-	metadata,
 	onChange,
 }: AttributeFilterProps) {
-	console.log(metadata);
 	// Handle the different attribute types
 	switch (attribute.type) {
 		case "text": {
@@ -77,9 +74,9 @@ export function AttributeFilter({
 					</div>
 					<Slider
 						id={`attr-${attribute.id}`}
-						min={metadata?.minimum ?? 0}
-						max={metadata?.maximum ?? 1000}
-						step={metadata?.step ?? 1}
+						min={(attribute.metadata?.minimum as number) ?? 0}
+						max={(attribute.metadata?.maximum as number) ?? 1000}
+						step={(attribute.metadata?.step as number) ?? 1}
 						value={[numValue]}
 						onValueChange={(vals: number[]) =>
 							onChange(attribute.id, vals[0])

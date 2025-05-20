@@ -7,10 +7,10 @@ export default async function DocumentationLayout({
 	children,
 	params,
 }: PropsWithChildren<{
-	params: Promise<{ locale: string }>;
+	params: { locale: string };
 }>) {
 	const t = await getTranslations();
-	const { locale } = await params;
+	const { locale } = params;
 
 	return (
 		<div className="pt-[4.5rem]">

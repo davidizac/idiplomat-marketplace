@@ -29,7 +29,6 @@ export function CategoryFilter({
 }: CategoryFilterProps) {
 	// Fetch categories from Strapi
 	const { data, isLoading, isError } = useCategories();
-	console.log(data);
 	// Map Strapi categories to our component format
 	const categories: Category[] =
 		!isLoading && !isError && data?.data

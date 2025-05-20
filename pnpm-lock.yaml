@@ -102,6 +102,9 @@ importers:
       '@repo/auth':
         specifier: workspace:*
         version: link:../../packages/auth
+      '@repo/cms':
+        specifier: workspace:*
+        version: link:../../packages/cms
       '@repo/config':
         specifier: workspace:*
         version: link:../../config
@@ -502,6 +505,28 @@ importers:
       '@types/node':
         specifier: ^22.15.14
         version: 22.15.14
+
+  packages/cms:
+    dependencies:
+      qs:
+        specifier: ^6.11.2
+        version: 6.14.0
+      server-only:
+        specifier: ^0.0.1
+        version: 0.0.1
+    devDependencies:
+      '@biomejs/biome':
+        specifier: 1.9.4
+        version: 1.9.4
+      '@repo/tsconfig':
+        specifier: workspace:*
+        version: link:../../tooling/typescript
+      '@types/node':
+        specifier: ^22.15.14
+        version: 22.15.14
+      '@types/qs':
+        specifier: ^6.9.10
+        version: 6.9.11
 
   packages/database:
     dependencies:
