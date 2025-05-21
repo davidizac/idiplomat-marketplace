@@ -12,14 +12,15 @@
 		"./types": "./src/types/index.ts"
 	},
 	"dependencies": {
+		"@strapi/client": "^1.4.0",
 		"qs": "^6.11.2",
 		"server-only": "^0.0.1"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "1.9.4",
+		"@repo/tsconfig": "workspace:*",
 		"@types/node": "^22.15.14",
-		"@types/qs": "^6.9.10",
-		"@repo/tsconfig": "workspace:*"
+		"@types/qs": "^6.9.10"
 	},
 	"scripts": {
 		"type-check": "tsc --noEmit"

@@ -97,7 +97,13 @@ export default function PhotosStep({
 
 	// Handle publish button click
 	const handlePublish = () => {
-		if (validateBeforeSubmit()) {
+		console.log("Publish button clicked");
+		const isValid = validateBeforeSubmit();
+		console.log("Photo validation result:", isValid);
+		console.log("Photos:", formState.photos);
+
+		if (isValid) {
+			console.log("Calling onSubmit()...");
 			onSubmit();
 		}
 	};

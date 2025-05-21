@@ -31,9 +31,15 @@ export function useCategories(
 ) {
 	const { enabled = true, ...restParams } = params;
 
+	// Make sure we're populating the categories relationship for subcategories
+	const enhancedParams = {
+		...restParams,
+		populate: ["categories"], // Include subcategories
+	};
+
 	return useQuery({
-		queryKey: [CATEGORIES_KEY, restParams],
-		queryFn: () => getCategories(restParams),
+		queryKey: [CATEGORIES_KEY, enhancedParams],
+		queryFn: () => getCategories(enhancedParams),
 		enabled,
 	});
 }

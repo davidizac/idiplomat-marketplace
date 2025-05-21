@@ -21,6 +21,7 @@ export async function getCategories(params?: {
 	pageSize?: number;
 	sort?: string;
 	parentId?: string | null;
+	populate?: string[];
 }): Promise<{
 	data: Category[];
 	pagination: {
@@ -58,8 +59,12 @@ export async function getCategories(params?: {
 		}
 	}
 
-	// Add population
-	query.populate(["parent"]);
+	// Add population - always include parent, and add any custom populate fields
+	const fieldsToPopulate = ["parent"];
+	if (params?.populate && Array.isArray(params.populate)) {
+		fieldsToPopulate.push(...params.populate);
+	}
+	query.populate(fieldsToPopulate);
 
 	// Make the API call
 	const queryString = query.build();

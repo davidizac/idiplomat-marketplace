@@ -1,7 +1,9 @@
 "use client";
-
+import { strapiClient } from "@repo/cms/clients";
 import { Check, ChevronRight } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast } from "sonner";
 import DetailsStep from "./steps/DetailsStep";
 import PhotosStep from "./steps/PhotosStep";
 import PricingStep from "./steps/PricingStep";
@@ -21,16 +23,20 @@ interface FormState {
 	// Details step
 	category: string;
 	subCategory: string;
+	categoryId: string;
+	subCategoryId: string;
 	title: string;
 	description: string;
 
-	// Pricing step
-	price: number;
-	location: string;
-	condition: string;
-
 	// Photos step
 	photos: File[];
+
+	// Attributes
+	attributes: Array<{
+		attributeId: number;
+		attributeName: string;
+		value: string;
+	}>;
 
 	[key: string]: any; // Add index signature to allow string indexing
 }
@@ -40,13 +46,15 @@ export default function ListingForm({ userId }: ListingFormProps) {
 	const [formState, setFormState] = useState<FormState>({
 		category: "",
 		subCategory: "",
+		categoryId: "",
+		subCategoryId: "",
 		title: "",
 		description: "",
 		price: 0,
-		location: "",
-		condition: "",
 		photos: [],
+		attributes: [],
 	});
+	const router = useRouter();
 
 	const steps = [
 		{ id: "details", label: "Listing Details" },
@@ -61,72 +69,105 @@ export default function ListingForm({ userId }: ListingFormProps) {
 
 	// Navigate to next step
 	const goToNextStep = () => {
-		if (currentStep === "details") setCurrentStep("pricing");
-		else if (currentStep === "pricing") setCurrentStep("photos");
+		console.log("goToNextStep called, current step:", currentStep);
+
+		if (currentStep === "details") {
+			console.log("Moving from details to pricing...");
+			setCurrentStep("pricing");
+		} else if (currentStep === "pricing") {
+			console.log("Moving from pricing to photos...");
+			setCurrentStep("photos");
+		}
 	};
 
 	// Navigate to previous step
 	const goToPrevStep = () => {
-		if (currentStep === "pricing") setCurrentStep("details");
-		else if (currentStep === "photos") setCurrentStep("pricing");
+		console.log("goToPrevStep called, current step:", currentStep);
+
+		if (currentStep === "pricing") {
+			console.log("Moving from pricing to details...");
+			setCurrentStep("details");
+		} else if (currentStep === "photos") {
+			console.log("Moving from photos to pricing...");
+			setCurrentStep("pricing");
+		}
 	};
 
-	// Handle submission
 	const handleSubmit = async () => {
-		// Here you would typically submit the form data to your API
-		console.log("Form submitted:", {
-			...formState,
-			userId,
-			// Transform data as needed for the API
-			categoryId: formState.category,
-			subcategoryId: formState.subCategory,
-			locationValue: formState.location,
-			conditionValue: formState.condition,
-		});
+		try {
+			// 1. Create product attribute values (if needed)
+			// For each attribute, POST to /product-attribute-values and collect the IDs
+			const productAttributeValueIds: number[] = [];
+			for (const attr of formState.attributes) {
+				// Prepare the data for the attribute value
+				const attributeValueData = {
+					attribute: attr.attributeId, // relation by ID
+					value: attr.value,
+				};
 
-		// In a real implementation, you would use the Strapi API to create a listing:
-		// Example:
-		// try {
-		//   const formData = new FormData();
-		//
-		//   // Add basic data
-		//   formData.append('data.title', formState.title);
-		//   formData.append('data.description', formState.description);
-		//   formData.append('data.price', formState.price.toString());
-		//   formData.append('data.condition', formState.condition);
-		//   formData.append('data.location', formState.location);
-		//   formData.append('data.slug', formState.title.toLowerCase().replace(/\s+/g, '-'));
-		//
-		//   // Add categories
-		//   formData.append('data.categories[0]', formState.category);
-		//   if(formState.subCategory) {
-		//     formData.append('data.categories[1]', formState.subCategory);
-		//   }
-		//
-		//   // Add images
-		//   formState.photos.forEach((photo, index) => {
-		//     formData.append(`files.images`, photo);
-		//   });
-		//
-		//   const response = await fetch(`${process.env.NEXT_PUBLIC_STRAPI_URL}/api/listings`, {
-		//     method: 'POST',
-		//     headers: {
-		//       'Authorization': `Bearer ${process.env.NEXT_PUBLIC_STRAPI_TOKEN}`,
-		//     },
-		//     body: formData
-		//   });
-		//
-		//   if (!response.ok) {
-		//     throw new Error('Failed to create listing');
-		//   }
-		//
-		//   // Handle success - redirect to the new listing page or show success message
-		// } catch (error) {
-		//   console.error('Error creating listing:', error);
-		//   // Handle error - show error message
-		// }
+				// Create the attribute value entry
+				const res = await strapiClient.post(
+					"/product-attribute-values",
+					attributeValueData,
+				);
+				// Collect the created ID
+				productAttributeValueIds.push(res.data.id);
+			}
 
-		// Redirect or show success message
+			// 2. Prepare categories array
+			const categories: number[] = [];
+			if (formState.categoryId)
+				categories.push(Number(formState.categoryId));
+			if (formState.subCategoryId)
+				categories.push(Number(formState.subCategoryId));
+
+			// 3. Create the listing entry (without images)
+			const listingData = {
+				title: formState.title,
+				description: formState.description,
+				slug: formState.title.toLowerCase().replace(/\s+/g, "-"),
+				categories,
+				product_attribute_values: productAttributeValueIds,
+			};
+
+			const response = await strapiClient.post("/listings", listingData);
+			const createdListingId = response.data.id;
+
+			// 4. Upload images and link to the listing
+			if (formState.photos.length > 0) {
+				const formData = new FormData();
+				formData.append("ref", "api::listing.listing");
+				formData.append("refId", createdListingId.toString());
+				formData.append("field", "images");
+				formState.photos.forEach((photo) => {
+					formData.append("files", photo);
+				});
+
+				await fetch(
+					`${process.env.NEXT_PUBLIC_STRAPI_URL}/api/upload`,
+					{
+						method: "POST",
+						headers: {
+							Authorization: `Bearer ${process.env.STRAPI_TOKEN}`,
+						},
+						body: formData,
+					},
+				);
+			}
+
+			// Success notification and redirect
+			toast.success("Listing published successfully", {
+				description:
+					"Your listing has been published to the marketplace.",
+			});
+			router.push("/app/my-listings");
+		} catch (error) {
+			console.error("Error creating listing:", error);
+			toast.error("Failed to publish listing", {
+				description:
+					"There was an error publishing your listing. Please try again.",
+			});
+		}
 	};
 
 	// Get step status: completed, current, or upcoming

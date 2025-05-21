@@ -6,8 +6,6 @@ import { useState } from "react";
 
 interface FormState {
 	price: number;
-	location?: string;
-	condition?: string;
 	[key: string]: any;
 }
 
@@ -46,21 +44,19 @@ export default function PricingStep({
 			newErrors.price = "Please enter a valid price greater than zero";
 		}
 
-		if (!formState.location) {
-			newErrors.location = "Please select a location";
-		}
-
-		if (!formState.condition) {
-			newErrors.condition = "Please select the item's condition";
-		}
-
 		setErrors(newErrors);
 		return Object.keys(newErrors).length === 0;
 	};
 
 	// Handle next button click
 	const handleNext = () => {
-		if (validateForm()) {
+		console.log("Attempting to move to next step...");
+		const isValid = validateForm();
+		console.log("Form validation result:", isValid);
+		console.log("Current form state:", formState);
+
+		if (isValid) {
+			console.log("Calling onNext()...");
 			onNext();
 		}
 	};
@@ -68,10 +64,9 @@ export default function PricingStep({
 	return (
 		<div className="space-y-6">
 			<div className="space-y-2">
-				<h2 className="text-2xl font-bold">Pricing & Details</h2>
+				<h2 className="text-2xl font-bold">Pricing</h2>
 				<p className="text-muted-foreground">
-					Set a competitive price and provide additional details for
-					your listing.
+					Set a competitive price for your listing.
 				</p>
 			</div>
 
