@@ -148,13 +148,25 @@ export class CategoryService {
 	 * Get a single category by slug
 	 */
 	async getCategoryBySlug(slug: string): Promise<Category> {
-		// Build query parameters
+		// Build query parameters with deep population
 		const queryParams = {
 			filters: {
 				slug: { $eq: slug },
 			},
-			populate: ["parent", "attributes", "categories", "icon"],
+			populate: {
+				parent: true,
+				attributes: true,
+				categories: {
+					populate: {
+						attributes: true, // Also populate attributes of subcategories
+						categories: true, // Populate nested subcategories
+					},
+				},
+				icon: true,
+			},
 		};
+
+		console.log("CMS: Fetching category by slug:", slug);
 
 		// Make the API call
 		const response = await strapiCollections.categories().find(queryParams);
@@ -165,11 +177,13 @@ export class CategoryService {
 			!Array.isArray(response.data) ||
 			response.data.length === 0
 		) {
+			console.error("CMS: Category not found:", slug);
 			throw new Error(`Category with slug '${slug}' not found`);
 		}
 
 		// Map Strapi data to our domain type
 		const categories = response.data;
+		console.log("CMS: Found category:", categories[0]);
 		return categories[0] as Category;
 	}
 

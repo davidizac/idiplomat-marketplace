@@ -21,15 +21,20 @@ type Step = "details" | "pricing" | "photos";
 
 interface FormState {
 	// Details step
-	category: string;
-	subCategory: string;
-	categoryId: string;
-	subCategoryId: string;
+	categories: Array<{
+		slug: string;
+		name: string;
+		documentId: string;
+		level: number;
+	}>;
 	title: string;
 	description: string;
 
 	// Photos step
 	photos: File[];
+
+	// Pricing step
+	price: number;
 
 	// Attributes
 	attributes: Array<{
@@ -44,10 +49,7 @@ interface FormState {
 export default function ListingForm({ userId }: ListingFormProps) {
 	const [currentStep, setCurrentStep] = useState<Step>("details");
 	const [formState, setFormState] = useState<FormState>({
-		category: "",
-		subCategory: "",
-		categoryId: "",
-		subCategoryId: "",
+		categories: [],
 		title: "",
 		description: "",
 		location: "", // Added location which is required in the Listing type
@@ -102,11 +104,10 @@ export default function ListingForm({ userId }: ListingFormProps) {
 		try {
 			setIsSubmitting(true);
 
-			// Prepare categories array - only include valid category IDs
-			const categories: string[] = [];
-			if (formState.categoryId) categories.push(formState.categoryId);
-			if (formState.subCategoryId)
-				categories.push(formState.subCategoryId);
+			// Prepare categories array - extract all category documentIds
+			const categories = formState.categories.map(
+				(cat) => cat.documentId,
+			);
 
 			// Prepare attribute values array
 			const attributeValues = formState.attributes.map((attr) => ({

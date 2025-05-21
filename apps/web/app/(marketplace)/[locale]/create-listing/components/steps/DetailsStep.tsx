@@ -1,8 +1,7 @@
 "use client";
-
-import { useCategories } from "@marketplace/api";
-import { useCategoryBySlug } from "@marketplace/api";
-import type { Attribute } from "@repo/cms";
+import { categoryService } from "@repo/cms";
+import type { Attribute, Category } from "@repo/cms";
+import { useQuery } from "@tanstack/react-query";
 import { Button } from "@ui/components/button";
 import { Input } from "@ui/components/input";
 import { Label } from "@ui/components/label";
@@ -15,12 +14,16 @@ import {
 } from "@ui/components/select";
 import { Skeleton } from "@ui/components/skeleton";
 import { Textarea } from "@ui/components/textarea";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import AttributeInputs from "./AttributeInputs";
 
 interface FormState {
-	category: string;
-	subCategory: string;
+	categories: Array<{
+		slug: string;
+		name: string;
+		documentId: string;
+		level: number;
+	}>;
 	title: string;
 	description: string;
 	attributes: Array<{
@@ -37,49 +40,14 @@ interface DetailsStepProps {
 	onNext: () => void;
 }
 
-// Fallback category data in case API fails
-const fallbackCategories = [
-	{
-		id: "furniture",
-		name: "Furniture",
-		subCategories: [
-			{ id: "sofas", name: "Sofas & Armchairs" },
-			{ id: "tables", name: "Tables & Desks" },
-			{ id: "beds", name: "Beds & Mattresses" },
-			{ id: "storage", name: "Storage & Shelving" },
-		],
-	},
-	{
-		id: "electronics",
-		name: "Electronics",
-		subCategories: [
-			{ id: "phones", name: "Phones & Tablets" },
-			{ id: "computers", name: "Computers & Laptops" },
-			{ id: "tv", name: "TVs & Monitors" },
-			{ id: "audio", name: "Audio Equipment" },
-		],
-	},
-	{
-		id: "vehicles",
-		name: "Vehicles",
-		subCategories: [
-			{ id: "cars", name: "Cars" },
-			{ id: "motorcycles", name: "Motorcycles" },
-			{ id: "bicycles", name: "Bicycles" },
-			{ id: "accessories", name: "Vehicle Accessories" },
-		],
-	},
-	{
-		id: "clothing",
-		name: "Clothing",
-		subCategories: [
-			{ id: "mens", name: "Men's Clothing" },
-			{ id: "womens", name: "Women's Clothing" },
-			{ id: "kids", name: "Kids' Clothing" },
-			{ id: "shoes", name: "Shoes & Accessories" },
-		],
-	},
-];
+// Simplified category dropdown structure
+interface CategoryLevel {
+	level: number;
+	isLoading: boolean;
+	categories: Category[];
+	selectedSlug: string;
+	parentSlug?: string;
+}
 
 export default function DetailsStep({
 	formState,
@@ -87,124 +55,145 @@ export default function DetailsStep({
 	onNext,
 }: DetailsStepProps) {
 	const [errors, setErrors] = useState<Record<string, string>>({});
-	const [categoryAttributes, setCategoryAttributes] = useState<Attribute[]>(
-		[],
-	);
-	const [subCategoryAttributes, setSubCategoryAttributes] = useState<
+	const [allCategoryAttributes, setAllCategoryAttributes] = useState<
 		Attribute[]
 	>([]);
-	const [combinedAttributes, setCombinedAttributes] = useState<Attribute[]>(
-		[],
-	);
+	const [levels, setLevels] = useState<CategoryLevel[]>([]);
 
-	// Fetch categories from Strapi
-	const { data: categoriesData, isLoading, isError } = useCategories();
-
-	// Log the raw category data when it changes
-	useEffect(() => {
-		if (categoriesData?.data) {
-			console.log("Raw categories data from API:", categoriesData.data);
-		}
-	}, [categoriesData]);
-
-	// Fetch category details when selected
-	const { data: categoryData, isLoading: isCategoryLoading } =
-		useCategoryBySlug(formState.category, Boolean(formState.category));
-
-	// Fetch subcategory details when selected
-	const { data: subCategoryData, isLoading: isSubCategoryLoading } =
-		useCategoryBySlug(
-			formState.subCategory,
-			Boolean(formState.subCategory),
-		);
-
-	// Process categories from Strapi to match our structure
-	const categories = useMemo(() => {
-		if (!isLoading && !isError && categoriesData?.data) {
-			return categoriesData.data.map((category) => {
-				// Properly extract subcategories from the category data
-				let subcategories: Array<{ id: string; name: string }> = [];
-				if (category.categories && Array.isArray(category.categories)) {
-					subcategories = category.categories.map((subcategory) => ({
-						id: subcategory.slug,
-						name: subcategory.name,
-					}));
-				}
-
-				return {
-					id: category.slug,
-					name: category.name,
-					subCategories: subcategories,
-				};
-			});
-		}
-		return fallbackCategories;
-	}, [categoriesData, isLoading, isError]);
-
-	// Update category attributes when category data changes
-	useEffect(() => {
-		if (categoryData) {
-			setCategoryAttributes(categoryData.attributes || []);
-		} else {
-			setCategoryAttributes([]);
-		}
-	}, [categoryData]);
-
-	// Update subcategory attributes when subcategory data changes
-	useEffect(() => {
-		if (subCategoryData) {
-			setSubCategoryAttributes(subCategoryData.attributes || []);
-		} else {
-			setSubCategoryAttributes([]);
-		}
-	}, [subCategoryData]);
-
-	// Combine attributes from category and subcategory, avoiding duplicates
-	useEffect(() => {
-		const allAttributes = [...categoryAttributes];
-
-		// Add subcategory attributes, avoiding duplicates by name
-		subCategoryAttributes.forEach((subAttr) => {
-			if (!allAttributes.some((attr) => attr.name === subAttr.name)) {
-				allAttributes.push(subAttr);
-			}
+	// Fetch root categories
+	const { data: rootCategories, isLoading: isRootCategoriesLoading } =
+		useQuery({
+			queryKey: ["root-categories"],
+			queryFn: async () => {
+				console.log("Fetching root categories");
+				const result = await categoryService.getRootCategories();
+				console.log("Root categories:", result.data);
+				return result.data;
+			},
 		});
 
-		setCombinedAttributes(allAttributes);
-	}, [categoryAttributes, subCategoryAttributes]);
-
-	// Add specific debug logging for category data
+	// Initialize with root categories
 	useEffect(() => {
-		if (categoryData) {
-			console.log("Selected category data from API:", categoryData);
-			console.log(
-				"Subcategories from selected category:",
-				categoryData.categories,
-			);
+		if (rootCategories && !isRootCategoriesLoading) {
+			setLevels([
+				{
+					level: 0,
+					isLoading: false,
+					categories: rootCategories,
+					selectedSlug: "",
+				},
+			]);
 		}
-	}, [categoryData]);
+	}, [rootCategories, isRootCategoriesLoading]);
 
-	// Get subcategories based on selected category using a memo
-	const subcategories = useMemo(() => {
-		// Find the category by its slug
-		const selectedCategory = categories.find(
-			(c) => c.id === formState.category,
-		);
+	// Initialize form state if needed
+	useEffect(() => {
+		if (!formState.categories) {
+			updateField("categories", []);
+		}
+	}, [formState, updateField]);
 
-		if (selectedCategory) {
-			// Debug information
-			if (process.env.NODE_ENV === "development") {
-				console.log(
-					"useMemo subcategories - found category:",
-					selectedCategory,
-				);
-				console.log("Subcategories:", selectedCategory.subCategories);
+	// Handle category selection
+	const handleCategorySelect = async (level: number, slug: string) => {
+		if (!slug) return;
+
+		try {
+			console.log(`Selecting category at level ${level}, slug: ${slug}`);
+
+			// 1. Update the current level's selection
+			setLevels((prev) => {
+				const newLevels = [...prev];
+				newLevels[level] = {
+					...newLevels[level],
+					selectedSlug: slug,
+					isLoading: true,
+				};
+
+				// Remove any deeper levels
+				return newLevels.slice(0, level + 1);
+			});
+
+			// 2. Fetch the category details
+			const categoryDetails =
+				await categoryService.getCategoryBySlug(slug);
+			console.log(`Category details for ${slug}:`, categoryDetails);
+
+			// 3. Update attributes
+			if (categoryDetails.attributes) {
+				setAllCategoryAttributes((prev) => {
+					const attrMap = new Map(
+						prev.map((attr) => [attr.documentId, attr]),
+					);
+					categoryDetails.attributes.forEach((attr) => {
+						attrMap.set(attr.documentId, attr);
+					});
+					return Array.from(attrMap.values());
+				});
 			}
-			return selectedCategory.subCategories || [];
-		}
 
-		return [];
-	}, [categories, formState.category]);
+			// 4. Check for subcategories
+			const hasSubcategories = categoryDetails.categories?.length > 0;
+			console.log(`${slug} has subcategories:`, hasSubcategories);
+
+			if (hasSubcategories) {
+				// Add a new level for subcategories
+				setLevels((prev) => {
+					const newLevels = [...prev];
+					newLevels[level] = {
+						...newLevels[level],
+						isLoading: false,
+					};
+
+					// Add the next level
+					newLevels.push({
+						level: level + 1,
+						isLoading: false,
+						categories: categoryDetails.categories,
+						selectedSlug: "",
+						parentSlug: slug,
+					});
+
+					return newLevels;
+				});
+			} else {
+				// Just update loading state
+				setLevels((prev) => {
+					const newLevels = [...prev];
+					newLevels[level] = {
+						...newLevels[level],
+						isLoading: false,
+					};
+					return newLevels;
+				});
+			}
+
+			// 5. Update selected categories in form state
+			const newCategories = formState.categories
+				.filter((cat) => cat.level < level)
+				.concat({
+					level,
+					slug,
+					name: categoryDetails.name,
+					documentId: categoryDetails.documentId,
+				});
+
+			updateField("categories", newCategories);
+		} catch (error) {
+			console.error("Error selecting category:", error);
+
+			// Reset loading state on error
+			setLevels((prev) => {
+				const newLevels = [...prev];
+				if (newLevels[level]) {
+					newLevels[level] = {
+						...newLevels[level],
+						isLoading: false,
+					};
+				}
+				return newLevels;
+			});
+		}
+	};
 
 	// Update attributes in form state
 	const updateAttributes = useCallback(
@@ -224,12 +213,9 @@ export default function DetailsStep({
 	const validateForm = () => {
 		const newErrors: Record<string, string> = {};
 
-		if (!formState.category) {
+		// Require at least one category
+		if (!formState.categories || formState.categories.length === 0) {
 			newErrors.category = "Category is required";
-		}
-
-		if (!formState.subCategory && subcategories.length > 0) {
-			newErrors.subCategory = "Sub-category is required";
 		}
 
 		if (!formState.title) {
@@ -246,7 +232,7 @@ export default function DetailsStep({
 		}
 
 		// Validate required attributes
-		combinedAttributes.forEach((attr) => {
+		allCategoryAttributes.forEach((attr) => {
 			if (attr.required) {
 				const attributeValue = formState.attributes.find(
 					(a) => a.attributeDocumentId === attr.documentId,
@@ -269,42 +255,6 @@ export default function DetailsStep({
 		}
 	};
 
-	// Update form state and save category ID for API submission
-	const handleCategoryChange = (value: string) => {
-		// Skip if the value hasn't changed
-		if (value === formState.category) return;
-
-		updateField("category", value);
-		updateField("subCategory", ""); // Reset subcategory when category changes
-		updateField("attributes", []); // Reset attributes when category changes
-
-		// Find the full category object to save its ID
-		const category = categoriesData?.data.find((c) => c.slug === value);
-		if (category) {
-			updateField("categoryId", category.documentId);
-		}
-	};
-
-	// Update form state and save subcategory ID for API submission
-	const handleSubCategoryChange = (value: string) => {
-		// Skip if the value hasn't changed
-		if (value === formState.subCategory) return;
-
-		console.log("Selected subcategory value:", value);
-
-		updateField("subCategory", value);
-
-		// Find the full subcategory object from the category data
-		const subcategory = categoryData?.categories?.find(
-			(c) => c.slug === value,
-		);
-		console.log("Found subcategory data:", subcategory);
-
-		if (subcategory) {
-			updateField("subCategoryId", subcategory.documentId);
-		}
-	};
-
 	return (
 		<div className="space-y-6">
 			<div className="space-y-2">
@@ -314,101 +264,104 @@ export default function DetailsStep({
 				</p>
 			</div>
 
-			<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-				<div className="space-y-2">
-					<Label htmlFor="category">Category</Label>
-					{isLoading ? (
-						<Skeleton className="h-10 w-full" />
-					) : (
-						<Select
-							value={formState.category}
-							onValueChange={handleCategoryChange}
-						>
-							<SelectTrigger id="category" className="w-full">
-								<SelectValue placeholder="Select a category" />
-							</SelectTrigger>
-							<SelectContent>
-								{categories.map((category) => (
-									<SelectItem
-										key={category.id}
-										value={category.id}
-									>
-										{category.name}
-									</SelectItem>
-								))}
-							</SelectContent>
-						</Select>
-					)}
-					{errors.category && (
-						<p className="text-sm text-destructive">
-							{errors.category}
-						</p>
-					)}
+			{/* Category Selection - Dynamic Dropdowns */}
+			<div className="space-y-4">
+				<div className="flex items-center space-x-2">
+					<h3 className="font-medium">Categories</h3>
 				</div>
 
-				<div className="space-y-2">
-					<Label htmlFor="subCategory">Sub-Category</Label>
-					{isLoading ? (
-						<Skeleton className="h-10 w-full" />
-					) : (
-						<>
+				{/* Display category dropdowns for each level */}
+				{levels.map((level, index) => (
+					<div key={`category-level-${index}`} className="space-y-2">
+						<Label htmlFor={`category-level-${index}`}>
+							{index === 0
+								? "Main Category"
+								: `Subcategory (Level ${index + 1})`}
+						</Label>
+
+						{level.isLoading ? (
+							<Skeleton className="h-10 w-full" />
+						) : (
 							<Select
-								value={formState.subCategory}
-								onValueChange={handleSubCategoryChange}
-								disabled={
-									!formState.category ||
-									subcategories.length === 0
+								value={level.selectedSlug}
+								onValueChange={(value) =>
+									handleCategorySelect(index, value)
 								}
 							>
 								<SelectTrigger
-									id="subCategory"
+									id={`category-level-${index}`}
 									className="w-full"
 								>
 									<SelectValue
-										placeholder={
-											subcategories.length > 0
-												? "Select a sub-category"
-												: "No subcategories available"
-										}
+										placeholder={`Select ${index === 0 ? "a category" : "a subcategory"}`}
 									/>
 								</SelectTrigger>
 								<SelectContent>
-									{subcategories.map((subCategory) => (
-										<SelectItem
-											key={subCategory.id}
-											value={subCategory.id}
-										>
-											{subCategory.name}
-										</SelectItem>
-									))}
+									{level.categories.length === 0 ? (
+										<div className="py-2 px-2 text-sm text-muted-foreground">
+											No categories available
+										</div>
+									) : (
+										level.categories.map((category) => (
+											<SelectItem
+												key={category.slug}
+												value={category.slug}
+											>
+												{category.name}
+											</SelectItem>
+										))
+									)}
 								</SelectContent>
 							</Select>
-							{formState.category &&
-								subcategories.length === 0 && (
-									<p className="text-xs text-muted-foreground mt-1">
-										This category doesn't have any
-										subcategories
-									</p>
-								)}
-							{process.env.NODE_ENV === "development" && (
-								<div className="text-xs text-muted-foreground mt-1">
-									<p>
-										Selected category: {formState.category}
-									</p>
-									<p>
-										Available subcategories:{" "}
-										{subcategories.length}
-									</p>
-								</div>
-							)}
-						</>
-					)}
-					{errors.subCategory && (
-						<p className="text-sm text-destructive">
-							{errors.subCategory}
+						)}
+
+						{index === 0 && errors.category && (
+							<p className="text-sm text-destructive">
+								{errors.category}
+							</p>
+						)}
+					</div>
+				))}
+
+				{/* Selected Categories Display */}
+				{formState.categories && formState.categories.length > 0 && (
+					<div className="text-sm text-muted-foreground pt-2">
+						<p>
+							Selected:{" "}
+							{formState.categories
+								.map((cat) => cat.name)
+								.join(" → ")}
 						</p>
-					)}
-				</div>
+					</div>
+				)}
+
+				{/* Debug information (only in development) */}
+				{process.env.NODE_ENV === "development" && (
+					<div className="mt-4 p-3 border border-dashed rounded-md text-xs">
+						<p className="font-medium mb-1">Debug info:</p>
+						<p>Active levels: {levels.length}</p>
+						{levels.map((level, i) => (
+							<div key={i} className="ml-2 mb-1">
+								<p>
+									Level {i}: {level.categories.length}{" "}
+									categories, selected: "{level.selectedSlug}
+									", loading: {level.isLoading.toString()}
+								</p>
+							</div>
+						))}
+						<p className="mt-2">
+							Form categories: {formState.categories.length}
+						</p>
+						{formState.categories.map((cat, i) => (
+							<div key={i} className="ml-2">
+								<p>
+									{i}: {cat.name} (level: {cat.level}, id:{" "}
+									{cat.documentId})
+								</p>
+							</div>
+						))}
+					</div>
+				)}
 			</div>
 
 			<div className="space-y-2">
@@ -441,17 +394,10 @@ export default function DetailsStep({
 			</div>
 
 			{/* Dynamic Attributes */}
-			{(isCategoryLoading || isSubCategoryLoading) &&
-			formState.category ? (
-				<div className="space-y-4">
-					<Skeleton className="h-8 w-1/3" />
-					<Skeleton className="h-10 w-full" />
-					<Skeleton className="h-10 w-full" />
-				</div>
-			) : (
+			{allCategoryAttributes.length > 0 && (
 				<AttributeInputs
-					attributes={combinedAttributes}
-					values={formState.attributes}
+					attributes={allCategoryAttributes}
+					values={formState.attributes || []}
 					updateAttributes={updateAttributes}
 					errors={errors}
 				/>

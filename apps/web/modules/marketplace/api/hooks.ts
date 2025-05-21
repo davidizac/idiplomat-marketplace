@@ -43,7 +43,20 @@ export function useCategories(
 export function useCategoryBySlug(slug: string | undefined, enabled = true) {
 	return useQuery({
 		queryKey: [CATEGORIES_KEY, "slug", slug],
-		queryFn: () => categoryService.getCategoryBySlug(slug as string),
+		queryFn: async () => {
+			// Log that we're fetching a category
+			console.log(`API: Fetching category with slug: ${slug}`);
+
+			// Get the category with deep population of subcategories
+			const result = await categoryService.getCategoryBySlug(
+				slug as string,
+			);
+
+			// Log the result for debugging
+			console.log("API: Category result:", result);
+
+			return result;
+		},
 		enabled: Boolean(slug) && enabled,
 	});
 }
