@@ -3,14 +3,7 @@
  * React hooks for API data fetching using the CMS package
  */
 
-import {
-	getCategories,
-	getCategoryById,
-	getCategoryBySlug,
-	getListingById,
-	getListingBySlug,
-	getListings,
-} from "@repo/cms/services";
+import { categoryService, listingService } from "@repo/cms";
 import { useQuery } from "@tanstack/react-query";
 
 // Query keys
@@ -39,22 +32,8 @@ export function useCategories(
 
 	return useQuery({
 		queryKey: [CATEGORIES_KEY, enhancedParams],
-		queryFn: () => getCategories(enhancedParams),
+		queryFn: () => categoryService.getCategories(enhancedParams),
 		enabled,
-	});
-}
-
-/**
- * Hook to fetch a single category by ID
- */
-export function useCategoryById(
-	id: string | number | undefined,
-	enabled = true,
-) {
-	return useQuery({
-		queryKey: [CATEGORIES_KEY, id],
-		queryFn: () => getCategoryById(id as string | number),
-		enabled: Boolean(id) && enabled,
 	});
 }
 
@@ -64,7 +43,7 @@ export function useCategoryById(
 export function useCategoryBySlug(slug: string | undefined, enabled = true) {
 	return useQuery({
 		queryKey: [CATEGORIES_KEY, "slug", slug],
-		queryFn: () => getCategoryBySlug(slug as string),
+		queryFn: () => categoryService.getCategoryBySlug(slug as string),
 		enabled: Boolean(slug) && enabled,
 	});
 }
@@ -92,32 +71,7 @@ export function useListings(
 
 	return useQuery({
 		queryKey: [LISTINGS_KEY, restParams],
-		queryFn: () => getListings(restParams),
+		queryFn: () => listingService.getListings(restParams),
 		enabled,
-	});
-}
-
-/**
- * Hook to fetch a single listing by ID
- */
-export function useListingById(
-	id: string | number | undefined,
-	enabled = true,
-) {
-	return useQuery({
-		queryKey: [LISTINGS_KEY, id],
-		queryFn: () => getListingById(id as string | number),
-		enabled: Boolean(id) && enabled,
-	});
-}
-
-/**
- * Hook to fetch a single listing by slug
- */
-export function useListingBySlug(slug: string | undefined, enabled = true) {
-	return useQuery({
-		queryKey: [LISTINGS_KEY, "slug", slug],
-		queryFn: () => getListingBySlug(slug as string),
-		enabled: Boolean(slug) && enabled,
 	});
 }

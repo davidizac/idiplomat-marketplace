@@ -16,6 +16,7 @@ interface PhotosStepProps {
 	updateField: (field: string, value: any) => void;
 	onSubmit: () => void;
 	onBack: () => void;
+	isSubmitting?: boolean;
 }
 
 export default function PhotosStep({
@@ -23,6 +24,7 @@ export default function PhotosStep({
 	updateField,
 	onSubmit,
 	onBack,
+	isSubmitting = false,
 }: PhotosStepProps) {
 	const [error, setError] = useState<string>("");
 	const [photoPreviewUrls, setPhotoPreviewUrls] = useState<string[]>([]);
@@ -206,11 +208,20 @@ export default function PhotosStep({
 			</div>
 
 			<div className="flex justify-between">
-				<Button type="button" variant="outline" onClick={onBack}>
+				<Button
+					type="button"
+					variant="outline"
+					onClick={onBack}
+					disabled={isSubmitting}
+				>
 					Back to Pricing
 				</Button>
-				<Button type="button" onClick={handlePublish}>
-					Publish Listing
+				<Button
+					type="button"
+					onClick={handlePublish}
+					disabled={isSubmitting}
+				>
+					{isSubmitting ? "Publishing..." : "Publish Listing"}
 				</Button>
 			</div>
 		</div>

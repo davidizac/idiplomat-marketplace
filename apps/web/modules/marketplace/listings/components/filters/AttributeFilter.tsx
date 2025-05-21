@@ -32,7 +32,7 @@ export type AttributeFilterValues = Record<number, AttributeValue>;
 interface AttributeFilterProps {
 	attribute: Attribute;
 	value: AttributeValue;
-	onChange: (attributeId: number, value: AttributeValue) => void;
+	onChange: (attributeDocumentId: string, value: AttributeValue) => void;
 }
 
 export function AttributeFilter({
@@ -45,15 +45,17 @@ export function AttributeFilter({
 		case "text": {
 			return (
 				<div className="space-y-2">
-					<Label htmlFor={`attr-${attribute.id}`}>
+					<Label htmlFor={attribute.documentId}>
 						{attribute.name}
 					</Label>
 					<input
-						id={`attr-${attribute.id}`}
+						id={attribute.documentId}
 						type="text"
 						className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
 						value={(value as string) || ""}
-						onChange={(e) => onChange(attribute.id, e.target.value)}
+						onChange={(e) =>
+							onChange(attribute.documentId, e.target.value)
+						}
 						placeholder={`Enter ${attribute.name.toLowerCase()}`}
 					/>
 				</div>
@@ -65,7 +67,7 @@ export function AttributeFilter({
 			return (
 				<div className="space-y-4">
 					<div className="flex justify-between">
-						<Label htmlFor={`attr-${attribute.id}`}>
+						<Label htmlFor={attribute.documentId}>
 							{attribute.name}
 						</Label>
 						<span className="text-sm text-muted-foreground">
@@ -73,13 +75,13 @@ export function AttributeFilter({
 						</span>
 					</div>
 					<Slider
-						id={`attr-${attribute.id}`}
+						id={attribute.documentId}
 						min={(attribute.metadata?.minimum as number) ?? 0}
 						max={(attribute.metadata?.maximum as number) ?? 1000}
 						step={(attribute.metadata?.step as number) ?? 1}
 						value={[numValue]}
 						onValueChange={(vals: number[]) =>
-							onChange(attribute.id, vals[0])
+							onChange(attribute.documentId, vals[0])
 						}
 					/>
 				</div>
@@ -89,14 +91,14 @@ export function AttributeFilter({
 		case "boolean": {
 			return (
 				<div className="flex items-center justify-between">
-					<Label htmlFor={`attr-${attribute.id}`} className="flex-1">
+					<Label htmlFor={attribute.documentId} className="flex-1">
 						{attribute.name}
 					</Label>
 					<Switch
-						id={`attr-${attribute.id}`}
+						id={attribute.documentId}
 						checked={Boolean(value)}
 						onCheckedChange={(checked: boolean) =>
-							onChange(attribute.id, checked)
+							onChange(attribute.documentId, checked)
 						}
 					/>
 				</div>
@@ -128,7 +130,7 @@ export function AttributeFilter({
 								mode="single"
 								selected={dateValue || undefined}
 								onSelect={(date: Date | undefined) =>
-									onChange(attribute.id, date || null)
+									onChange(attribute.documentId, date || null)
 								}
 								initialFocus
 							/>
@@ -145,16 +147,16 @@ export function AttributeFilter({
 
 			return (
 				<div className="space-y-2">
-					<Label htmlFor={`attr-${attribute.id}`}>
+					<Label htmlFor={attribute.documentId}>
 						{attribute.name}
 					</Label>
 					<Select
 						value={(value as string) || ""}
 						onValueChange={(val: string) =>
-							onChange(attribute.id, val)
+							onChange(attribute.documentId, val)
 						}
 					>
-						<SelectTrigger id={`attr-${attribute.id}`}>
+						<SelectTrigger id={attribute.documentId}>
 							<SelectValue
 								placeholder={`Select ${attribute.name.toLowerCase()}`}
 							/>
@@ -188,17 +190,17 @@ export function AttributeFilter({
 								className="flex items-center space-x-2"
 							>
 								<Checkbox
-									id={`attr-${attribute.id}-${option}`}
+									id={`${attribute.documentId}-${option}`}
 									checked={multiValues.includes(option)}
 									onCheckedChange={(checked: boolean) => {
 										if (checked) {
-											onChange(attribute.id, [
+											onChange(attribute.documentId, [
 												...multiValues,
 												option,
 											]);
 										} else {
 											onChange(
-												attribute.id,
+												attribute.documentId,
 												multiValues.filter(
 													(item) => item !== option,
 												),
@@ -207,7 +209,7 @@ export function AttributeFilter({
 									}}
 								/>
 								<Label
-									htmlFor={`attr-${attribute.id}-${option}`}
+									htmlFor={`${attribute.documentId}-${option}`}
 									className="text-sm font-normal"
 								>
 									{option}

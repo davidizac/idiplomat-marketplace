@@ -10,7 +10,6 @@ interface PageProps {
 
 export default async function ListingDetailPage({ params }: PageProps) {
 	// Load listing data using the loader
-	const listings = await loadListing(params.id);
-
-	return <ListingDetail listing={listings[0]} />;
+	const listing = await loadListing(params.id);
+	return <ListingDetail listing={listing} />;
 }

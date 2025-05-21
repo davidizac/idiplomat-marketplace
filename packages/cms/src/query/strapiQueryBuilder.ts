@@ -89,6 +89,36 @@ export class StrapiQueryBuilder {
 	}
 
 	/**
+	 * Build and return the query parameters as an object
+	 * Compatible with @strapi/client
+	 */
+	buildObject(): Record<string, any> {
+		const query: Record<string, any> = {};
+
+		// Add pagination if set
+		if (Object.keys(this._pagination).length > 0) {
+			query.pagination = this._pagination;
+		}
+
+		// Add sorting if set
+		if (this._sort.length > 0) {
+			query.sort = this._sort;
+		}
+
+		// Add filters if set
+		if (Object.keys(this._where).length > 0) {
+			query.filters = this._where;
+		}
+
+		// Add population if set
+		if (Object.keys(this._populate).length > 0) {
+			query.populate = this._populate;
+		}
+
+		return query;
+	}
+
+	/**
 	 * Build a basic query for a listing by ID
 	 */
 	static forListingById(): StrapiQueryBuilder {

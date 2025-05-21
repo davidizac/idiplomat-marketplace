@@ -49,11 +49,11 @@ export function useFilterManager(initialFilters?: {
 		// Set initial attribute values
 		if (initialFilters.attributeValues) {
 			Object.entries(initialFilters.attributeValues).forEach(
-				([attributeId, value]) => {
+				([attributeDocumentId, value]) => {
 					if (value !== undefined && value !== null) {
-						const attrName = `attribute_${attributeId}`;
+						const attrName = attributeDocumentId;
 						filterManager.addAttributeFilter(
-							attributeId,
+							attributeDocumentId,
 							attrName,
 							value,
 						);
@@ -69,11 +69,15 @@ export function useFilterManager(initialFilters?: {
 	// Handler for updating an attribute filter
 	const updateAttributeFilter = useCallback(
 		(
-			attributeId: number | string,
+			attributeDocumentId: string,
 			attributeName: string,
 			value: AttributeValue,
 		) => {
-			filterManager.addAttributeFilter(attributeId, attributeName, value);
+			filterManager.addAttributeFilter(
+				attributeDocumentId,
+				attributeName,
+				value,
+			);
 			setFilterVersion((v) => v + 1);
 		},
 		[filterManager],

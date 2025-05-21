@@ -17,13 +17,13 @@ import { useEffect, useRef } from "react";
 interface AttributeInputsProps {
 	attributes: Attribute[];
 	values: Array<{
-		attributeId: number;
+		attributeDocumentId: string;
 		attributeName: string;
 		value: string;
 	}>;
 	updateAttributes: (
 		attributes: Array<{
-			attributeId: number;
+			attributeDocumentId: string;
 			attributeName: string;
 			value: string;
 		}>,
@@ -61,14 +61,17 @@ export default function AttributeInputs({
 
 		// Calculate if we need to update the values
 		const needsUpdate = attributes.some(
-			(attr) => !values.some((val) => val.attributeId === attr.id),
+			(attr) =>
+				!values.some(
+					(val) => val.attributeDocumentId === attr.documentId,
+				),
 		);
 
 		if (needsUpdate) {
 			const initializedAttributes = attributes.map((attr) => {
 				// Check if we already have a value for this attribute
 				const existingValue = values.find(
-					(v) => v.attributeId === attr.id,
+					(v) => v.attributeDocumentId === attr.documentId,
 				);
 				if (existingValue) return existingValue;
 
@@ -79,7 +82,7 @@ export default function AttributeInputs({
 					defaultValue = attr.options[0];
 
 				return {
-					attributeId: attr.id,
+					attributeDocumentId: attr.documentId,
 					attributeName: attr.name,
 					value: defaultValue,
 				};
@@ -95,19 +98,23 @@ export default function AttributeInputs({
 	}
 
 	const handleValueChange = (
-		attributeId: number,
+		attributeDocumentId: string,
 		attributeName: string,
 		newValue: string,
 	) => {
 		const updatedValues = [...values];
 		const index = updatedValues.findIndex(
-			(v) => v.attributeId === attributeId,
+			(v) => v.attributeDocumentId === attributeDocumentId,
 		);
 
 		if (index !== -1) {
 			updatedValues[index] = { ...updatedValues[index], value: newValue };
 		} else {
-			updatedValues.push({ attributeId, attributeName, value: newValue });
+			updatedValues.push({
+				attributeDocumentId,
+				attributeName,
+				value: newValue,
+			});
 		}
 
 		updateAttributes(updatedValues);
@@ -127,8 +134,9 @@ export default function AttributeInputs({
 			<div className="space-y-4">
 				{attributes.map((attr) => {
 					const value =
-						values.find((v) => v.attributeId === attr.id)?.value ||
-						"";
+						values.find(
+							(v) => v.attributeDocumentId === attr.documentId,
+						)?.value || "";
 					const errorKey = `attribute-${attr.id}`;
 					const hasError = Boolean(errors[errorKey]);
 
@@ -158,7 +166,7 @@ export default function AttributeInputs({
 									value={value}
 									onChange={(e) =>
 										handleValueChange(
-											attr.id,
+											attr.documentId,
 											attr.name,
 											e.target.value,
 										)
@@ -176,7 +184,7 @@ export default function AttributeInputs({
 									value={value}
 									onChange={(e) =>
 										handleValueChange(
-											attr.id,
+											attr.documentId,
 											attr.name,
 											e.target.value,
 										)
@@ -193,7 +201,7 @@ export default function AttributeInputs({
 									value={value}
 									onValueChange={(val) =>
 										handleValueChange(
-											attr.id,
+											attr.documentId,
 											attr.name,
 											val,
 										)
@@ -229,7 +237,7 @@ export default function AttributeInputs({
 										checked={value === "true"}
 										onCheckedChange={(checked) =>
 											handleValueChange(
-												attr.id,
+												attr.documentId,
 												attr.name,
 												checked ? "true" : "false",
 											)
@@ -251,7 +259,7 @@ export default function AttributeInputs({
 									value={value}
 									onChange={(e) =>
 										handleValueChange(
-											attr.id,
+											attr.documentId,
 											attr.name,
 											e.target.value,
 										)
@@ -278,7 +286,7 @@ export default function AttributeInputs({
 										value={value}
 										onChange={(e) =>
 											handleValueChange(
-												attr.id,
+												attr.documentId,
 												attr.name,
 												e.target.value,
 											)

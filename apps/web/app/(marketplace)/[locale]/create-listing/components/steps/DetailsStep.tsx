@@ -24,7 +24,7 @@ interface FormState {
 	title: string;
 	description: string;
 	attributes: Array<{
-		attributeId: number;
+		attributeDocumentId: string;
 		attributeName: string;
 		value: string;
 	}>;
@@ -210,7 +210,7 @@ export default function DetailsStep({
 	const updateAttributes = useCallback(
 		(
 			attributes: Array<{
-				attributeId: number;
+				attributeDocumentId: string;
 				attributeName: string;
 				value: string;
 			}>,
@@ -249,7 +249,7 @@ export default function DetailsStep({
 		combinedAttributes.forEach((attr) => {
 			if (attr.required) {
 				const attributeValue = formState.attributes.find(
-					(a) => a.attributeId === attr.id,
+					(a) => a.attributeDocumentId === attr.documentId,
 				);
 				if (!attributeValue || !attributeValue.value) {
 					newErrors[`attribute-${attr.id}`] =
@@ -281,7 +281,7 @@ export default function DetailsStep({
 		// Find the full category object to save its ID
 		const category = categoriesData?.data.find((c) => c.slug === value);
 		if (category) {
-			updateField("categoryId", category.id.toString());
+			updateField("categoryId", category.documentId);
 		}
 	};
 
@@ -301,7 +301,7 @@ export default function DetailsStep({
 		console.log("Found subcategory data:", subcategory);
 
 		if (subcategory) {
-			updateField("subCategoryId", subcategory.id.toString());
+			updateField("subCategoryId", subcategory.documentId);
 		}
 	};
 

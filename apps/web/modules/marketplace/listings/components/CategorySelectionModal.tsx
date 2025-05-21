@@ -103,10 +103,10 @@ export function CategorySelectionModal({
 									aria-label={`Select ${category.name} category`}
 								>
 									<div className="aspect-square relative">
-										{category.image ? (
+										{category.icon ? (
 											<Image
 												src={getStrapiImageUrl(
-													category.image.url,
+													category.icon.url,
 												)}
 												alt={category.name}
 												fill

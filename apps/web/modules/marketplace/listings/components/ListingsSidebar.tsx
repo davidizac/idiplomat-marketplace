@@ -23,7 +23,7 @@ interface ListingsSidebarProps {
 	selectedCategory?: Category;
 	filterManager: FilterManager;
 	onUpdateAttributeFilter: (
-		attributeId: number,
+		attributeDocumentId: string,
 		attributeName: string,
 		value: AttributeValue,
 	) => void;
@@ -55,15 +55,15 @@ export function ListingsSidebar({
 
 	// Handler for attribute changes
 	const handleAttributeChange = (
-		attributeId: number,
+		attributeDocumentId: string,
 		value: AttributeValue,
 	) => {
 		const attributeName =
 			selectedCategory?.attributes?.find(
-				(attr) => attr.id === attributeId,
-			)?.name || `attribute_${attributeId}`;
+				(attr) => attr.documentId === attributeDocumentId,
+			)?.name || attributeDocumentId;
 
-		onUpdateAttributeFilter(attributeId, attributeName, value);
+		onUpdateAttributeFilter(attributeDocumentId, attributeName, value);
 	};
 
 	// Handler for subcategory changes
@@ -73,8 +73,8 @@ export function ListingsSidebar({
 	};
 
 	// Get attribute values from FilterManager for display
-	const getAttributeValue = (attributeId: string): AttributeValue => {
-		const filterId = `attr_${attributeId}`;
+	const getAttributeValue = (attributeDocumentId: string): AttributeValue => {
+		const filterId = attributeDocumentId;
 		const filter = filterManager.getFilter(filterId);
 
 		if (filter) {
@@ -92,7 +92,7 @@ export function ListingsSidebar({
 
 		// Return appropriate default value based on attribute type
 		const attributeType = selectedCategory?.attributes?.find(
-			(attr) => attr.id.toString() === attributeId,
+			(attr) => attr.documentId === attributeDocumentId,
 		)?.type;
 
 		switch (attributeType) {
@@ -138,9 +138,9 @@ export function ListingsSidebar({
 				{/* Dynamic attribute filters based on selected category */}
 				{selectedCategory?.attributes?.map((attribute) => (
 					<AttributeFilter
-						key={attribute.id}
+						key={attribute.documentId}
 						attribute={attribute}
-						value={getAttributeValue(attribute.id.toString())}
+						value={getAttributeValue(attribute.documentId)}
 						onChange={handleAttributeChange}
 					/>
 				))}

@@ -92,12 +92,12 @@ export class FilterManager {
 	 * Add or update attribute filter
 	 */
 	addAttributeFilter(
-		attributeId: string | number,
+		attributeDocumentId: string,
 		attributeName: string,
 		value: FilterAttributeValue,
 		operator: FilterOperator = "eq",
 	): FilterManager {
-		const id = `attr_${attributeId}`;
+		const id = attributeDocumentId;
 
 		// Skip empty values
 		if (

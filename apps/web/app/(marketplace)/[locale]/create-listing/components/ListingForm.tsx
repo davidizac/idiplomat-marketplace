@@ -1,5 +1,5 @@
 "use client";
-import { strapiClient } from "@repo/cms/clients";
+import { listingService } from "@repo/cms";
 import { Check, ChevronRight } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -33,7 +33,7 @@ interface FormState {
 
 	// Attributes
 	attributes: Array<{
-		attributeId: number;
+		attributeDocumentId: string;
 		attributeName: string;
 		value: string;
 	}>;
@@ -50,10 +50,13 @@ export default function ListingForm({ userId }: ListingFormProps) {
 		subCategoryId: "",
 		title: "",
 		description: "",
+		location: "", // Added location which is required in the Listing type
+		status: "draft", // Default status to draft
 		price: 0,
 		photos: [],
 		attributes: [],
 	});
+	const [isSubmitting, setIsSubmitting] = useState(false);
 	const router = useRouter();
 
 	const steps = [
@@ -94,66 +97,38 @@ export default function ListingForm({ userId }: ListingFormProps) {
 	};
 
 	const handleSubmit = async () => {
+		if (isSubmitting) return;
+
 		try {
-			// 1. Create product attribute values (if needed)
-			// For each attribute, POST to /product-attribute-values and collect the IDs
-			const productAttributeValueIds: number[] = [];
-			for (const attr of formState.attributes) {
-				// Prepare the data for the attribute value
-				const attributeValueData = {
-					attribute: attr.attributeId, // relation by ID
-					value: attr.value,
-				};
+			setIsSubmitting(true);
 
-				// Create the attribute value entry
-				const res = await strapiClient.post(
-					"/product-attribute-values",
-					attributeValueData,
-				);
-				// Collect the created ID
-				productAttributeValueIds.push(res.data.id);
-			}
-
-			// 2. Prepare categories array
-			const categories: number[] = [];
-			if (formState.categoryId)
-				categories.push(Number(formState.categoryId));
+			// Prepare categories array - only include valid category IDs
+			const categories: string[] = [];
+			if (formState.categoryId) categories.push(formState.categoryId);
 			if (formState.subCategoryId)
-				categories.push(Number(formState.subCategoryId));
+				categories.push(formState.subCategoryId);
 
-			// 3. Create the listing entry (without images)
-			const listingData = {
+			// Prepare attribute values array
+			const attributeValues = formState.attributes.map((attr) => ({
+				attributeDocumentId: attr.attributeDocumentId,
+				value: attr.value,
+			}));
+
+			// Prepare photos array with File objects
+			const images = formState.photos.map((photo) => ({
+				data: photo,
+				filename: photo.name,
+			}));
+
+			// Create the listing using the new service class
+			await listingService.createListing({
 				title: formState.title,
 				description: formState.description,
 				slug: formState.title.toLowerCase().replace(/\s+/g, "-"),
-				categories,
-				product_attribute_values: productAttributeValueIds,
-			};
-
-			const response = await strapiClient.post("/listings", listingData);
-			const createdListingId = response.data.id;
-
-			// 4. Upload images and link to the listing
-			if (formState.photos.length > 0) {
-				const formData = new FormData();
-				formData.append("ref", "api::listing.listing");
-				formData.append("refId", createdListingId.toString());
-				formData.append("field", "images");
-				formState.photos.forEach((photo) => {
-					formData.append("files", photo);
-				});
-
-				await fetch(
-					`${process.env.NEXT_PUBLIC_STRAPI_URL}/api/upload`,
-					{
-						method: "POST",
-						headers: {
-							Authorization: `Bearer ${process.env.STRAPI_TOKEN}`,
-						},
-						body: formData,
-					},
-				);
-			}
+				categories: categories,
+				images: images,
+				attributeValues: attributeValues,
+			});
 
 			// Success notification and redirect
 			toast.success("Listing published successfully", {
@@ -167,6 +142,8 @@ export default function ListingForm({ userId }: ListingFormProps) {
 				description:
 					"There was an error publishing your listing. Please try again.",
 			});
+		} finally {
+			setIsSubmitting(false);
 		}
 	};
 
@@ -267,6 +244,7 @@ export default function ListingForm({ userId }: ListingFormProps) {
 								updateField={updateField}
 								onSubmit={handleSubmit}
 								onBack={goToPrevStep}
+								isSubmitting={isSubmitting}
 							/>
 						)}
 					</main>

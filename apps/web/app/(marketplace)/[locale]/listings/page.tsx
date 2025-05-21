@@ -39,6 +39,8 @@ export default function ListingsPage() {
 	const { data: categoryData, isLoading: isCategoryLoading } =
 		useCategoryBySlug(categorySlug || undefined, Boolean(categorySlug));
 
+	console.log(categoryData);
+
 	// If no category is selected, show the modal
 	useEffect(() => {
 		if (!categorySlug && !isCategoryLoading) {

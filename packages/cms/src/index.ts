@@ -14,3 +14,6 @@ export * from "./types";
 
 // Query Builders
 export * from "./query";
+
+// Examples
+export { examples } from "./examples";

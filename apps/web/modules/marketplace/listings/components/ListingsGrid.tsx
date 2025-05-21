@@ -19,11 +19,18 @@ interface ListingCardProps {
 	category: string;
 	imageUrl: string;
 	createdAt: Date;
+	documentId: string;
 }
 
-function ListingCard({ id, title, category, imageUrl }: ListingCardProps) {
+function ListingCard({
+	id,
+	title,
+	category,
+	imageUrl,
+	documentId,
+}: ListingCardProps) {
 	return (
-		<Link href={`/listings/${id}`}>
+		<Link href={`/listings/${documentId}`}>
 			<Card className="overflow-hidden hover:shadow-lg transition-shadow h-full">
 				<div className="relative h-48">
 					<Image
@@ -94,6 +101,7 @@ function processListings(data: any): ListingCardProps[] {
 
 			return {
 				id: item.id.toString(),
+				documentId: item.documentId,
 				title: listing.title,
 				category: mainCategory,
 				imageUrl:

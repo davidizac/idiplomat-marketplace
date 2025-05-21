@@ -65,6 +65,7 @@ export interface Image extends BaseAttributes {
 //  Category Type
 export interface Category extends BaseAttributes {
 	id: number;
+	documentId: string;
 	name: string;
 	slug: string;
 	description: string | null;
@@ -77,7 +78,7 @@ export interface Category extends BaseAttributes {
 //  Attribute Type
 export interface Attribute {
 	id: number;
-
+	documentId: string;
 	name: string;
 	type: string;
 	required: boolean;
@@ -96,7 +97,7 @@ export interface AttributeValue {
 //  Listing Type (API response)
 export interface Listing extends BaseAttributes {
 	id: number;
-
+	documentId: string;
 	title: string;
 	description: string;
 	price: number;
