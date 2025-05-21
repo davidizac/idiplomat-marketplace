@@ -51,7 +51,8 @@ export function CategorySelectionModal({
 			if (searchQuery) {
 				url += `&search=${encodeURIComponent(searchQuery)}`;
 			}
-			router.push(url);
+			// Use replace instead of push to force a page refresh
+			router.replace(url);
 			onOpenChange(false);
 		}
 	};

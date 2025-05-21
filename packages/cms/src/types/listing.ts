@@ -70,7 +70,7 @@ export interface Category extends BaseAttributes {
 	description: string | null;
 	categories: Category[];
 	attributes: Attribute[];
-	image: Image;
+	icon: Image;
 	parent: Category | null;
 }
 

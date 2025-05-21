@@ -28,6 +28,7 @@ export default function ListingsPage() {
 		updateSort,
 		clearAllFilters,
 		filterVersion,
+		setFilterVersion,
 	} = useFilterManager({
 		categorySlug: categorySlug || null,
 		subcategorySlug: subcategorySlug || null,
@@ -52,6 +53,15 @@ export default function ListingsPage() {
 			// We could use the search query to filter categories or other fields
 		}
 	}, [searchQuery]);
+
+	// Force re-fetch when category changes in URL
+	useEffect(() => {
+		if (categorySlug) {
+			// Ensure filter manager has correct category when URL changes
+			filterManager.setCategoryFilter(categorySlug);
+			setFilterVersion((v) => v + 1);
+		}
+	}, [categorySlug, filterManager, setFilterVersion]);
 
 	// Handle sort changes from the grid
 	const handleSortChange = (sort: SortOption) => {

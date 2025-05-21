@@ -134,5 +134,6 @@ export function useFilterManager(initialFilters?: {
 		updatePriceRange,
 		clearAllFilters,
 		filterVersion,
+		setFilterVersion,
 	};
 }
