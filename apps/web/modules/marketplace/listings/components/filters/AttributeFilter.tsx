@@ -33,6 +33,7 @@ interface AttributeFilterProps {
 	attribute: Attribute;
 	value: AttributeValue;
 	onChange: (attributeDocumentId: string, value: AttributeValue) => void;
+	error?: string;
 }
 
 export function AttributeFilter({

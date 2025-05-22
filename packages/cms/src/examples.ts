@@ -86,7 +86,9 @@ async function updateListingWithRelationsExample(listingDocumentId: string) {
 			status: "on_sale", // Updated status
 			// Add a new category (assume this ID exists)
 			categories: [
-				...existingListing.categories.map((c) => c.id.toString()),
+				...existingListing.categories.map((c) =>
+					c.documentId.toString(),
+				),
 				"10",
 			],
 			// Replace all attribute values
@@ -165,3 +167,5 @@ export const examples = {
 	searchListingsByAttributesExample,
 	usingStrapiClientDirectlyExample,
 };
+
+createCompleteProductExample();

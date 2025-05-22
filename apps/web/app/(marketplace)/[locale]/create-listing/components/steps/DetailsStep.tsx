@@ -1,21 +1,18 @@
 "use client";
-import { categoryService } from "@repo/cms";
-import type { Attribute, Category } from "@repo/cms";
-import { useQuery } from "@tanstack/react-query";
+import type {} from "@repo/cms";
 import { Button } from "@ui/components/button";
 import { Input } from "@ui/components/input";
 import { Label } from "@ui/components/label";
-import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from "@ui/components/select";
-import { Skeleton } from "@ui/components/skeleton";
 import { Textarea } from "@ui/components/textarea";
 import { useCallback, useEffect, useState } from "react";
-import AttributeInputs from "./AttributeInputs";
+import {
+	type AttributeData,
+	AttributesManager,
+} from "../../../../../../modules/marketplace/components/AttributesManager";
+import {
+	type CategorySelectionData,
+	CategorySelector,
+} from "../../../../../../modules/marketplace/components/CategorySelector";
 
 interface FormState {
 	categories: Array<{
@@ -40,170 +37,37 @@ interface DetailsStepProps {
 	onNext: () => void;
 }
 
-// Simplified category dropdown structure
-interface CategoryLevel {
-	level: number;
-	isLoading: boolean;
-	categories: Category[];
-	selectedSlug: string;
-	parentSlug?: string;
-}
-
 export default function DetailsStep({
 	formState,
 	updateField,
 	onNext,
 }: DetailsStepProps) {
 	const [errors, setErrors] = useState<Record<string, string>>({});
-	const [allCategoryAttributes, setAllCategoryAttributes] = useState<
-		Attribute[]
-	>([]);
-	const [levels, setLevels] = useState<CategoryLevel[]>([]);
 
-	// Fetch root categories
-	const { data: rootCategories, isLoading: isRootCategoriesLoading } =
-		useQuery({
-			queryKey: ["root-categories"],
-			queryFn: async () => {
-				console.log("Fetching root categories");
-				const result = await categoryService.getRootCategories();
-				console.log("Root categories:", result.data);
-				return result.data;
-			},
-		});
-
-	// Initialize with root categories
-	useEffect(() => {
-		if (rootCategories && !isRootCategoriesLoading) {
-			setLevels([
-				{
-					level: 0,
-					isLoading: false,
-					categories: rootCategories,
-					selectedSlug: "",
-				},
-			]);
-		}
-	}, [rootCategories, isRootCategoriesLoading]);
-
-	// Initialize form state if needed
+	// Initialize form state with empty categories array if it doesn't exist
 	useEffect(() => {
 		if (!formState.categories) {
 			updateField("categories", []);
 		}
+
+		// Initialize attributes array if it doesn't exist
+		if (!formState.attributes) {
+			updateField("attributes", []);
+		}
 	}, [formState, updateField]);
 
-	// Handle category selection
-	const handleCategorySelect = async (level: number, slug: string) => {
-		if (!slug) return;
+	// Handle category selection changes
+	const handleSelectionChange = useCallback(
+		(data: CategorySelectionData) => {
+			// Update the form state with the selected categories
+			updateField("categories", data.selectedCategories);
+		},
+		[updateField],
+	);
 
-		try {
-			console.log(`Selecting category at level ${level}, slug: ${slug}`);
-
-			// 1. Update the current level's selection
-			setLevels((prev) => {
-				const newLevels = [...prev];
-				newLevels[level] = {
-					...newLevels[level],
-					selectedSlug: slug,
-					isLoading: true,
-				};
-
-				// Remove any deeper levels
-				return newLevels.slice(0, level + 1);
-			});
-
-			// 2. Fetch the category details
-			const categoryDetails =
-				await categoryService.getCategoryBySlug(slug);
-			console.log(`Category details for ${slug}:`, categoryDetails);
-
-			// 3. Update attributes
-			if (categoryDetails.attributes) {
-				setAllCategoryAttributes((prev) => {
-					const attrMap = new Map(
-						prev.map((attr) => [attr.documentId, attr]),
-					);
-					categoryDetails.attributes.forEach((attr) => {
-						attrMap.set(attr.documentId, attr);
-					});
-					return Array.from(attrMap.values());
-				});
-			}
-
-			// 4. Check for subcategories
-			const hasSubcategories = categoryDetails.categories?.length > 0;
-			console.log(`${slug} has subcategories:`, hasSubcategories);
-
-			if (hasSubcategories) {
-				// Add a new level for subcategories
-				setLevels((prev) => {
-					const newLevels = [...prev];
-					newLevels[level] = {
-						...newLevels[level],
-						isLoading: false,
-					};
-
-					// Add the next level
-					newLevels.push({
-						level: level + 1,
-						isLoading: false,
-						categories: categoryDetails.categories,
-						selectedSlug: "",
-						parentSlug: slug,
-					});
-
-					return newLevels;
-				});
-			} else {
-				// Just update loading state
-				setLevels((prev) => {
-					const newLevels = [...prev];
-					newLevels[level] = {
-						...newLevels[level],
-						isLoading: false,
-					};
-					return newLevels;
-				});
-			}
-
-			// 5. Update selected categories in form state
-			const newCategories = formState.categories
-				.filter((cat) => cat.level < level)
-				.concat({
-					level,
-					slug,
-					name: categoryDetails.name,
-					documentId: categoryDetails.documentId,
-				});
-
-			updateField("categories", newCategories);
-		} catch (error) {
-			console.error("Error selecting category:", error);
-
-			// Reset loading state on error
-			setLevels((prev) => {
-				const newLevels = [...prev];
-				if (newLevels[level]) {
-					newLevels[level] = {
-						...newLevels[level],
-						isLoading: false,
-					};
-				}
-				return newLevels;
-			});
-		}
-	};
-
-	// Update attributes in form state
-	const updateAttributes = useCallback(
-		(
-			attributes: Array<{
-				attributeDocumentId: string;
-				attributeName: string;
-				value: string;
-			}>,
-		) => {
+	// Handle attribute updates
+	const handleUpdateAttributes = useCallback(
+		(attributes: AttributeData[]) => {
 			updateField("attributes", attributes);
 		},
 		[updateField],
@@ -231,19 +95,6 @@ export default function DetailsStep({
 				"Description must be at least 20 characters";
 		}
 
-		// Validate required attributes
-		allCategoryAttributes.forEach((attr) => {
-			if (attr.required) {
-				const attributeValue = formState.attributes.find(
-					(a) => a.attributeDocumentId === attr.documentId,
-				);
-				if (!attributeValue || !attributeValue.value) {
-					newErrors[`attribute-${attr.id}`] =
-						`${attr.name} is required`;
-				}
-			}
-		});
-
 		setErrors(newErrors);
 		return Object.keys(newErrors).length === 0;
 	};
@@ -255,6 +106,15 @@ export default function DetailsStep({
 		}
 	};
 
+	// Convert the attributes array to a record for the AttributesManager
+	const attributeValues = formState.attributes?.reduce(
+		(acc, attr) => {
+			acc[attr.attributeDocumentId] = attr.value;
+			return acc;
+		},
+		{} as Record<string, string>,
+	);
+
 	return (
 		<div className="space-y-6">
 			<div className="space-y-2">
@@ -264,103 +124,27 @@ export default function DetailsStep({
 				</p>
 			</div>
 
-			{/* Category Selection - Dynamic Dropdowns */}
-			<div className="space-y-4">
-				<div className="flex items-center space-x-2">
-					<h3 className="font-medium">Categories</h3>
-				</div>
-
-				{/* Display category dropdowns for each level */}
-				{levels.map((level, index) => (
-					<div key={`category-level-${index}`} className="space-y-2">
-						<Label htmlFor={`category-level-${index}`}>
-							{index === 0
-								? "Main Category"
-								: `Subcategory (Level ${index + 1})`}
-						</Label>
-
-						{level.isLoading ? (
-							<Skeleton className="h-10 w-full" />
-						) : (
-							<Select
-								value={level.selectedSlug}
-								onValueChange={(value) =>
-									handleCategorySelect(index, value)
-								}
-							>
-								<SelectTrigger
-									id={`category-level-${index}`}
-									className="w-full"
-								>
-									<SelectValue
-										placeholder={`Select ${index === 0 ? "a category" : "a subcategory"}`}
-									/>
-								</SelectTrigger>
-								<SelectContent>
-									{level.categories.length === 0 ? (
-										<div className="py-2 px-2 text-sm text-muted-foreground">
-											No categories available
-										</div>
-									) : (
-										level.categories.map((category) => (
-											<SelectItem
-												key={category.slug}
-												value={category.slug}
-											>
-												{category.name}
-											</SelectItem>
-										))
-									)}
-								</SelectContent>
-							</Select>
-						)}
-
-						{index === 0 && errors.category && (
-							<p className="text-sm text-destructive">
-								{errors.category}
-							</p>
-						)}
-					</div>
-				))}
-
-				{/* Selected Categories Display */}
-				{formState.categories && formState.categories.length > 0 && (
-					<div className="text-sm text-muted-foreground pt-2">
-						<p>
-							Selected:{" "}
-							{formState.categories
-								.map((cat) => cat.name)
-								.join(" → ")}
-						</p>
-					</div>
-				)}
-
-				{/* Debug information (only in development) */}
-				{process.env.NODE_ENV === "development" && (
-					<div className="mt-4 p-3 border border-dashed rounded-md text-xs">
-						<p className="font-medium mb-1">Debug info:</p>
-						<p>Active levels: {levels.length}</p>
-						{levels.map((level, i) => (
-							<div key={i} className="ml-2 mb-1">
-								<p>
-									Level {i}: {level.categories.length}{" "}
-									categories, selected: "{level.selectedSlug}
-									", loading: {level.isLoading.toString()}
-								</p>
-							</div>
-						))}
-						<p className="mt-2">
-							Form categories: {formState.categories.length}
-						</p>
-						{formState.categories.map((cat, i) => (
-							<div key={i} className="ml-2">
-								<p>
-									{i}: {cat.name} (level: {cat.level}, id:{" "}
-									{cat.documentId})
-								</p>
-							</div>
-						))}
-					</div>
+			{/* Category Selection */}
+			<div>
+				<CategorySelector
+					label=""
+					allowSelectAll={false}
+					showSelectionPath={true}
+					initialSelection={formState.categories}
+					levelLabels={{
+						root: "Main Category",
+						subcategory: "Subcategories",
+					}}
+					placeholders={{
+						root: "Select a category",
+						subcategory: "Select a subcategory",
+					}}
+					onSelectionChange={handleSelectionChange}
+				/>
+				{errors.category && (
+					<p className="text-sm text-destructive mt-1">
+						{errors.category}
+					</p>
 				)}
 			</div>
 
@@ -394,12 +178,13 @@ export default function DetailsStep({
 			</div>
 
 			{/* Dynamic Attributes */}
-			{allCategoryAttributes.length > 0 && (
-				<AttributeInputs
-					attributes={allCategoryAttributes}
-					values={formState.attributes || []}
-					updateAttributes={updateAttributes}
+			{formState.categories && formState.categories.length > 0 && (
+				<AttributesManager
+					selectedCategories={formState.categories}
+					values={attributeValues}
+					isFilter={false}
 					errors={errors}
+					onUpdateAttributes={handleUpdateAttributes}
 				/>
 			)}
 

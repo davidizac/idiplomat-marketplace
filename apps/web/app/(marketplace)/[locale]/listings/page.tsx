@@ -1,8 +1,8 @@
 "use client";
 
+import type { Category } from "@repo/cms";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useCategoryBySlug } from "../../../../modules/marketplace/api";
 import { CategorySelectionModal } from "../../../../modules/marketplace/listings/components/CategorySelectionModal";
 import { ListingsGrid } from "../../../../modules/marketplace/listings/components/ListingsGrid";
 import { ListingsSidebar } from "../../../../modules/marketplace/listings/components/ListingsSidebar";
@@ -18,6 +18,11 @@ export default function ListingsPage() {
 
 	// State for the category modal
 	const [showCategoryModal, setShowCategoryModal] = useState(false);
+	const [selectedCategory, setSelectedCategory] = useState<Category | null>(
+		null,
+	);
+	const [selectedSubcategory, setSelectedSubcategory] =
+		useState<Category | null>(null);
 
 	// Use the filter manager hook to manage all filters
 	const {
@@ -35,18 +40,12 @@ export default function ListingsPage() {
 		sortOption: "newest",
 	});
 
-	// Check if a category is selected
-	const { data: categoryData, isLoading: isCategoryLoading } =
-		useCategoryBySlug(categorySlug || undefined, Boolean(categorySlug));
-
-	console.log(categoryData);
-
 	// If no category is selected, show the modal
 	useEffect(() => {
-		if (!categorySlug && !isCategoryLoading) {
+		if (!categorySlug) {
 			setShowCategoryModal(true);
 		}
-	}, [categorySlug, isCategoryLoading]);
+	}, [categorySlug]);
 
 	// Apply search query from URL parameters if available
 	useEffect(() => {
@@ -70,35 +69,43 @@ export default function ListingsPage() {
 		updateSort(sort);
 	};
 
-	// If no category is set and we're still loading, show loading state
-	if (!categorySlug && isCategoryLoading) {
-		return (
-			<div className="container py-16 flex justify-center">
-				<div className="w-12 h-12 rounded-full border-4 border-primary border-t-transparent animate-spin" />
-			</div>
-		);
-	}
+	// Handle category selection from the sidebar
+	const handleCategorySelect = (category: Category | null) => {
+		setSelectedCategory(category);
 
-	// If we have a category slug but it's invalid, show error
-	if (categorySlug && !isCategoryLoading && !categoryData) {
-		return (
-			<div className="container py-16 text-center">
-				<h2 className="text-2xl font-bold text-red-500">
-					Category not found
-				</h2>
-				<p className="mt-2 text-muted-foreground">
-					The category you're looking for doesn't exist
-				</p>
-				<button
-					type="button"
-					className="mt-4 px-4 py-2 bg-primary text-primary-foreground rounded-md"
-					onClick={() => router.push("/categories")}
-				>
-					Browse All Categories
-				</button>
-			</div>
-		);
-	}
+		// Update URL to reflect the category change
+		if (category) {
+			const params = new URLSearchParams(searchParams.toString());
+			params.set("category", category.slug);
+			params.delete("subcategory"); // Clear subcategory when category changes
+			router.push(`/listings?${params.toString()}`);
+		} else {
+			// Clear category from URL
+			const params = new URLSearchParams(searchParams.toString());
+			params.delete("category");
+			params.delete("subcategory");
+			router.push(`/listings?${params.toString()}`);
+		}
+	};
+
+	// Handle subcategory selection from the sidebar
+	const handleSubcategorySelect = (subcategory: Category | null) => {
+		setSelectedSubcategory(subcategory);
+
+		// Update URL and filter manager
+		if (subcategory) {
+			const params = new URLSearchParams(searchParams.toString());
+			params.set("subcategory", subcategory.slug);
+			router.push(`/listings?${params.toString()}`);
+			updateSubcategory(subcategory.slug);
+		} else {
+			// Clear subcategory from URL
+			const params = new URLSearchParams(searchParams.toString());
+			params.delete("subcategory");
+			router.push(`/listings?${params.toString()}`);
+			updateSubcategory(null);
+		}
+	};
 
 	return (
 		<>
@@ -113,20 +120,22 @@ export default function ListingsPage() {
 			<div className="py-8">
 				<div className="container">
 					<h1 className="text-3xl font-bold mb-8">
-						{categoryData?.name
-							? `${categoryData.name} Listings`
-							: searchQuery
-								? `Search Results: ${searchQuery}`
-								: "Browse Listings"}
+						{selectedSubcategory
+							? `${selectedSubcategory.name} Listings`
+							: selectedCategory
+								? `${selectedCategory.name} Listings`
+								: searchQuery
+									? `Search Results: ${searchQuery}`
+									: "Browse Listings"}
 					</h1>
 
 					<div className="flex flex-col md:flex-row gap-8">
 						<div className="w-full md:w-auto">
 							<ListingsSidebar
-								selectedCategory={categoryData}
 								filterManager={filterManager}
 								onUpdateAttributeFilter={updateAttributeFilter}
-								onUpdateSubcategory={updateSubcategory}
+								onUpdateCategory={handleCategorySelect}
+								onUpdateSubcategory={handleSubcategorySelect}
 								onClearFilters={clearAllFilters}
 							/>
 						</div>

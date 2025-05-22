@@ -3,73 +3,118 @@
 import type { Category, FilterManager } from "@repo/cms";
 import { Button } from "@ui/components/button";
 import { Card } from "@ui/components/card";
-import { useEffect, useState } from "react";
-import {
-	AttributeFilter,
-	type AttributeFilterValues,
-	type AttributeValue,
-} from "./filters/AttributeFilter";
+import { useState } from "react";
+import { AttributesManager } from "../../components/AttributesManager";
+import type { AttributeValue } from "./filters/AttributeFilter";
+import { HierarchicalCategoryFilter } from "./filters/HierarchicalCategoryFilter";
 import type { SortOption } from "./filters/SortFilter";
-import { SubcategoryFilter } from "./filters/SubcategoryFilter";
 
 // Legacy filter state interface for backward compatibility
 export interface SidebarFilters {
 	sort?: SortOption;
-	attributes?: AttributeFilterValues;
+	attributes?: Record<string, AttributeValue>;
 	subcategories?: string[] | null;
 }
 
 interface ListingsSidebarProps {
-	selectedCategory?: Category;
 	filterManager: FilterManager;
 	onUpdateAttributeFilter: (
 		attributeDocumentId: string,
 		attributeName: string,
 		value: AttributeValue,
 	) => void;
-	onUpdateSubcategory: (subcategorySlug: string | null) => void;
+	onUpdateCategory: (category: Category | null) => void;
+	onUpdateSubcategory: (subcategory: Category | null) => void;
 	onClearFilters: () => void;
 }
 
 export function ListingsSidebar({
-	selectedCategory,
 	filterManager,
 	onUpdateAttributeFilter,
+	onUpdateCategory,
 	onUpdateSubcategory,
 	onClearFilters,
 }: ListingsSidebarProps) {
-	// Selected subcategory state (derived from FilterManager)
-	const [selectedSubcategory, setSelectedSubcategory] = useState<
-		string | null
-	>(null);
+	// Selected categories state (for attributes display)
+	const [selectedCategories, setSelectedCategories] = useState<
+		Array<{
+			slug: string;
+			name: string;
+			documentId: string;
+			level: number;
+		}>
+	>([]);
 
-	// Get current subcategory from the FilterManager
-	useEffect(() => {
-		const subcategoryFilter = filterManager.getFilter("subcategory");
-		if (subcategoryFilter) {
-			setSelectedSubcategory(subcategoryFilter.value as string);
+	// Handle category selection
+	const handleCategorySelect = (category: Category | null) => {
+		if (category) {
+			// Update the selected categories for attributes
+			setSelectedCategories((prev) => {
+				// Find if we already have a level 0 category
+				const hasPrimary = prev.some((cat) => cat.level === 0);
+
+				if (hasPrimary) {
+					// Replace the primary category and remove any subcategories
+					return [
+						{
+							slug: category.slug,
+							name: category.name,
+							documentId: category.documentId,
+							level: 0,
+						},
+					];
+				}
+
+				// Add as the primary category
+				return [
+					...prev,
+					{
+						slug: category.slug,
+						name: category.name,
+						documentId: category.documentId,
+						level: 0,
+					},
+				];
+			});
 		} else {
-			setSelectedSubcategory(null);
+			// Clear all selected categories
+			setSelectedCategories([]);
 		}
-	}, [filterManager]);
 
-	// Handler for attribute changes
-	const handleAttributeChange = (
-		attributeDocumentId: string,
-		value: AttributeValue,
-	) => {
-		const attributeName =
-			selectedCategory?.attributes?.find(
-				(attr) => attr.documentId === attributeDocumentId,
-			)?.name || attributeDocumentId;
-
-		onUpdateAttributeFilter(attributeDocumentId, attributeName, value);
+		// Notify parent component
+		onUpdateCategory(category);
 	};
 
-	// Handler for subcategory changes
-	const handleSubcategoryChange = (subcategorySlug: string | null) => {
-		setSelectedSubcategory(subcategorySlug);
-		onUpdateSubcategory(subcategorySlug);
+	// Handle subcategory selection
+	const handleSubcategorySelect = (subcategory: Category | null) => {
+		if (subcategory) {
+			// Update the selected categories for attributes
+			setSelectedCategories((prev) => {
+				// Filter out any existing subcategories (level > 0)
+				const withoutSubcategories = prev.filter(
+					(cat) => cat.level === 0,
+				);
+
+				// Add the new subcategory
+				return [
+					...withoutSubcategories,
+					{
+						slug: subcategory.slug,
+						name: subcategory.name,
+						documentId: subcategory.documentId,
+						level: 1,
+					},
+				];
+			});
+		} else {
+			// Remove subcategories, keep primary category
+			setSelectedCategories((prev) =>
+				prev.filter((cat) => cat.level === 0),
+			);
+		}
+
+		// Notify parent component
+		onUpdateSubcategory(subcategory);
 	};
 
 	// Get attribute values from FilterManager for display
@@ -90,60 +135,27 @@ export function ListingsSidebar({
 			return filter.value as AttributeValue;
 		}
 
-		// Return appropriate default value based on attribute type
-		const attributeType = selectedCategory?.attributes?.find(
-			(attr) => attr.documentId === attributeDocumentId,
-		)?.type;
-
-		switch (attributeType) {
-			case "text":
-			case "select":
-				return "";
-			case "number":
-				return 0;
-			case "boolean":
-				return false;
-			case "date":
-				return null;
-			case "multi-select":
-				return [];
-			default:
-				return null;
-		}
+		return null;
 	};
 
 	return (
 		<Card className="h-fit w-64 flex-shrink-0 p-6">
 			<div className="space-y-6">
-				{selectedCategory && (
-					<div className="pb-2">
-						<h3 className="font-medium text-sm text-muted-foreground mb-1">
-							Selected Category
-						</h3>
-						<div className="font-medium">
-							{selectedCategory.name}
-						</div>
-					</div>
-				)}
+				{/* Hierarchical Category Filter */}
+				<HierarchicalCategoryFilter
+					onSelectCategory={handleCategorySelect}
+					onSelectSubcategory={handleSubcategorySelect}
+				/>
 
-				{/* Show subcategory filter if the category has subcategories */}
-				{selectedCategory && (
-					<SubcategoryFilter
-						parentCategory={selectedCategory}
-						selectedSubcategory={selectedSubcategory}
-						onChange={handleSubcategoryChange}
+				{/* Dynamic attribute filters based on selected categories */}
+				{selectedCategories.length > 0 && (
+					<AttributesManager
+						selectedCategories={selectedCategories}
+						isFilter={true}
+						getAttributeValue={getAttributeValue}
+						onChange={onUpdateAttributeFilter}
 					/>
 				)}
-
-				{/* Dynamic attribute filters based on selected category */}
-				{selectedCategory?.attributes?.map((attribute) => (
-					<AttributeFilter
-						key={attribute.documentId}
-						attribute={attribute}
-						value={getAttributeValue(attribute.documentId)}
-						onChange={handleAttributeChange}
-					/>
-				))}
 
 				<div className="space-y-2 pt-2">
 					<Button className="w-full" onClick={onClearFilters}>

@@ -92,6 +92,15 @@ export function useFilterManager(initialFilters?: {
 		[filterManager],
 	);
 
+	// Handler for updating category
+	const updateCategory = useCallback(
+		(categorySlug: string | null) => {
+			filterManager.setCategoryFilter(categorySlug);
+			setFilterVersion((v) => v + 1);
+		},
+		[filterManager],
+	);
+
 	// Handler for updating subcategory
 	const updateSubcategory = useCallback(
 		(subcategorySlug: string | null) => {
@@ -133,6 +142,7 @@ export function useFilterManager(initialFilters?: {
 		strapiQuery,
 		updateAttributeFilter,
 		updateSort,
+		updateCategory,
 		updateSubcategory,
 		updateSubcategories,
 		updatePriceRange,
