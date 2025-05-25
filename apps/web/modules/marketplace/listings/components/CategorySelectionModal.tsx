@@ -1,5 +1,6 @@
 "use client";
 
+import { useLocaleRouter } from "@i18n/routing";
 import { getStrapiImageUrl } from "@repo/cms";
 import { Button } from "@ui/components/button";
 import {
@@ -10,7 +11,6 @@ import {
 	DialogTitle,
 } from "@ui/components/dialog";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { type Category, useCategories } from "../../api";
 
@@ -25,7 +25,7 @@ export function CategorySelectionModal({
 	onOpenChange,
 	searchQuery,
 }: CategorySelectionModalProps) {
-	const router = useRouter();
+	const router = useLocaleRouter();
 	const { data: categoriesResponse, isLoading } = useCategories({
 		pageSize: 8, // Get only top categories for the modal
 	});

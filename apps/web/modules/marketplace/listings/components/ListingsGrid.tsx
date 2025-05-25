@@ -1,5 +1,6 @@
 "use client";
 
+import { LocaleLink } from "@i18n/routing";
 import {
 	type ListingData,
 	type ListingFilterParams,
@@ -9,7 +10,6 @@ import { getStrapiImageUrl } from "@repo/cms";
 import { Card } from "@ui/components/card";
 import { Skeleton } from "@ui/components/skeleton";
 import Image from "next/image";
-import Link from "next/link";
 import { useState } from "react";
 import { SortFilter, type SortOption } from "./filters/SortFilter";
 
@@ -30,7 +30,7 @@ function ListingCard({
 	documentId,
 }: ListingCardProps) {
 	return (
-		<Link href={`/listings/${documentId}`}>
+		<LocaleLink href={`/listings/${documentId}`}>
 			<Card className="overflow-hidden hover:shadow-lg transition-shadow h-full">
 				<div className="relative h-48">
 					<Image
@@ -58,7 +58,7 @@ function ListingCard({
 					</div>
 				</div>
 			</Card>
-		</Link>
+		</LocaleLink>
 	);
 }
 

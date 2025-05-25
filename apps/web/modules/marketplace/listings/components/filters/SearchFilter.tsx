@@ -3,7 +3,7 @@
 import { Input } from "@ui/components/input";
 import { Label } from "@ui/components/label";
 import { SearchIcon, XIcon } from "lucide-react";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 interface SearchFilterProps {
 	value?: string | null;
@@ -21,17 +21,25 @@ export function SearchFilter({
 	debounceMs = 300,
 }: SearchFilterProps) {
 	const [searchValue, setSearchValue] = useState(value || "");
+	const onSearchRef = useRef(onSearch);
 
-	// Debounced search effect
+	// Keep the ref updated with the latest callback
+	useEffect(() => {
+		onSearchRef.current = onSearch;
+	}, [onSearch]);
+
+	// Debounced search effect - removed onSearch from dependencies to prevent infinite loop
 	useEffect(() => {
 		const timeoutId = setTimeout(() => {
-			if (onSearch) {
-				onSearch(searchValue.trim() === "" ? null : searchValue.trim());
+			if (onSearchRef.current) {
+				onSearchRef.current(
+					searchValue.trim() === "" ? null : searchValue.trim(),
+				);
 			}
 		}, debounceMs);
 
 		return () => clearTimeout(timeoutId);
-	}, [searchValue, onSearch, debounceMs]);
+	}, [searchValue, debounceMs]);
 
 	// Update internal state when external value changes
 	useEffect(() => {
@@ -49,10 +57,10 @@ export function SearchFilter({
 	// Handle clear button
 	const handleClear = useCallback(() => {
 		setSearchValue("");
-		if (onSearch) {
-			onSearch(null);
+		if (onSearchRef.current) {
+			onSearchRef.current(null);
 		}
-	}, [onSearch]);
+	}, []);
 
 	return (
 		<div className="space-y-2">

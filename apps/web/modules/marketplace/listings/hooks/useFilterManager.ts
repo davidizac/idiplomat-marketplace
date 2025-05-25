@@ -4,7 +4,7 @@
  */
 
 import { FilterManager, toStrapiQuery } from "@repo/cms";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import type { AttributeValue } from "../components/filters/AttributeFilter";
 import type { SortOption } from "../components/filters/SortFilter";
 /**
@@ -18,58 +18,54 @@ export function useFilterManager(initialFilters?: {
 	search?: string | null;
 	attributeValues?: Record<string, AttributeValue>;
 }) {
-	// Create filter manager instance
-	const [filterManager] = useState(() => new FilterManager());
+	// Create filter manager instance with initial filters applied
+	const [filterManager] = useState(() => {
+		const manager = new FilterManager();
+
+		// Apply initial filters immediately during creation
+		if (initialFilters) {
+			if (initialFilters.categorySlug) {
+				manager.setCategoryFilter(initialFilters.categorySlug);
+			}
+
+			if (initialFilters.subcategorySlug) {
+				manager.setSubcategoryFilter(initialFilters.subcategorySlug);
+			}
+
+			if (initialFilters.subcategorySlugs) {
+				manager.setSubcategoriesFilter(initialFilters.subcategorySlugs);
+			}
+
+			if (initialFilters.sortOption) {
+				manager.setSortFilter(initialFilters.sortOption);
+			}
+
+			if (initialFilters.search) {
+				manager.setSearchFilter(initialFilters.search);
+			}
+
+			// Set initial attribute values
+			if (initialFilters.attributeValues) {
+				Object.entries(initialFilters.attributeValues).forEach(
+					([attributeDocumentId, value]) => {
+						if (value !== undefined && value !== null) {
+							const attrName = attributeDocumentId;
+							manager.addAttributeFilter(
+								attributeDocumentId,
+								attrName,
+								value,
+							);
+						}
+					},
+				);
+			}
+		}
+
+		return manager;
+	});
 
 	// State to track when filters change
 	const [filterVersion, setFilterVersion] = useState(0);
-
-	// Initialize filters
-	useEffect(() => {
-		if (!initialFilters) return;
-
-		// Set initial filters
-		if (initialFilters.categorySlug) {
-			filterManager.setCategoryFilter(initialFilters.categorySlug);
-		}
-
-		if (initialFilters.subcategorySlug) {
-			filterManager.setSubcategoryFilter(initialFilters.subcategorySlug);
-		}
-
-		if (initialFilters.subcategorySlugs) {
-			filterManager.setSubcategoriesFilter(
-				initialFilters.subcategorySlugs,
-			);
-		}
-
-		if (initialFilters.sortOption) {
-			filterManager.setSortFilter(initialFilters.sortOption);
-		}
-
-		if (initialFilters.search) {
-			filterManager.setSearchFilter(initialFilters.search);
-		}
-
-		// Set initial attribute values
-		if (initialFilters.attributeValues) {
-			Object.entries(initialFilters.attributeValues).forEach(
-				([attributeDocumentId, value]) => {
-					if (value !== undefined && value !== null) {
-						const attrName = attributeDocumentId;
-						filterManager.addAttributeFilter(
-							attributeDocumentId,
-							attrName,
-							value,
-						);
-					}
-				},
-			);
-		}
-
-		// Update version to trigger a re-render
-		setFilterVersion((v) => v + 1);
-	}, [filterManager]);
 
 	// Handler for updating an attribute filter
 	const updateAttributeFilter = useCallback(
@@ -148,8 +144,11 @@ export function useFilterManager(initialFilters?: {
 		setFilterVersion((v) => v + 1);
 	}, [filterManager]);
 
-	// Convert filters to Strapi query params
-	const strapiQuery = toStrapiQuery(filterManager);
+	// Convert filters to Strapi query params - memoize to prevent unnecessary recalculations
+	const strapiQuery = useMemo(
+		() => toStrapiQuery(filterManager),
+		[filterVersion],
+	);
 
 	return {
 		filterManager,

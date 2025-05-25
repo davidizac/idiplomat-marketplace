@@ -1,7 +1,8 @@
 "use client";
 
+import { useLocaleRouter } from "@i18n/routing";
 import type { Category } from "@repo/cms";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { CategorySelectionModal } from "../../../../modules/marketplace/listings/components/CategorySelectionModal";
 import { ListingsGrid } from "../../../../modules/marketplace/listings/components/ListingsGrid";
@@ -10,7 +11,7 @@ import type { SortOption } from "../../../../modules/marketplace/listings/compon
 import { useFilterManager } from "../../../../modules/marketplace/listings/hooks/useFilterManager";
 
 export default function ListingsPage() {
-	const router = useRouter();
+	const router = useLocaleRouter();
 	const searchParams = useSearchParams();
 	const searchQuery = searchParams.get("search");
 	const categorySlug = searchParams.get("category");
@@ -34,7 +35,6 @@ export default function ListingsPage() {
 		updateSearch,
 		clearAllFilters,
 		filterVersion,
-		setFilterVersion,
 	} = useFilterManager({
 		categorySlug: categorySlug || null,
 		subcategorySlug: subcategorySlug || null,
@@ -56,15 +56,6 @@ export default function ListingsPage() {
 			// We could use the search query to filter categories or other fields
 		}
 	}, [searchQuery]);
-
-	// Force re-fetch when category changes in URL
-	useEffect(() => {
-		if (categorySlug) {
-			// Ensure filter manager has correct category when URL changes
-			filterManager.setCategoryFilter(categorySlug);
-			setFilterVersion((v) => v + 1);
-		}
-	}, [categorySlug, filterManager, setFilterVersion]);
 
 	// Handle sort changes from the grid
 	const handleSortChange = (sort: SortOption) => {
@@ -157,7 +148,6 @@ export default function ListingsPage() {
 							/>
 						</div>
 						<ListingsGrid
-							key={`listings-${filterVersion}`}
 							strapiQuery={strapiQuery}
 							onSortChange={handleSortChange}
 						/>
