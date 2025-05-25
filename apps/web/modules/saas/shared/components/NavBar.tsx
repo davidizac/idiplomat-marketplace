@@ -6,7 +6,6 @@ import { UserMenu } from "@saas/shared/components/UserMenu";
 import { Logo } from "@shared/components/Logo";
 import { cn } from "@ui/lib";
 import {
-	BotMessageSquareIcon,
 	ChevronRightIcon,
 	HomeIcon,
 	ListIcon,
@@ -39,15 +38,7 @@ export function NavBar() {
 			isActive: pathname === basePath,
 		},
 		{
-			label: t("app.menu.aiChatbot"),
-			href: activeOrganization
-				? `/app/${activeOrganization.slug}/chatbot`
-				: "/app/chatbot",
-			icon: BotMessageSquareIcon,
-			isActive: pathname.includes("/chatbot"),
-		},
-		{
-			label: t("app.menu.myListings"),
+			label: "My listings",
 			href: "/app/my-listings",
 			icon: ListIcon,
 			isActive: pathname.startsWith("/app/my-listings"),

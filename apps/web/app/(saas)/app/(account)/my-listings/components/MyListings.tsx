@@ -1,27 +1,26 @@
 "use client";
 
+import { getStrapiImageUrl, listingService } from "@repo/cms";
+import type { Listing } from "@repo/cms";
 import { Pagination } from "@saas/shared/components/Pagination";
 import { Badge } from "@ui/components/badge";
 import { Button } from "@ui/components/button";
 import { Card } from "@ui/components/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@ui/components/tabs";
-import { Pencil, PlusIcon, Trash2 } from "lucide-react";
+import { cn } from "@ui/lib";
+import {
+	CalendarIcon,
+	Edit2Icon,
+	ImageIcon,
+	MapPinIcon,
+	PlusIcon,
+	TagIcon,
+	Trash2Icon,
+} from "lucide-react";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-
-// This would come from your API or database
-// Replace with actual API calls when backend is ready
-type Listing = {
-	id: string;
-	title: string;
-	price: number;
-	status: "DRAFT" | "ACTIVE" | "SOLD" | "ARCHIVED";
-	category: string;
-	createdAt: string;
-	images: string[];
-};
 
 interface MyListingsProps {
 	userId: string;
@@ -33,71 +32,71 @@ export default function MyListings({ userId }: MyListingsProps) {
 	const [listings, setListings] = useState<Listing[]>([]);
 	const [loading, setLoading] = useState(true);
 	const [currentPage, setCurrentPage] = useState(1);
+	const [deletingId, setDeletingId] = useState<string | null>(null);
 	const itemsPerPage = 6;
 
 	useEffect(() => {
-		// Simulating API call to fetch user listings
-		setLoading(true);
-		setTimeout(() => {
-			// This is dummy data. Replace with actual API call
-			const mockListings: Listing[] = [
-				{
-					id: "1",
-					title: "Modern Dining Table",
-					price: 250,
-					status: "ACTIVE",
-					category: "Furniture",
-					createdAt: "2023-06-15",
-					images: ["/images/placeholder-listing.jpg"],
-				},
-				{
-					id: "2",
-					title: "Vintage Desk Lamp",
-					price: 75,
-					status: "ACTIVE",
-					category: "Home Decor",
-					createdAt: "2023-06-10",
-					images: ["/images/placeholder-listing.jpg"],
-				},
-				{
-					id: "3",
-					title: "Leather Office Chair",
-					price: 120,
-					status: "SOLD",
-					category: "Furniture",
-					createdAt: "2023-05-22",
-					images: ["/images/placeholder-listing.jpg"],
-				},
-				{
-					id: "4",
-					title: "Persian Rug (6x9)",
-					price: 350,
-					status: "ACTIVE",
-					category: "Home Decor",
-					createdAt: "2023-05-15",
-					images: ["/images/placeholder-listing.jpg"],
-				},
-				{
-					id: "5",
-					title: "Bookshelf - White",
-					price: 80,
-					status: "DRAFT",
-					category: "Furniture",
-					createdAt: "2023-05-10",
-					images: ["/images/placeholder-listing.jpg"],
-				},
-			];
-
-			setListings(mockListings);
-			setLoading(false);
-		}, 1000);
+		fetchListings();
 	}, [userId]);
 
-	const handleDelete = (id: string) => {
-		// This would be replaced with an actual API call
-		setListings(listings.filter((listing) => listing.id !== id));
-		// Remove toast for now - we'll add proper notification later
-		console.log("Listing deleted:", id);
+	const fetchListings = async () => {
+		try {
+			setLoading(true);
+			// TODO: Filter by userId when backend supports it
+			const response = await listingService.getListings({
+				pageSize: 100, // Get all user listings
+			});
+			setListings(response.data);
+		} catch (error) {
+			console.error("Failed to fetch listings:", error);
+		} finally {
+			setLoading(false);
+		}
+	};
+
+	const handleDelete = async (documentId: string) => {
+		if (!confirm(t("listings.confirmDelete"))) {
+			return;
+		}
+
+		try {
+			setDeletingId(documentId);
+			await listingService.deleteListing(documentId);
+			await fetchListings();
+		} catch (error) {
+			console.error("Failed to delete listing:", error);
+			alert(t("listings.deleteFailed"));
+		} finally {
+			setDeletingId(null);
+		}
+	};
+
+	const getStatusBadge = (status: string) => {
+		const variants: Record<
+			string,
+			"default" | "secondary" | "destructive" | "outline"
+		> = {
+			ACTIVE: "default",
+			DRAFT: "secondary",
+			SOLD: "outline",
+			ARCHIVED: "destructive",
+		};
+
+		const colors: Record<string, string> = {
+			ACTIVE: "text-green-600 bg-green-50 border-green-200",
+			DRAFT: "text-yellow-600 bg-yellow-50 border-yellow-200",
+			SOLD: "text-gray-600 bg-gray-50 border-gray-200",
+			ARCHIVED: "text-red-600 bg-red-50 border-red-200",
+		};
+
+		return (
+			<Badge
+				variant={variants[status] || "default"}
+				className={cn("capitalize", colors[status])}
+			>
+				{status.toLowerCase()}
+			</Badge>
+		);
 	};
 
 	const filteredListings = listings.filter((listing) => {
@@ -155,21 +154,26 @@ export default function MyListings({ userId }: MyListingsProps) {
 				{/* All tabs share the same content section */}
 				<TabsContent value={activeTab} className="mt-0">
 					{loading ? (
-						<div className="text-center py-8">
-							<p>{t("common.loading")}</p>
+						<div className="flex items-center justify-center py-8">
+							<p className="text-muted-foreground">
+								{t("common.loading")}
+							</p>
 						</div>
 					) : paginatedListings.length === 0 ? (
-						<Card className="p-8 text-center">
+						<div className="flex flex-col items-center justify-center py-12 text-center">
+							<TagIcon className="h-12 w-12 text-muted-foreground/20 mb-4" />
 							<p className="text-muted-foreground mb-4">
-								{t("myListings.noListings")}
+								{activeTab === "all"
+									? t("listings.noListings")
+									: t("listings.noListingsInCategory")}
 							</p>
 							<Link href="/create-listing">
 								<Button>
 									<PlusIcon className="mr-2 h-4 w-4" />
-									{t("myListings.createFirst")}
+									{t("listings.createFirst")}
 								</Button>
 							</Link>
-						</Card>
+						</div>
 					) : (
 						<>
 							<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -178,55 +182,71 @@ export default function MyListings({ userId }: MyListingsProps) {
 										key={listing.id}
 										className="overflow-hidden"
 									>
-										<div className="relative h-48 w-full">
-											<Image
-												src={
-													listing.images[0] ||
-													"/images/placeholder-listing.jpg"
-												}
-												alt={listing.title}
-												fill
-												className="object-cover"
-											/>
+										<div className="relative h-48 w-full bg-muted">
+											{listing.images?.[0] ? (
+												<Image
+													src={getStrapiImageUrl(
+														listing.images[0].url,
+													)}
+													alt={listing.title}
+													fill
+													className="object-cover"
+												/>
+											) : (
+												<div className="flex h-full items-center justify-center">
+													<ImageIcon className="h-12 w-12 text-muted-foreground/20" />
+												</div>
+											)}
 										</div>
-										<div className="p-4 space-y-2">
+										<div className="p-4 space-y-3">
 											<div className="flex justify-between items-start">
-												<h3 className="font-medium truncate">
+												<h3 className="font-medium line-clamp-2">
 													{listing.title}
 												</h3>
-												<p className="font-semibold">
-													${listing.price}
-												</p>
+												{listing.price && (
+													<p className="font-semibold">
+														${listing.price}
+													</p>
+												)}
 											</div>
 
-											<div className="flex justify-between items-center">
-												<Badge
-													variant={
-														listing.status ===
-														"ACTIVE"
-															? "default"
-															: listing.status ===
-																	"SOLD"
-																? "destructive"
-																: "secondary"
-													}
-												>
-													{listing.status}
-												</Badge>
-												<span className="text-xs text-muted-foreground">
-													{listing.category}
+											<div className="flex items-center justify-between">
+												{getStatusBadge(listing.status)}
+												{listing.categories?.[0] && (
+													<span className="text-xs text-muted-foreground">
+														{
+															listing
+																.categories[0]
+																.name
+														}
+													</span>
+												)}
+											</div>
+
+											<div className="flex items-center gap-4 text-xs text-muted-foreground">
+												{listing.location && (
+													<span className="flex items-center gap-1">
+														<MapPinIcon className="h-3 w-3" />
+														{listing.location}
+													</span>
+												)}
+												<span className="flex items-center gap-1">
+													<CalendarIcon className="h-3 w-3" />
+													{new Date(
+														listing.createdAt,
+													).toLocaleDateString()}
 												</span>
 											</div>
 
 											<div className="flex justify-between items-center pt-2">
 												<Link
-													href={`/edit-listing/${listing.id}`}
+													href={`/edit-listing/${listing.documentId}`}
 												>
 													<Button
 														variant="outline"
 														size="sm"
 													>
-														<Pencil className="h-4 w-4 mr-1" />
+														<Edit2Icon className="h-4 w-4 mr-1" />
 														{t("myListings.edit")}
 													</Button>
 												</Link>
@@ -234,10 +254,16 @@ export default function MyListings({ userId }: MyListingsProps) {
 													variant="ghost"
 													size="sm"
 													onClick={() =>
-														handleDelete(listing.id)
+														handleDelete(
+															listing.documentId,
+														)
+													}
+													disabled={
+														deletingId ===
+														listing.documentId
 													}
 												>
-													<Trash2 className="h-4 w-4 text-destructive" />
+													<Trash2Icon className="h-4 w-4 text-destructive" />
 												</Button>
 											</div>
 										</div>

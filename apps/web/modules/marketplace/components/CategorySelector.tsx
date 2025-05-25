@@ -121,7 +121,7 @@ export function CategorySelector({
 	onCategorySelect,
 }: CategorySelectorProps) {
 	// State for category levels and selection
-
+	console.log(initialSelection);
 	const params = useSearchParams();
 	const category = params.get("category");
 	const [levels, setLevels] = useState<CategoryLevel[]>(initialLevels || []);

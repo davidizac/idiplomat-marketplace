@@ -168,4 +168,4 @@ export const examples = {
 	usingStrapiClientDirectlyExample,
 };
 
-createCompleteProductExample();
+// createCompleteProductExample();
