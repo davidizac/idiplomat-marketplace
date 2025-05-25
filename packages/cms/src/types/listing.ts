@@ -120,6 +120,7 @@ export interface ListingFilterParams {
 	page?: number;
 	pageSize?: number;
 	sort?: string;
+	search?: string;
 	subCategories?: string[];
 	attributeFilters?: Array<{
 		attribute: string;

@@ -7,6 +7,7 @@ import { useState } from "react";
 import { AttributesManager } from "../../components/AttributesManager";
 import type { AttributeValue } from "./filters/AttributeFilter";
 import { HierarchicalCategoryFilter } from "./filters/HierarchicalCategoryFilter";
+import { SearchFilter } from "./filters/SearchFilter";
 import type { SortOption } from "./filters/SortFilter";
 
 // Legacy filter state interface for backward compatibility
@@ -25,6 +26,7 @@ interface ListingsSidebarProps {
 	) => void;
 	onUpdateCategory: (category: Category | null) => void;
 	onUpdateSubcategory: (subcategory: Category | null) => void;
+	onUpdateSearch: (searchTerm: string | null) => void;
 	onClearFilters: () => void;
 }
 
@@ -33,6 +35,7 @@ export function ListingsSidebar({
 	onUpdateAttributeFilter,
 	onUpdateCategory,
 	onUpdateSubcategory,
+	onUpdateSearch,
 	onClearFilters,
 }: ListingsSidebarProps) {
 	// Selected categories state (for attributes display)
@@ -138,9 +141,21 @@ export function ListingsSidebar({
 		return null;
 	};
 
+	// Get current search value from FilterManager
+	const getCurrentSearchValue = (): string | null => {
+		const searchFilter = filterManager.getFilter("search");
+		return searchFilter ? (searchFilter.value as string) : null;
+	};
+
 	return (
 		<Card className="h-fit w-64 flex-shrink-0 p-6">
 			<div className="space-y-6">
+				{/* Search Filter */}
+				<SearchFilter
+					value={getCurrentSearchValue()}
+					onSearch={onUpdateSearch}
+				/>
+
 				{/* Hierarchical Category Filter */}
 				<HierarchicalCategoryFilter
 					onSelectCategory={handleCategorySelect}

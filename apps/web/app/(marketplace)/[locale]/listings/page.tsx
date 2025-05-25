@@ -31,12 +31,14 @@ export default function ListingsPage() {
 		updateAttributeFilter,
 		updateSubcategory,
 		updateSort,
+		updateSearch,
 		clearAllFilters,
 		filterVersion,
 		setFilterVersion,
 	} = useFilterManager({
 		categorySlug: categorySlug || null,
 		subcategorySlug: subcategorySlug || null,
+		search: searchQuery || null,
 		sortOption: "newest",
 	});
 
@@ -107,6 +109,20 @@ export default function ListingsPage() {
 		}
 	};
 
+	// Handle search updates from the sidebar
+	const handleSearchUpdate = (searchTerm: string | null) => {
+		updateSearch(searchTerm);
+
+		// Update URL to reflect the search change
+		const params = new URLSearchParams(searchParams.toString());
+		if (searchTerm) {
+			params.set("search", searchTerm);
+		} else {
+			params.delete("search");
+		}
+		router.push(`/listings?${params.toString()}`);
+	};
+
 	return (
 		<>
 			{/* Category Selection Modal */}
@@ -136,6 +152,7 @@ export default function ListingsPage() {
 								onUpdateAttributeFilter={updateAttributeFilter}
 								onUpdateCategory={handleCategorySelect}
 								onUpdateSubcategory={handleSubcategorySelect}
+								onUpdateSearch={handleSearchUpdate}
 								onClearFilters={clearAllFilters}
 							/>
 						</div>

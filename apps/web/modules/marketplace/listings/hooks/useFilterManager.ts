@@ -15,6 +15,7 @@ export function useFilterManager(initialFilters?: {
 	subcategorySlug?: string | null;
 	subcategorySlugs?: string[] | null;
 	sortOption?: SortOption;
+	search?: string | null;
 	attributeValues?: Record<string, AttributeValue>;
 }) {
 	// Create filter manager instance
@@ -44,6 +45,10 @@ export function useFilterManager(initialFilters?: {
 
 		if (initialFilters.sortOption) {
 			filterManager.setSortFilter(initialFilters.sortOption);
+		}
+
+		if (initialFilters.search) {
+			filterManager.setSearchFilter(initialFilters.search);
 		}
 
 		// Set initial attribute values
@@ -128,6 +133,15 @@ export function useFilterManager(initialFilters?: {
 		[filterManager],
 	);
 
+	// Handler for updating search term
+	const updateSearch = useCallback(
+		(searchTerm: string | null) => {
+			filterManager.setSearchFilter(searchTerm);
+			setFilterVersion((v) => v + 1);
+		},
+		[filterManager],
+	);
+
 	// Handler for clearing all filters
 	const clearAllFilters = useCallback(() => {
 		filterManager.clearFilters();
@@ -146,6 +160,7 @@ export function useFilterManager(initialFilters?: {
 		updateSubcategory,
 		updateSubcategories,
 		updatePriceRange,
+		updateSearch,
 		clearAllFilters,
 		filterVersion,
 		setFilterVersion,

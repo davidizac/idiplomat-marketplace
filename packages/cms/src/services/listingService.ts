@@ -75,6 +75,25 @@ export class ListingService {
 			});
 		}
 
+		// Add keyword search filter if provided
+		if (params.search && params.search.trim() !== "") {
+			const searchTerm = params.search.trim();
+			query.where({
+				$or: [
+					{
+						title: {
+							$containsi: searchTerm,
+						},
+					},
+					{
+						description: {
+							$containsi: searchTerm,
+						},
+					},
+				],
+			});
+		}
+
 		// Add standard population for listings
 		query.populate({
 			categories: {

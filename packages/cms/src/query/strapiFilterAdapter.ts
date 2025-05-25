@@ -29,6 +29,9 @@ export function toStrapiQuery(
 		if (id === "sort") {
 			// Handle sort
 			params.sort = convertSort(filter.value as string);
+		} else if (id === "search") {
+			// Handle search/keyword filter
+			params.search = filter.value as string;
 		} else if (id === "category") {
 			// Handle single category filter
 			params.category = filter.value as string;

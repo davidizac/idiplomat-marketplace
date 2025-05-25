@@ -218,4 +218,19 @@ export class FilterManager {
 			value: sortOption,
 		});
 	}
+
+	/**
+	 * Set search/keyword filter
+	 */
+	setSearchFilter(searchTerm: string | null): FilterManager {
+		if (searchTerm && searchTerm.trim() !== "") {
+			return this.addFilter("search", {
+				field: "search",
+				operator: "contains",
+				value: searchTerm.trim(),
+			});
+		}
+
+		return this.removeFilter("search");
+	}
 }

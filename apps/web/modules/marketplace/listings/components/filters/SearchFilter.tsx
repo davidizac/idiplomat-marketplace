@@ -1,0 +1,83 @@
+"use client";
+
+import { Input } from "@ui/components/input";
+import { Label } from "@ui/components/label";
+import { SearchIcon, XIcon } from "lucide-react";
+import { useCallback, useEffect, useState } from "react";
+
+interface SearchFilterProps {
+	value?: string | null;
+	onSearch?: (searchTerm: string | null) => void;
+	placeholder?: string;
+	label?: string;
+	debounceMs?: number;
+}
+
+export function SearchFilter({
+	value = "",
+	onSearch,
+	placeholder = "Search listings...",
+	label = "Search",
+	debounceMs = 300,
+}: SearchFilterProps) {
+	const [searchValue, setSearchValue] = useState(value || "");
+
+	// Debounced search effect
+	useEffect(() => {
+		const timeoutId = setTimeout(() => {
+			if (onSearch) {
+				onSearch(searchValue.trim() === "" ? null : searchValue.trim());
+			}
+		}, debounceMs);
+
+		return () => clearTimeout(timeoutId);
+	}, [searchValue, onSearch, debounceMs]);
+
+	// Update internal state when external value changes
+	useEffect(() => {
+		setSearchValue(value || "");
+	}, [value]);
+
+	// Handle input changes
+	const handleInputChange = useCallback(
+		(e: React.ChangeEvent<HTMLInputElement>) => {
+			setSearchValue(e.target.value);
+		},
+		[],
+	);
+
+	// Handle clear button
+	const handleClear = useCallback(() => {
+		setSearchValue("");
+		if (onSearch) {
+			onSearch(null);
+		}
+	}, [onSearch]);
+
+	return (
+		<div className="space-y-2">
+			<Label htmlFor="search-input">{label}</Label>
+			<div className="relative">
+				<SearchIcon className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+				<Input
+					id="search-input"
+					type="text"
+					placeholder={placeholder}
+					value={searchValue}
+					onChange={handleInputChange}
+					className="pl-10 pr-10"
+				/>
+				{searchValue && (
+					<button
+						type="button"
+						onClick={handleClear}
+						className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+						aria-label="Clear search"
+					>
+						<XIcon className="h-4 w-4" />
+					</button>
+				)}
+			</div>
+		</div>
+	);
+}
