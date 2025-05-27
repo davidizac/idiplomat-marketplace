@@ -11,7 +11,7 @@ import {
 	SelectValue,
 } from "@ui/components/select";
 import { Textarea } from "@ui/components/textarea";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import {
 	type AttributeData,
 	AttributesManager,
@@ -53,28 +53,6 @@ export default function DetailsStep({
 	onNext,
 }: DetailsStepProps) {
 	const [errors, setErrors] = useState<Record<string, string>>({});
-
-	// Initialize form state with empty categories array if it doesn't exist
-	useEffect(() => {
-		if (!formState.categories) {
-			updateField("categories", []);
-		}
-
-		// Initialize attributes array if it doesn't exist
-		if (!formState.attributes) {
-			updateField("attributes", []);
-		}
-
-		// Initialize address if it doesn't exist
-		if (!formState.address) {
-			updateField("address", "");
-		}
-
-		// Initialize type if it doesn't exist
-		if (!formState.type) {
-			updateField("type", "sale");
-		}
-	}, [formState, updateField]);
 
 	// Handle category selection changes
 	const handleSelectionChange = useCallback(
@@ -135,13 +113,14 @@ export default function DetailsStep({
 	};
 
 	// Convert the attributes array to a record for the AttributesManager
-	const attributeValues = formState.attributes?.reduce(
-		(acc, attr) => {
-			acc[attr.attributeDocumentId] = attr.value;
-			return acc;
-		},
-		{} as Record<string, string>,
-	);
+	const attributeValues =
+		formState.attributes?.reduce(
+			(acc, attr) => {
+				acc[attr.attributeDocumentId] = attr.value;
+				return acc;
+			},
+			{} as Record<string, string>,
+		) || {};
 
 	return (
 		<div className="space-y-6">
@@ -158,7 +137,7 @@ export default function DetailsStep({
 					label=""
 					allowSelectAll={false}
 					showSelectionPath={true}
-					initialSelection={formState.categories}
+					initialSelection={formState.categories || []}
 					levelLabels={{
 						root: "Main Category",
 						subcategory: "Subcategories",
@@ -180,7 +159,7 @@ export default function DetailsStep({
 			<div className="space-y-2">
 				<Label htmlFor="type">Listing Type</Label>
 				<Select
-					value={formState.type || ""}
+					value={formState.type || "sale"}
 					onValueChange={(value) => updateField("type", value)}
 				>
 					<SelectTrigger>
@@ -202,7 +181,7 @@ export default function DetailsStep({
 				<Input
 					id="title"
 					placeholder="Enter a descriptive title"
-					value={formState.title}
+					value={formState.title || ""}
 					onChange={(e) => updateField("title", e.target.value)}
 				/>
 				{errors.title && (
@@ -216,7 +195,7 @@ export default function DetailsStep({
 					id="description"
 					placeholder="Describe your item in detail (condition, features, etc.)"
 					className="min-h-[150px]"
-					value={formState.description}
+					value={formState.description || ""}
 					onChange={(e) => updateField("description", e.target.value)}
 				/>
 				{errors.description && (

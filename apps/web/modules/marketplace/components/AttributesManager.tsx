@@ -171,9 +171,14 @@ export function AttributesManager({
 
 		setAttributeValues(newAttributeValues);
 
-		if (onUpdateAttributes) {
-			onUpdateAttributes(newAttributeValues);
-		}
+		// Use a timeout to avoid calling the callback during render
+		const timeoutId = setTimeout(() => {
+			if (onUpdateAttributes) {
+				onUpdateAttributes(newAttributeValues);
+			}
+		}, 0);
+
+		return () => clearTimeout(timeoutId);
 		// We intentionally omit onUpdateAttributes to avoid cycles when the parent updates
 		// as a result of the callback that is triggered here.
 		// eslint-disable-next-line react-hooks/exhaustive-deps

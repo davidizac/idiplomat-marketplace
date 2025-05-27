@@ -105,7 +105,7 @@ export default function ListingForm({ userId }: ListingFormProps) {
 
 	const handleSubmit = async () => {
 		if (isSubmitting) return;
-
+		console.log(formState);
 		try {
 			setIsSubmitting(true);
 
@@ -152,7 +152,7 @@ export default function ListingForm({ userId }: ListingFormProps) {
 				description:
 					"Your listing has been published to the marketplace.",
 			});
-			router.push("/app/my-listings");
+			router.push("/app");
 		} catch (error) {
 			console.error("Error creating listing:", error);
 			toast.error("Failed to publish listing", {

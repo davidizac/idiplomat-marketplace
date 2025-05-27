@@ -167,14 +167,17 @@ export function CategorySelector({
 		isRootCategoriesLoading,
 		initialLevels,
 		allowSelectAll,
+		category,
 	]);
 
 	// Sync URL parameters with component state
 	useEffect(() => {
-		if (!rootCategories || levels.length === 0) return;
+		if (!rootCategories) return;
 
-		// Update the first level selection to match URL
+		// Update the first level selection to match URL only if levels exist
 		setLevels((prev) => {
+			if (prev.length === 0) return prev;
+
 			const newLevels = [...prev];
 			if (newLevels[0]) {
 				const newSelectedSlug =
@@ -190,7 +193,7 @@ export function CategorySelector({
 			}
 			return prev;
 		});
-	}, [category, allowSelectAll]);
+	}, [category, allowSelectAll, rootCategories]);
 
 	// Notify parent when URL category changes (but only when we have the data)
 	useEffect(() => {
@@ -214,29 +217,36 @@ export function CategorySelector({
 			// Handle "all" value for "Select All" option
 			if (allowSelectAll && slug === "all") {
 				// If clearing a selection, remove all deeper levels
-				setLevels((prev) => prev.slice(0, level + 1));
+				setLevels((prev) => {
+					const newLevels = prev.slice(0, level + 1);
+
+					// Notify about selection change
+					if (onSelectionChange) {
+						setSelectedCategories((prevSelected) => {
+							const filteredCategories = prevSelected.filter(
+								(cat) => cat.level < level,
+							);
+							onSelectionChange({
+								levels: newLevels,
+								selectedCategories: filteredCategories,
+							});
+							return filteredCategories;
+						});
+					} else {
+						setSelectedCategories((prev) =>
+							prev.filter((cat) => cat.level < level),
+						);
+					}
+
+					return newLevels;
+				});
 
 				// Update selected path - remove items at and beyond this level
 				setSelectedPath((prev) => prev.filter((_, i) => i < level));
 
-				// Update selected categories - remove items at and beyond this level
-				setSelectedCategories((prev) =>
-					prev.filter((cat) => cat.level < level),
-				);
-
 				// Notify parent component
 				if (onCategorySelect) {
 					onCategorySelect(level, null);
-				}
-
-				// Notify about selection change
-				if (onSelectionChange) {
-					onSelectionChange({
-						levels: levels.slice(0, level + 1),
-						selectedCategories: selectedCategories.filter(
-							(cat) => cat.level < level,
-						),
-					});
 				}
 
 				return;
@@ -271,10 +281,10 @@ export function CategorySelector({
 					return newPath;
 				});
 
-				// Update selected categories
-				setSelectedCategories((prev) => {
+				// Update selected categories and levels together
+				setSelectedCategories((prevSelected) => {
 					// Remove any categories at or beyond this level
-					const newCategories = prev.filter(
+					const newCategories = prevSelected.filter(
 						(cat) => cat.level < level,
 					);
 
@@ -286,89 +296,46 @@ export function CategorySelector({
 						documentId: categoryDetails.documentId,
 					});
 
+					// Check for subcategories
+					const hasSubcategories =
+						categoryDetails.categories?.length > 0;
+
+					// Update levels state
+					setLevels((prevLevels) => {
+						const updatedLevels = [...prevLevels];
+						updatedLevels[level] = {
+							...updatedLevels[level],
+							isLoading: false,
+						};
+
+						// Add next level if there are subcategories
+						if (hasSubcategories) {
+							updatedLevels.push({
+								level: level + 1,
+								isLoading: false,
+								categories: categoryDetails.categories,
+								selectedSlug: allowSelectAll ? "all" : "",
+								parentSlug: slug,
+							});
+						}
+
+						// Notify about selection change with updated data
+						if (onSelectionChange) {
+							onSelectionChange({
+								levels: updatedLevels,
+								selectedCategories: newCategories,
+							});
+						}
+
+						return updatedLevels;
+					});
+
 					return newCategories;
 				});
-
-				// Check for subcategories
-				const hasSubcategories = categoryDetails.categories?.length > 0;
-
-				if (hasSubcategories) {
-					// Add a new level for subcategories
-					setLevels((prev) => {
-						const newLevels = [...prev];
-						newLevels[level] = {
-							...newLevels[level],
-							isLoading: false,
-						};
-
-						// Add the next level
-						newLevels.push({
-							level: level + 1,
-							isLoading: false,
-							categories: categoryDetails.categories,
-							selectedSlug: allowSelectAll ? "all" : "",
-							parentSlug: slug,
-						});
-
-						return newLevels;
-					});
-				} else {
-					// Just update loading state
-					setLevels((prev) => {
-						const newLevels = [...prev];
-						newLevels[level] = {
-							...newLevels[level],
-							isLoading: false,
-						};
-						return newLevels;
-					});
-				}
 
 				// Notify parent component
 				if (onCategorySelect) {
 					onCategorySelect(level, categoryDetails);
-				}
-
-				// Notify about selection change with updated data
-				if (onSelectionChange) {
-					// Create the updated selection data
-					const updatedCategories = [
-						...selectedCategories.filter(
-							(cat) => cat.level < level,
-						),
-						{
-							level,
-							slug,
-							name: categoryDetails.name,
-							documentId: categoryDetails.documentId,
-						},
-					];
-
-					// Create updated levels
-					const updatedLevels = [
-						...levels.slice(0, level),
-						{
-							...levels[level],
-							selectedSlug: slug,
-							isLoading: false,
-						},
-					];
-
-					// Add next level if there are subcategories
-					if (hasSubcategories) {
-						updatedLevels.push({
-							level: level + 1,
-							isLoading: false,
-							categories: categoryDetails.categories,
-							selectedSlug: allowSelectAll ? "all" : "",
-							parentSlug: slug,
-						});
-					}
-
-					onSelectionChange({
-						levels: updatedLevels,
-						selectedCategories: updatedCategories,
-					});
 				}
 			} catch (error) {
 				console.error("Error selecting category:", error);
@@ -386,13 +353,7 @@ export function CategorySelector({
 				});
 			}
 		},
-		[
-			levels,
-			selectedCategories,
-			allowSelectAll,
-			onCategorySelect,
-			onSelectionChange,
-		],
+		[allowSelectAll, onCategorySelect, onSelectionChange],
 	);
 
 	// If loading and no levels, show skeleton

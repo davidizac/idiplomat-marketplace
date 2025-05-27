@@ -8,7 +8,6 @@ import { cn } from "@ui/lib";
 import {
 	ChevronRightIcon,
 	HomeIcon,
-	ListIcon,
 	SettingsIcon,
 	UserCog2Icon,
 	UserCogIcon,
@@ -36,12 +35,6 @@ export function NavBar() {
 			href: basePath,
 			icon: HomeIcon,
 			isActive: pathname === basePath,
-		},
-		{
-			label: "My listings",
-			href: "/app/my-listings",
-			icon: ListIcon,
-			isActive: pathname.startsWith("/app/my-listings"),
 		},
 		...(activeOrganization
 			? [

@@ -14,7 +14,7 @@ export function Hero() {
 				{/* Background image with overlay */}
 				<div className="absolute inset-0 overflow-hidden">
 					<Image
-						src="/images/telaviv-jaffa.jpg"
+						src="/images/cities/telaviv-jaffa.jpg"
 						alt="Tel Aviv Jaffa"
 						fill
 						className="object-cover object-center"

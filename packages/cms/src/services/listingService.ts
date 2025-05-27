@@ -304,7 +304,7 @@ export class ListingService {
 		const documentIds = [];
 		for (const attrValue of attributeValues) {
 			const data = {
-				value: attrValue.value,
+				value: attrValue.value.toString(),
 			};
 
 			// Use Strapi API to create product attribute values
