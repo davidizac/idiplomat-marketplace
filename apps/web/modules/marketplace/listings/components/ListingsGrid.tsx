@@ -16,19 +16,44 @@ import { SortFilter, type SortOption } from "./filters/SortFilter";
 interface ListingCardProps {
 	id: string;
 	title: string;
-	category: string;
 	imageUrl: string;
 	createdAt: Date;
 	documentId: string;
+	type: "rent" | "sale" | "free";
+	price?: number;
+	rental_price?: number;
+	rental_period?: "hourly" | "daily" | "weekly" | "monthly";
 }
 
 function ListingCard({
 	id,
 	title,
-	category,
 	imageUrl,
 	documentId,
+	type,
+	price,
+	rental_price,
+	rental_period,
 }: ListingCardProps) {
+	// Helper function to format price display
+	const formatPrice = () => {
+		if (type === "free") {
+			return "Free";
+		}
+		if (type === "sale" && price) {
+			return `$${price}`;
+		}
+		if (type === "rent" && rental_price && rental_period) {
+			const periodMap = {
+				hourly: "hr",
+				daily: "day",
+				weekly: "week",
+				monthly: "month",
+			};
+			return `$${rental_price}/${periodMap[rental_period]}`;
+		}
+		return "Price not set";
+	};
 	return (
 		<LocaleLink href={`/listings/${documentId}`}>
 			<Card className="overflow-hidden hover:shadow-lg transition-shadow h-full">
@@ -46,15 +71,12 @@ function ListingCard({
 						<h3 className="font-semibold truncate flex-1">
 							{title}
 						</h3>
-						<span className="font-bold text-lg ml-2">$12</span>
+						<span className="font-bold text-lg ml-2">
+							{formatPrice()}
+						</span>
 					</div>
 					<div className="mt-2 flex items-center text-sm text-muted-foreground">
 						{/* <span>{location}</span> */}
-					</div>
-					<div className="mt-3 flex gap-2">
-						<div className="bg-secondary text-xs px-2 py-1 rounded-full">
-							{category}
-						</div>
 					</div>
 				</div>
 			</Card>
@@ -96,19 +118,20 @@ function processListings(data: any): ListingCardProps[] {
 	return (
 		data?.data.map((item: ListingData) => {
 			const listing = item;
-			const mainCategory =
-				listing?.categories[0]?.name || "Uncategorized";
 
 			return {
 				id: item.id.toString(),
 				documentId: item.documentId,
 				title: listing.title,
-				category: mainCategory,
 				imageUrl:
 					listing.images?.length > 0
 						? getStrapiImageUrl(listing.images[0].url)
 						: "/images/hero-image.png",
 				createdAt: new Date(listing.createdAt),
+				type: listing.type || "sale",
+				price: listing.price,
+				rental_price: listing.rental_price,
+				rental_period: listing.rental_period,
 			};
 		}) || []
 	);

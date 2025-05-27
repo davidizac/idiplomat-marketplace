@@ -27,15 +27,17 @@ interface FormState {
 	}>;
 	title: string;
 	description: string;
-	// location: string;
-	// status: string;
+	address: string;
+	type: "rent" | "sale" | "free";
 
 	// Photos step
 	photos: File[];
 	existingPhotos?: Array<{ id: number; url: string }>;
 
 	// Pricing step
-	// price: number;
+	price?: number;
+	rental_price?: number;
+	rental_period?: "hourly" | "daily" | "weekly" | "monthly";
 
 	// Attributes
 	attributes: Array<{
@@ -57,9 +59,11 @@ export default function EditListingForm({
 		categories: [],
 		title: "",
 		description: "",
-		location: "",
-		status: "draft",
+		address: "",
+		type: "sale",
 		price: 0,
+		rental_price: 0,
+		rental_period: "daily",
 		photos: [],
 		existingPhotos: [],
 		attributes: [],
@@ -80,9 +84,11 @@ export default function EditListingForm({
 					})) || [],
 				title: listing.title || "",
 				description: listing.description || "",
-				// location: listing.location || "",
-				// status: listing.status || "draft",
-				// price: listing.price || 0,
+				address: listing.address || "",
+				type: listing.type || "sale",
+				price: listing.price || 0,
+				rental_price: listing.rental_price || 0,
+				rental_period: listing.rental_period || "daily",
 				photos: [],
 				existingPhotos:
 					listing.images?.map((img: any) => ({
@@ -154,9 +160,17 @@ export default function EditListingForm({
 			const updateData = {
 				title: formState.title,
 				description: formState.description,
-				// price: formState.price,
-				// location: formState.location,
-				// status: formState.status,
+				address: formState.address,
+				type: formState.type,
+				price: formState.type === "sale" ? formState.price : undefined,
+				rental_price:
+					formState.type === "rent"
+						? formState.rental_price
+						: undefined,
+				rental_period:
+					formState.type === "rent"
+						? formState.rental_period
+						: undefined,
 				slug: formState.title.toLowerCase().replace(/\s+/g, "-"),
 				categories: categories,
 				images: existingImageIds,

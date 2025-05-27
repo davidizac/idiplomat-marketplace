@@ -215,9 +215,12 @@ function CategoriesAttributes({
 // Listing Info Section Component
 function ListingInfo({
 	title,
+	type,
 	price,
+	rental_price,
+	rental_period,
 	author,
-	location,
+	address,
 	createdAt,
 	authorEmail,
 	authorPhone,
@@ -225,15 +228,37 @@ function ListingInfo({
 	setShowContact,
 }: {
 	title: string;
-	price: number;
+	type: "rent" | "sale" | "free";
+	price?: number;
+	rental_price?: number;
+	rental_period?: "hourly" | "daily" | "weekly" | "monthly";
 	author: string | undefined;
-	location: string;
+	address: string; // City name
 	createdAt: string | Date;
 	authorEmail: string | undefined;
 	authorPhone: string | undefined;
 	showContact: boolean;
 	setShowContact: (value: boolean) => void;
 }) {
+	// Helper function to format price display
+	const formatPrice = () => {
+		if (type === "free") {
+			return "Free";
+		}
+		if (type === "sale" && price) {
+			return `$${price}`;
+		}
+		if (type === "rent" && rental_price && rental_period) {
+			const periodMap = {
+				hourly: "per hour",
+				daily: "per day",
+				weekly: "per week",
+				monthly: "per month",
+			};
+			return `$${rental_price} ${periodMap[rental_period]}`;
+		}
+		return "Price not set";
+	};
 	// Provide fallbacks for optional fields
 	const displayAuthor = author || "Listing Owner";
 	const displayEmail = authorEmail || "N/A";
@@ -249,7 +274,9 @@ function ListingInfo({
 		<div className="space-y-8">
 			<div className="space-y-3">
 				<h1 className="text-3xl font-bold">{title}</h1>
-				<p className="text-3xl font-bold text-primary">${price}</p>
+				<p className="text-3xl font-bold text-primary">
+					{formatPrice()}
+				</p>
 			</div>
 
 			<div className="flex items-center space-x-3 p-4 bg-muted/30 rounded-lg">
@@ -258,7 +285,7 @@ function ListingInfo({
 				</div>
 				<div>
 					<p className="font-medium text-lg">{displayAuthor}</p>
-					<p className="text-sm text-muted-foreground">{location}</p>
+					<p className="text-sm text-muted-foreground">{address}</p>
 				</div>
 			</div>
 
@@ -390,9 +417,12 @@ export default function ListingDetail({ listing }: ListingDetailProps) {
 				{/* Listing Info Section */}
 				<ListingInfo
 					title={listing.title}
+					type={listing.type || "sale"}
 					price={listing.price}
+					rental_price={listing.rental_price}
+					rental_period={listing.rental_period}
 					author={"David"}
-					location={listing.location}
+					address={listing.address}
 					createdAt={listing.createdAt}
 					authorEmail={"davidgahnassia@gmail.com"}
 					authorPhone={"0586275174"}

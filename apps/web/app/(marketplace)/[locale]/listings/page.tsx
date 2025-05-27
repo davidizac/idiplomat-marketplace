@@ -34,6 +34,7 @@ export default function ListingsPage() {
 		updateSubcategory,
 		updateSort,
 		updateSearch,
+		updateAddress,
 		clearAllFilters,
 		filterVersion,
 	} = useFilterManager({
@@ -148,6 +149,7 @@ export default function ListingsPage() {
 								onUpdateCategory={handleCategorySelect}
 								onUpdateSubcategory={handleSubcategorySelect}
 								onUpdateSearch={handleSearchUpdate}
+								onUpdateAddress={updateAddress}
 								onClearFilters={clearAllFilters}
 							/>
 						</div>

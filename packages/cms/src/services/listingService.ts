@@ -94,6 +94,16 @@ export class ListingService {
 			});
 		}
 
+		// Add city filter if provided
+		if (params.address && params.address.trim() !== "") {
+			const cityTerm = params.address.trim();
+			query.where({
+				address: {
+					$containsi: cityTerm,
+				},
+			});
+		}
+
 		// Add standard population for listings
 		query.populate({
 			categories: {
@@ -191,6 +201,11 @@ export class ListingService {
 	async createListing(data: {
 		title: string;
 		description: string;
+		address: string;
+		type: "rent" | "sale" | "free";
+		price?: number;
+		rental_price?: number;
+		rental_period?: "hourly" | "daily" | "weekly" | "monthly";
 		slug: string;
 		images?: Array<
 			string | number | { data: Blob | Buffer | File; filename?: string }
@@ -205,8 +220,23 @@ export class ListingService {
 		const listingData: Record<string, any> = {
 			title: data.title,
 			description: data.description,
+			address: data.address,
+			type: data.type,
 			slug: data.slug,
 		};
+
+		// Add pricing fields based on type
+		if (data.type === "sale" && data.price !== undefined) {
+			listingData.price = data.price;
+		}
+		if (data.type === "rent") {
+			if (data.rental_price !== undefined) {
+				listingData.rental_price = data.rental_price;
+			}
+			if (data.rental_period !== undefined) {
+				listingData.rental_period = data.rental_period;
+			}
+		}
 
 		// Handle image uploads (support mixture of existing IDs and new binary files)
 		if (data.images && data.images.length > 0) {
@@ -303,8 +333,11 @@ export class ListingService {
 		data: Partial<{
 			title: string;
 			description: string;
+			address: string;
+			type: "rent" | "sale" | "free";
 			price: number;
-			location: string;
+			rental_price: number;
+			rental_period: "hourly" | "daily" | "weekly" | "monthly";
 			slug: string;
 			status: string;
 			images?: string[] | number[]; // Image IDs
@@ -322,8 +355,13 @@ export class ListingService {
 		if (data.title !== undefined) listingData.title = data.title;
 		if (data.description !== undefined)
 			listingData.description = data.description;
+		if (data.address !== undefined) listingData.address = data.address;
+		if (data.type !== undefined) listingData.type = data.type;
 		if (data.price !== undefined) listingData.price = data.price;
-		if (data.location !== undefined) listingData.location = data.location;
+		if (data.rental_price !== undefined)
+			listingData.rental_price = data.rental_price;
+		if (data.rental_period !== undefined)
+			listingData.rental_period = data.rental_period;
 		if (data.slug !== undefined) listingData.slug = data.slug;
 		if (data.status !== undefined) listingData.status = data.status;
 

@@ -3,6 +3,13 @@ import type {} from "@repo/cms";
 import { Button } from "@ui/components/button";
 import { Input } from "@ui/components/input";
 import { Label } from "@ui/components/label";
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "@ui/components/select";
 import { Textarea } from "@ui/components/textarea";
 import { useCallback, useEffect, useState } from "react";
 import {
@@ -13,6 +20,7 @@ import {
 	type CategorySelectionData,
 	CategorySelector,
 } from "../../../../../../modules/marketplace/components/CategorySelector";
+import { ISRAELI_CITIES } from "../../../../../../modules/marketplace/constants/cities";
 
 interface FormState {
 	categories: Array<{
@@ -23,6 +31,8 @@ interface FormState {
 	}>;
 	title: string;
 	description: string;
+	address: string;
+	type: "rent" | "sale" | "free";
 	attributes: Array<{
 		attributeDocumentId: string;
 		attributeName: string;
@@ -53,6 +63,16 @@ export default function DetailsStep({
 		// Initialize attributes array if it doesn't exist
 		if (!formState.attributes) {
 			updateField("attributes", []);
+		}
+
+		// Initialize address if it doesn't exist
+		if (!formState.address) {
+			updateField("address", "");
+		}
+
+		// Initialize type if it doesn't exist
+		if (!formState.type) {
+			updateField("type", "sale");
 		}
 	}, [formState, updateField]);
 
@@ -93,6 +113,14 @@ export default function DetailsStep({
 		} else if (formState.description.length < 20) {
 			newErrors.description =
 				"Description must be at least 20 characters";
+		}
+
+		if (!formState.address) {
+			newErrors.address = "City is required";
+		}
+
+		if (!formState.type) {
+			newErrors.type = "Listing type is required";
 		}
 
 		setErrors(newErrors);
@@ -148,6 +176,27 @@ export default function DetailsStep({
 				)}
 			</div>
 
+			{/* Listing Type */}
+			<div className="space-y-2">
+				<Label htmlFor="type">Listing Type</Label>
+				<Select
+					value={formState.type || ""}
+					onValueChange={(value) => updateField("type", value)}
+				>
+					<SelectTrigger>
+						<SelectValue placeholder="Select listing type" />
+					</SelectTrigger>
+					<SelectContent>
+						<SelectItem value="sale">For Sale</SelectItem>
+						<SelectItem value="rent">For Rent</SelectItem>
+						<SelectItem value="free">Free</SelectItem>
+					</SelectContent>
+				</Select>
+				{errors.type && (
+					<p className="text-sm text-destructive">{errors.type}</p>
+				)}
+			</div>
+
 			<div className="space-y-2">
 				<Label htmlFor="title">Title</Label>
 				<Input
@@ -174,6 +223,29 @@ export default function DetailsStep({
 					<p className="text-sm text-destructive">
 						{errors.description}
 					</p>
+				)}
+			</div>
+
+			{/* Address */}
+			<div className="space-y-2">
+				<Label htmlFor="address">City</Label>
+				<Select
+					value={formState.address || ""}
+					onValueChange={(value) => updateField("address", value)}
+				>
+					<SelectTrigger>
+						<SelectValue placeholder="Select a city" />
+					</SelectTrigger>
+					<SelectContent>
+						{ISRAELI_CITIES.map((city) => (
+							<SelectItem key={city} value={city}>
+								{city}
+							</SelectItem>
+						))}
+					</SelectContent>
+				</Select>
+				{errors.address && (
+					<p className="text-sm text-destructive">{errors.address}</p>
 				)}
 			</div>
 

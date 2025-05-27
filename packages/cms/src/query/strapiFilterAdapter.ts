@@ -32,6 +32,9 @@ export function toStrapiQuery(
 		} else if (id === "search") {
 			// Handle search/keyword filter
 			params.search = filter.value as string;
+		} else if (id === "address") {
+			// Handle city filter
+			params.address = filter.value as string;
 		} else if (id === "category") {
 			// Handle single category filter
 			params.category = filter.value as string;

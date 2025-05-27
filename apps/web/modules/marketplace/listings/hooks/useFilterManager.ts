@@ -138,6 +138,15 @@ export function useFilterManager(initialFilters?: {
 		[filterManager],
 	);
 
+	// Handler for updating city filter
+	const updateAddress = useCallback(
+		(address: string | null) => {
+			filterManager.setAddressFilter(address);
+			setFilterVersion((v) => v + 1);
+		},
+		[filterManager],
+	);
+
 	// Handler for clearing all filters
 	const clearAllFilters = useCallback(() => {
 		filterManager.clearFilters();
@@ -160,6 +169,7 @@ export function useFilterManager(initialFilters?: {
 		updateSubcategories,
 		updatePriceRange,
 		updateSearch,
+		updateAddress,
 		clearAllFilters,
 		filterVersion,
 		setFilterVersion,

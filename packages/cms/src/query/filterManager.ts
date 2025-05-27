@@ -233,4 +233,19 @@ export class FilterManager {
 
 		return this.removeFilter("search");
 	}
+
+	/**
+	 * Set city filter
+	 */
+	setAddressFilter(address: string | null): FilterManager {
+		if (address && address.trim() !== "") {
+			return this.addFilter("address", {
+				field: "address",
+				operator: "contains",
+				value: address.trim(),
+			});
+		}
+
+		return this.removeFilter("address");
+	}
 }

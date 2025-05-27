@@ -100,13 +100,16 @@ export interface Listing extends BaseAttributes {
 	documentId: string;
 	title: string;
 	description: string;
-	price: number;
-	location: string;
+	price?: number;
+	address: string; // City name from predefined list
 	slug: string;
 	status: string;
 	images: Image[];
 	categories: Category[];
 	product_attribute_values: AttributeValue[];
+	type: "rent" | "sale" | "free";
+	rental_price?: number;
+	rental_period?: "hourly" | "daily" | "weekly" | "monthly";
 }
 
 //  Listing Collection Response
@@ -121,6 +124,7 @@ export interface ListingFilterParams {
 	pageSize?: number;
 	sort?: string;
 	search?: string;
+	address?: string; // City name filter
 	subCategories?: string[];
 	attributeFilters?: Array<{
 		attribute: string;

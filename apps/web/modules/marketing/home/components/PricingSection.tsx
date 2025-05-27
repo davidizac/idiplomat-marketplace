@@ -9,6 +9,7 @@ import {
 	ShoppingBag,
 	Sofa,
 } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 
 const popularCategories = [
@@ -39,7 +40,7 @@ const popularLocations = [
 		description: "Modern city with beaches and nightlife",
 		bgColor: "bg-blue-500/50",
 		textColor: "text-white",
-		imageLink: "images/telaviv-jaffa.jpg",
+		imageLink: "/images/cities/telaviv-jaffa.jpg",
 	},
 	{
 		name: "Jerusalem",
@@ -47,7 +48,7 @@ const popularLocations = [
 		description: "Historic and cultural center",
 		bgColor: "bg-amber-600/50",
 		textColor: "text-white",
-		imageLink: "images/jerusalem.jpg",
+		imageLink: "/images/cities/jerusalem.jpg",
 	},
 	{
 		name: "Herzliya",
@@ -55,7 +56,7 @@ const popularLocations = [
 		description: "Upscale coastal city",
 		bgColor: "bg-cyan-500/60",
 		textColor: "text-white",
-		imageLink: "images/herzliya.jpg",
+		imageLink: "/images/cities/hertzilia.jpg",
 	},
 	{
 		name: "Beer Sheva",
@@ -63,7 +64,7 @@ const popularLocations = [
 		description: "Gateway to the Negev desert",
 		bgColor: "bg-orange-700/50",
 		textColor: "text-white",
-		imageLink: "images/beersheva.jpg",
+		imageLink: "/images/cities/beer-sheva.jpg",
 	},
 ];
 
@@ -143,8 +144,12 @@ export function PricingSection() {
 								className="group overflow-hidden rounded-xl border shadow-sm bg-card transition-all hover:shadow-md hover:border-primary/20"
 							>
 								<div className="relative h-48 overflow-hidden">
-									<div
-										className={`absolute inset-0 ${location.bgColor}`}
+									<Image
+										src={location.imageLink}
+										alt={`${location.name} cityscape`}
+										fill
+										className="object-cover transition-transform group-hover:scale-105"
+										sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
 									/>
 									<div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
 									<div className="absolute bottom-0 left-0 p-4 text-white">

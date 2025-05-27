@@ -29,12 +29,16 @@ interface FormState {
 	}>;
 	title: string;
 	description: string;
+	address: string;
+	type: "rent" | "sale" | "free";
 
 	// Photos step
 	photos: File[];
 
 	// Pricing step
-	price: number;
+	price?: number;
+	rental_price?: number;
+	rental_period?: "hourly" | "daily" | "weekly" | "monthly";
 
 	// Attributes
 	attributes: Array<{
@@ -52,7 +56,8 @@ export default function ListingForm({ userId }: ListingFormProps) {
 		categories: [],
 		title: "",
 		description: "",
-		location: "", // Added location which is required in the Listing type
+		address: "",
+		type: "free",
 		status: "draft", // Default status to draft
 		price: 0,
 		photos: [],
@@ -125,6 +130,17 @@ export default function ListingForm({ userId }: ListingFormProps) {
 			await listingService.createListing({
 				title: formState.title,
 				description: formState.description,
+				address: formState.address,
+				type: formState.type,
+				price: formState.type === "sale" ? formState.price : undefined,
+				rental_price:
+					formState.type === "rent"
+						? formState.rental_price
+						: undefined,
+				rental_period:
+					formState.type === "rent"
+						? formState.rental_period
+						: undefined,
 				slug: formState.title.toLowerCase().replace(/\s+/g, "-"),
 				categories: categories,
 				images: images,

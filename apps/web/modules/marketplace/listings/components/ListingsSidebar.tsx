@@ -6,6 +6,7 @@ import { Card } from "@ui/components/card";
 import { useState } from "react";
 import { AttributesManager } from "../../components/AttributesManager";
 import type { AttributeValue } from "./filters/AttributeFilter";
+import { CityFilter } from "./filters/CityFilter";
 import { HierarchicalCategoryFilter } from "./filters/HierarchicalCategoryFilter";
 import { SearchFilter } from "./filters/SearchFilter";
 import type { SortOption } from "./filters/SortFilter";
@@ -27,6 +28,7 @@ interface ListingsSidebarProps {
 	onUpdateCategory: (category: Category | null) => void;
 	onUpdateSubcategory: (subcategory: Category | null) => void;
 	onUpdateSearch: (searchTerm: string | null) => void;
+	onUpdateAddress: (address: string | null) => void;
 	onClearFilters: () => void;
 }
 
@@ -36,6 +38,7 @@ export function ListingsSidebar({
 	onUpdateCategory,
 	onUpdateSubcategory,
 	onUpdateSearch,
+	onUpdateAddress,
 	onClearFilters,
 }: ListingsSidebarProps) {
 	// Selected categories state (for attributes display)
@@ -147,6 +150,12 @@ export function ListingsSidebar({
 		return searchFilter ? (searchFilter.value as string) : null;
 	};
 
+	// Get current address value from FilterManager
+	const getCurrentAddressValue = (): string | null => {
+		const addressFilter = filterManager.getFilter("address");
+		return addressFilter ? (addressFilter.value as string) : null;
+	};
+
 	return (
 		<Card className="h-fit w-64 flex-shrink-0 p-6">
 			<div className="space-y-6">
@@ -154,6 +163,13 @@ export function ListingsSidebar({
 				<SearchFilter
 					value={getCurrentSearchValue()}
 					onSearch={onUpdateSearch}
+				/>
+
+				{/* City Filter */}
+				<CityFilter
+					value={getCurrentAddressValue()}
+					onChange={onUpdateAddress}
+					label="City"
 				/>
 
 				{/* Hierarchical Category Filter */}
