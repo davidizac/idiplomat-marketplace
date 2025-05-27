@@ -16,6 +16,7 @@ export default function ListingsPage() {
 	const searchQuery = searchParams.get("search");
 	const categorySlug = searchParams.get("category");
 	const subcategorySlug = searchParams.get("subcategory");
+	const cityQuery = searchParams.get("city");
 
 	// State for the category modal
 	const [showCategoryModal, setShowCategoryModal] = useState(false);
@@ -41,6 +42,7 @@ export default function ListingsPage() {
 		categorySlug: categorySlug || null,
 		subcategorySlug: subcategorySlug || null,
 		search: searchQuery || null,
+		address: cityQuery || null,
 		sortOption: "newest",
 	});
 
@@ -71,38 +73,38 @@ export default function ListingsPage() {
 		// Update the filter manager
 		updateCategory(category?.slug || null);
 
-		// Update URL to reflect the category change
+		// Update URL to reflect the category change while preserving other params
+		const params = new URLSearchParams(searchParams.toString());
+
 		if (category) {
-			const params = new URLSearchParams(searchParams.toString());
 			params.set("category", category.slug);
 			params.delete("subcategory"); // Clear subcategory when category changes
-			router.push(`/listings?${params.toString()}`);
 		} else {
 			// Clear category from URL
-			const params = new URLSearchParams(searchParams.toString());
 			params.delete("category");
 			params.delete("subcategory");
-			router.push(`/listings?${params.toString()}`);
 		}
+
+		router.push(`/listings?${params.toString()}`);
 	};
 
 	// Handle subcategory selection from the sidebar
 	const handleSubcategorySelect = (subcategory: Category | null) => {
 		setSelectedSubcategory(subcategory);
 
-		// Update URL and filter manager
+		// Update URL and filter manager while preserving other params
+		const params = new URLSearchParams(searchParams.toString());
+
 		if (subcategory) {
-			const params = new URLSearchParams(searchParams.toString());
 			params.set("subcategory", subcategory.slug);
-			router.push(`/listings?${params.toString()}`);
 			updateSubcategory(subcategory.slug);
 		} else {
 			// Clear subcategory from URL
-			const params = new URLSearchParams(searchParams.toString());
 			params.delete("subcategory");
-			router.push(`/listings?${params.toString()}`);
 			updateSubcategory(null);
 		}
+
+		router.push(`/listings?${params.toString()}`);
 	};
 
 	// Handle search updates from the sidebar
@@ -115,6 +117,20 @@ export default function ListingsPage() {
 			params.set("search", searchTerm);
 		} else {
 			params.delete("search");
+		}
+		router.push(`/listings?${params.toString()}`);
+	};
+
+	// Handle city updates from the sidebar
+	const handleCityUpdate = (city: string | null) => {
+		updateAddress(city);
+
+		// Update URL to reflect the city change
+		const params = new URLSearchParams(searchParams.toString());
+		if (city) {
+			params.set("city", city);
+		} else {
+			params.delete("city");
 		}
 		router.push(`/listings?${params.toString()}`);
 	};
@@ -133,12 +149,14 @@ export default function ListingsPage() {
 				<div className="container">
 					<h1 className="text-3xl font-bold mb-8">
 						{selectedSubcategory
-							? `${selectedSubcategory.name} Listings`
+							? `${selectedSubcategory.name} Listings${cityQuery ? ` in ${cityQuery}` : ""}`
 							: selectedCategory
-								? `${selectedCategory.name} Listings`
+								? `${selectedCategory.name} Listings${cityQuery ? ` in ${cityQuery}` : ""}`
 								: searchQuery
-									? `Search Results: ${searchQuery}`
-									: "Browse Listings"}
+									? `Search Results: ${searchQuery}${cityQuery ? ` in ${cityQuery}` : ""}`
+									: cityQuery
+										? `Listings in ${cityQuery}`
+										: "Browse Listings"}
 					</h1>
 
 					<div className="flex flex-col md:flex-row gap-8">
@@ -149,7 +167,7 @@ export default function ListingsPage() {
 								onUpdateCategory={handleCategorySelect}
 								onUpdateSubcategory={handleSubcategorySelect}
 								onUpdateSearch={handleSearchUpdate}
-								onUpdateAddress={updateAddress}
+								onUpdateAddress={handleCityUpdate}
 								onClearFilters={clearAllFilters}
 							/>
 						</div>

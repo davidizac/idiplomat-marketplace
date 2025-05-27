@@ -16,6 +16,7 @@ export function useFilterManager(initialFilters?: {
 	subcategorySlugs?: string[] | null;
 	sortOption?: SortOption;
 	search?: string | null;
+	address?: string | null;
 	attributeValues?: Record<string, AttributeValue>;
 }) {
 	// Create filter manager instance with initial filters applied
@@ -42,6 +43,10 @@ export function useFilterManager(initialFilters?: {
 
 			if (initialFilters.search) {
 				manager.setSearchFilter(initialFilters.search);
+			}
+
+			if (initialFilters.address) {
+				manager.setAddressFilter(initialFilters.address);
 			}
 
 			// Set initial attribute values

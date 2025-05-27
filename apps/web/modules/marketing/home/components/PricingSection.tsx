@@ -140,7 +140,7 @@ export function PricingSection() {
 						{popularLocations.map((location) => (
 							<Link
 								key={location.name}
-								href={`/location/${location.name.toLowerCase()}`}
+								href={`/listings?city=${location.name}`}
 								className="group overflow-hidden rounded-xl border shadow-sm bg-card transition-all hover:shadow-md hover:border-primary/20"
 							>
 								<div className="relative h-48 overflow-hidden">

@@ -11,6 +11,7 @@ import {
 	DialogTitle,
 } from "@ui/components/dialog";
 import Image from "next/image";
+import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { type Category, useCategories } from "../../api";
 
@@ -26,6 +27,7 @@ export function CategorySelectionModal({
 	searchQuery,
 }: CategorySelectionModalProps) {
 	const router = useLocaleRouter();
+	const searchParams = useSearchParams();
 	const { data: categoriesResponse, isLoading } = useCategories({
 		pageSize: 8, // Get only top categories for the modal
 	});
@@ -46,13 +48,13 @@ export function CategorySelectionModal({
 
 	const handleContinue = () => {
 		if (selectedCategorySlug) {
-			// Build the URL with both category and search query if available
-			let url = `/listings?category=${selectedCategorySlug}`;
-			if (searchQuery) {
-				url += `&search=${encodeURIComponent(searchQuery)}`;
-			}
+			// Preserve all existing URL parameters and add/update the category
+			const params = new URLSearchParams(searchParams.toString());
+			params.set("category", selectedCategorySlug);
+			params.delete("subcategory"); // Clear subcategory when category changes
+
 			// Use replace instead of push to force a page refresh
-			router.replace(url);
+			router.replace(`/listings?${params.toString()}`);
 			onOpenChange(false);
 		}
 	};
