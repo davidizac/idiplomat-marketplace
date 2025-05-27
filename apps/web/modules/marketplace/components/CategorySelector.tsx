@@ -124,6 +124,7 @@ export function CategorySelector({
 	console.log(initialSelection);
 	const params = useSearchParams();
 	const category = params.get("category");
+	const subcategory = params.get("subcategory");
 	const [levels, setLevels] = useState<CategoryLevel[]>(initialLevels || []);
 	const [selectedPath, setSelectedPath] = useState<Category[]>([]);
 	const [selectedCategories, setSelectedCategories] =
@@ -151,7 +152,7 @@ export function CategorySelector({
 	// Initialize with root categories if not provided
 	useEffect(() => {
 		if (!initialLevels && rootCategories && !isRootCategoriesLoading) {
-			const levels = [
+			const initialLevels = [
 				{
 					level: 0,
 					isLoading: false,
@@ -159,15 +160,7 @@ export function CategorySelector({
 					selectedSlug: category ?? (allowSelectAll ? "all" : ""),
 				},
 			];
-			setLevels(levels);
-			if (category) {
-				const categoryData = rootCategories.find(
-					(c) => c.slug === category,
-				);
-				if (!categoryData) return;
-				if (!onCategorySelect) return;
-				onCategorySelect(0, categoryData);
-			}
+			setLevels(initialLevels);
 		}
 	}, [
 		rootCategories,
@@ -175,6 +168,45 @@ export function CategorySelector({
 		initialLevels,
 		allowSelectAll,
 	]);
+
+	// Sync URL parameters with component state
+	useEffect(() => {
+		if (!rootCategories || levels.length === 0) return;
+
+		// Update the first level selection to match URL
+		setLevels((prev) => {
+			const newLevels = [...prev];
+			if (newLevels[0]) {
+				const newSelectedSlug =
+					category ?? (allowSelectAll ? "all" : "");
+				// Only update if it's actually different to avoid infinite loops
+				if (newLevels[0].selectedSlug !== newSelectedSlug) {
+					newLevels[0] = {
+						...newLevels[0],
+						selectedSlug: newSelectedSlug,
+					};
+					return newLevels;
+				}
+			}
+			return prev;
+		});
+	}, [category, allowSelectAll]);
+
+	// Notify parent when URL category changes (but only when we have the data)
+	useEffect(() => {
+		if (!rootCategories || !onCategorySelect) return;
+
+		if (category) {
+			const categoryData = rootCategories.find(
+				(c) => c.slug === category,
+			);
+			if (categoryData) {
+				onCategorySelect(0, categoryData);
+			}
+		} else {
+			onCategorySelect(0, null);
+		}
+	}, [category, rootCategories]); // Removed onCategorySelect from deps to avoid loops
 
 	// Handle category selection
 	const handleCategorySelect = useCallback(

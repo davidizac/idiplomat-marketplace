@@ -30,6 +30,7 @@ export default function ListingsPage() {
 		filterManager,
 		strapiQuery,
 		updateAttributeFilter,
+		updateCategory,
 		updateSubcategory,
 		updateSort,
 		updateSearch,
@@ -65,6 +66,9 @@ export default function ListingsPage() {
 	// Handle category selection from the sidebar
 	const handleCategorySelect = (category: Category | null) => {
 		setSelectedCategory(category);
+
+		// Update the filter manager
+		updateCategory(category?.slug || null);
 
 		// Update URL to reflect the category change
 		if (category) {
