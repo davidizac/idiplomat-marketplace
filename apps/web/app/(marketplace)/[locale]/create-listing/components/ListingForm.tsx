@@ -262,6 +262,7 @@ export default function ListingForm({ userId }: ListingFormProps) {
 								onSubmit={handleSubmit}
 								onBack={goToPrevStep}
 								isSubmitting={isSubmitting}
+								submitButtonText="Publish Listing"
 							/>
 						)}
 					</main>

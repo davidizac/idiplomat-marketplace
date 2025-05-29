@@ -340,7 +340,11 @@ export class ListingService {
 			rental_period: "hourly" | "daily" | "weekly" | "monthly";
 			slug: string;
 			status: string;
-			images?: string[] | number[]; // Image IDs
+			images?: Array<
+				| string
+				| number
+				| { data: Blob | Buffer | File; filename?: string }
+			>; // Support both IDs and new files
 			categories?: string[] | number[]; // Category IDs
 			attributeValues?: Array<{
 				attributeDocumentId: string;
@@ -365,9 +369,31 @@ export class ListingService {
 		if (data.slug !== undefined) listingData.slug = data.slug;
 		if (data.status !== undefined) listingData.status = data.status;
 
-		// Add relational fields
+		// Handle image uploads (support mixture of existing IDs and new binary files)
 		if (data.images !== undefined) {
-			listingData.images = data.images;
+			const existingIds: Array<string | number> = [];
+			const newFiles: Array<{
+				data: Blob | Buffer | File;
+				filename?: string;
+			}> = [];
+
+			data.images.forEach((item) => {
+				if (typeof item === "string" || typeof item === "number") {
+					existingIds.push(item);
+				} else if (item && typeof item === "object" && "data" in item) {
+					newFiles.push(item as any);
+				}
+			});
+
+			// Upload new files and get their IDs
+			if (newFiles.length > 0) {
+				const uploadedIds = await uploadFiles(newFiles);
+				existingIds.push(...uploadedIds);
+			}
+
+			if (existingIds.length > 0) {
+				listingData.images = existingIds;
+			}
 		}
 
 		if (data.categories !== undefined) {

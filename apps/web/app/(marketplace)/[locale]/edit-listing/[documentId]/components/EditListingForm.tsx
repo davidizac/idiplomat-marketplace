@@ -1,5 +1,5 @@
 "use client";
-import { listingService } from "@repo/cms";
+import { getStrapiImageUrl, listingService } from "@repo/cms";
 import type { Listing } from "@repo/cms";
 import { cn } from "@ui/lib";
 import { Check, ChevronRight } from "lucide-react";
@@ -93,7 +93,7 @@ export default function EditListingForm({
 				existingPhotos:
 					listing.images?.map((img: any) => ({
 						id: img.id,
-						url: img.url,
+						url: getStrapiImageUrl(img.url),
 					})) || [],
 				attributes:
 					listing.product_attribute_values?.map((attrVal: any) => ({
@@ -152,11 +152,30 @@ export default function EditListingForm({
 			}));
 
 			// Prepare images - combine existing photo IDs with new uploads
-			const existingImageIds =
-				formState.existingPhotos?.map((photo) => photo.id) || [];
+			const images: Array<
+				string | number | { data: File; filename?: string }
+			> = [];
 
-			// For new photos, we'll need to upload them first
-			// This is a simplified version - in production you'd handle uploads properly
+			// Add existing photo IDs
+			if (
+				formState.existingPhotos &&
+				formState.existingPhotos.length > 0
+			) {
+				formState.existingPhotos.forEach((photo) => {
+					images.push(photo.id);
+				});
+			}
+
+			// Add new photo uploads
+			if (formState.photos && formState.photos.length > 0) {
+				formState.photos.forEach((photo) => {
+					images.push({
+						data: photo,
+						filename: photo.name,
+					});
+				});
+			}
+
 			const updateData = {
 				title: formState.title,
 				description: formState.description,
@@ -173,7 +192,7 @@ export default function EditListingForm({
 						: undefined,
 				slug: formState.title.toLowerCase().replace(/\s+/g, "-"),
 				categories: categories,
-				images: existingImageIds,
+				images: images,
 				attributeValues: attributeValues,
 			};
 
@@ -294,6 +313,7 @@ export default function EditListingForm({
 								onSubmit={handleSubmit}
 								onBack={goToPrevStep}
 								isSubmitting={isSubmitting}
+								submitButtonText="Update Listing"
 							/>
 						)}
 					</main>

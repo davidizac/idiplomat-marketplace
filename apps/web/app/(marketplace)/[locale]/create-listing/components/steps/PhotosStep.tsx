@@ -4,10 +4,11 @@ import { Button } from "@ui/components/button";
 import { Label } from "@ui/components/label";
 import { Image as ImageIcon, Upload, X } from "lucide-react";
 import Image from "next/image";
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 interface FormState {
 	photos: File[];
+	existingPhotos?: Array<{ id: number; url: string }>;
 	[key: string]: any;
 }
 
@@ -17,6 +18,7 @@ interface PhotosStepProps {
 	onSubmit: () => void;
 	onBack: () => void;
 	isSubmitting?: boolean;
+	submitButtonText?: string;
 }
 
 export default function PhotosStep({
@@ -25,24 +27,43 @@ export default function PhotosStep({
 	onSubmit,
 	onBack,
 	isSubmitting = false,
+	submitButtonText = "Submit",
 }: PhotosStepProps) {
 	const [error, setError] = useState<string>("");
 	const [photoPreviewUrls, setPhotoPreviewUrls] = useState<string[]>([]);
 	const fileInputRef = useRef<HTMLInputElement>(null);
+	const previewUrlsRef = useRef<string[]>([]);
 	const MAX_PHOTOS = 5;
 
 	// Create URL previews for the uploaded photos
 	const updatePhotoPreviews = useCallback(
 		(photos: File[]) => {
 			// Revoke any existing object URLs to avoid memory leaks
-			photoPreviewUrls.forEach((url) => URL.revokeObjectURL(url));
+			previewUrlsRef.current.forEach((url) => URL.revokeObjectURL(url));
 
 			// Create new object URLs
 			const newUrls = photos.map((file) => URL.createObjectURL(file));
+			previewUrlsRef.current = newUrls;
 			setPhotoPreviewUrls(newUrls);
 		},
-		[photoPreviewUrls],
+		[], // No dependencies needed
 	);
+
+	// Initialize photo previews when component mounts or photos change
+	useEffect(() => {
+		if (formState.photos && formState.photos.length > 0) {
+			updatePhotoPreviews(formState.photos);
+		}
+
+		// Cleanup function to revoke URLs when component unmounts
+		return () => {
+			previewUrlsRef.current.forEach((url) => URL.revokeObjectURL(url));
+		};
+	}, [formState.photos, updatePhotoPreviews]);
+
+	// Calculate total photos (existing + new)
+	const totalPhotos =
+		(formState.existingPhotos?.length || 0) + formState.photos.length;
 
 	// Handle photo uploads (append new photos instead of replacing)
 	const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -62,10 +83,16 @@ export default function PhotosStep({
 		// Combine existing photos with the newly selected ones
 		let combined = [...formState.photos, ...selectedFiles];
 
-		// If combined exceeds max, trim and show an error
-		if (combined.length > MAX_PHOTOS) {
-			setError(`You can upload a maximum of ${MAX_PHOTOS} photos`);
-			combined = combined.slice(0, MAX_PHOTOS);
+		// Check if total (existing + new) exceeds max
+		const totalAfterUpload =
+			(formState.existingPhotos?.length || 0) + combined.length;
+		if (totalAfterUpload > MAX_PHOTOS) {
+			const allowedNewPhotos =
+				MAX_PHOTOS - (formState.existingPhotos?.length || 0);
+			setError(
+				`You can upload a maximum of ${MAX_PHOTOS} photos total. You can add ${allowedNewPhotos} more photos.`,
+			);
+			combined = combined.slice(0, allowedNewPhotos);
 		} else {
 			setError("");
 		}
@@ -79,16 +106,23 @@ export default function PhotosStep({
 		fileInputRef.current?.click();
 	};
 
-	// Remove a photo
-	const removePhoto = (index: number) => {
+	// Remove a new photo (from File uploads)
+	const removeNewPhoto = (index: number) => {
 		const updatedPhotos = formState.photos.filter((_, i) => i !== index);
 		updateField("photos", updatedPhotos);
 		updatePhotoPreviews(updatedPhotos);
 	};
 
+	// Remove an existing photo
+	const removeExistingPhoto = (index: number) => {
+		const updatedExistingPhotos =
+			formState.existingPhotos?.filter((_, i) => i !== index) || [];
+		updateField("existingPhotos", updatedExistingPhotos);
+	};
+
 	// Validate before publishing
 	const validateBeforeSubmit = () => {
-		if (formState.photos.length === 0) {
+		if (totalPhotos === 0) {
 			setError("Please upload at least one photo");
 			return false;
 		}
@@ -102,7 +136,8 @@ export default function PhotosStep({
 		console.log("Publish button clicked");
 		const isValid = validateBeforeSubmit();
 		console.log("Photo validation result:", isValid);
-		console.log("Photos:", formState.photos);
+		console.log("Existing photos:", formState.existingPhotos);
+		console.log("New photos:", formState.photos);
 
 		if (isValid) {
 			console.log("Calling onSubmit()...");
@@ -140,7 +175,7 @@ export default function PhotosStep({
 					className="hidden"
 				/>
 
-				{formState.photos.length === 0 ? (
+				{totalPhotos === 0 ? (
 					<button
 						type="button"
 						onClick={handleUploadClick}
@@ -160,28 +195,60 @@ export default function PhotosStep({
 				) : (
 					<div className="space-y-4">
 						<div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
-							{photoPreviewUrls.map((url, index) => (
+							{/* Display existing photos */}
+							{formState.existingPhotos?.map((photo, index) => (
 								<div
-									key={index}
+									key={`existing-${photo.id}`}
 									className="relative group aspect-square border rounded-md overflow-hidden bg-background"
 								>
 									<Image
-										src={url}
-										alt={`Preview ${index + 1}`}
+										src={photo.url}
+										alt={`Existing photo ${index + 1}`}
 										fill
 										className="object-cover"
 									/>
 									<button
 										type="button"
-										onClick={() => removePhoto(index)}
+										onClick={() =>
+											removeExistingPhoto(index)
+										}
 										className="absolute top-1 right-1 bg-black/70 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
 									>
 										<X className="h-4 w-4" />
 									</button>
+									<div className="absolute bottom-1 left-1 bg-black/70 text-white px-2 py-1 rounded text-xs">
+										Existing
+									</div>
 								</div>
 							))}
 
-							{formState.photos.length < MAX_PHOTOS && (
+							{/* Display new photo previews */}
+							{photoPreviewUrls.map((url, index) => (
+								<div
+									key={`new-${index}`}
+									className="relative group aspect-square border rounded-md overflow-hidden bg-background"
+								>
+									<Image
+										src={url}
+										alt={`New photo ${index + 1}`}
+										fill
+										className="object-cover"
+									/>
+									<button
+										type="button"
+										onClick={() => removeNewPhoto(index)}
+										className="absolute top-1 right-1 bg-black/70 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+									>
+										<X className="h-4 w-4" />
+									</button>
+									<div className="absolute bottom-1 left-1 bg-green-600 text-white px-2 py-1 rounded text-xs">
+										New
+									</div>
+								</div>
+							))}
+
+							{/* Add more button */}
+							{totalPhotos < MAX_PHOTOS && (
 								<button
 									type="button"
 									onClick={handleUploadClick}
@@ -194,8 +261,14 @@ export default function PhotosStep({
 						</div>
 
 						<p className="text-sm text-center text-muted-foreground">
-							{formState.photos.length} of {MAX_PHOTOS} photos
-							uploaded
+							{totalPhotos} of {MAX_PHOTOS} photos
+							{formState.existingPhotos &&
+								formState.existingPhotos.length > 0 && (
+									<span className="block mt-1">
+										({formState.existingPhotos.length}{" "}
+										existing, {formState.photos.length} new)
+									</span>
+								)}
 						</p>
 					</div>
 				)}
@@ -221,7 +294,7 @@ export default function PhotosStep({
 					onClick={handlePublish}
 					disabled={isSubmitting}
 				>
-					{isSubmitting ? "Publishing..." : "Publish Listing"}
+					{isSubmitting ? "Submitting..." : submitButtonText}
 				</Button>
 			</div>
 		</div>
