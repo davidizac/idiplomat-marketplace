@@ -54,7 +54,10 @@ export function DeleteAccountForm() {
 				description={t("settings.account.deleteAccount.description")}
 			>
 				<div className="mt-4 flex justify-end">
-					<Button variant="error" onClick={() => confirmDelete()}>
+					<Button
+						variant="destructive"
+						onClick={() => confirmDelete()}
+					>
 						{t("settings.account.deleteAccount.submit")}
 					</Button>
 				</div>

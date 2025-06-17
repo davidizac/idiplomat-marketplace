@@ -1,14 +1,8 @@
 import { DocsLayout } from "fumadocs-ui/layouts/docs";
 import { getTranslations } from "next-intl/server";
-import type { PropsWithChildren } from "react";
 import { docsSource } from "../../../../docs-source";
 
-export default async function DocumentationLayout({
-	children,
-	params,
-}: PropsWithChildren<{
-	params: { locale: string };
-}>) {
+export default async function DocumentationLayout({ children, params }: any) {
 	const t = await getTranslations();
 	const { locale } = params;
 

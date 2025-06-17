@@ -3,20 +3,7 @@ import Link from "next/link";
 import type { Category } from "../../../../modules/marketplace/api";
 import { loadRootCategories } from "./loader";
 
-interface CategoriesPageProps {
-	params: {
-		locale: string;
-	};
-	searchParams: {
-		page?: string;
-		pageSize?: string;
-	};
-}
-
-export default async function CategoriesPage({
-	params,
-	searchParams,
-}: CategoriesPageProps) {
+export default async function CategoriesPage({ params, searchParams }: any) {
 	// Parse pagination params
 	const page = Number.parseInt(searchParams.page || "1", 10);
 	const pageSize = Number.parseInt(searchParams.pageSize || "20", 10);

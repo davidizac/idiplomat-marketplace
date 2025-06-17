@@ -130,7 +130,7 @@ export function NavBar() {
 
 						{/* Post Listing Button */}
 						<Button
-							variant="primary"
+							variant="default"
 							size="sm"
 							className="hidden md:flex"
 							asChild

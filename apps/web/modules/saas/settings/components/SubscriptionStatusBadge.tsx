@@ -1,6 +1,5 @@
 "use client";
 
-import type { BadgeProps } from "@ui/components/badge";
 import { Badge } from "@ui/components/badge";
 import { useTranslations } from "next-intl";
 
@@ -23,7 +22,7 @@ export function SubscriptionStatusBadge({
 		unpaid: t("settings.billing.activePlan.status.unpaid"),
 	};
 
-	const badgeColors: Record<string, BadgeProps["status"]> = {
+	const badgeColors: Record<string, any> = {
 		active: "success",
 		canceled: "error",
 		expired: "error",
@@ -34,5 +33,5 @@ export function SubscriptionStatusBadge({
 		unpaid: "error",
 	};
 
-	return <Badge status={badgeColors[status]}>{badgeLabels[status]}</Badge>;
+	return <Badge variant={badgeColors[status]}>{badgeLabels[status]}</Badge>;
 }

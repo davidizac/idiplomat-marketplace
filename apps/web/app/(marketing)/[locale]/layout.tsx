@@ -7,7 +7,6 @@ import { RootProvider as FumadocsRootProvider } from "fumadocs-ui/provider";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
-import type { PropsWithChildren } from "react";
 
 const locales = Object.keys(config.i18n.locales);
 
@@ -15,10 +14,7 @@ export function generateStaticParams() {
 	return locales.map((locale) => ({ locale }));
 }
 
-export default async function MarketingLayout({
-	children,
-	params,
-}: PropsWithChildren<{ params: { locale: string } }>) {
+export default async function MarketingLayout({ children, params }: any) {
 	const { locale } = params;
 
 	setRequestLocale(locale);

@@ -2,14 +2,7 @@ import { getListings, getStrapiImageUrl } from "@repo/cms";
 import { notFound } from "next/navigation";
 import { loadCategoryBySlug } from "../loader";
 
-interface CategoryPageProps {
-	params: {
-		slug: string;
-		locale: string;
-	};
-}
-
-export default async function CategoryPage({ params }: CategoryPageProps) {
+export default async function CategoryPage({ params }: any) {
 	// Load category by slug
 	const category = await loadCategoryBySlug(params.slug);
 
@@ -98,7 +91,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
 											${listing.price}
 										</p>
 										<p className="mt-1 text-sm text-muted-foreground">
-											{listing.location}
+											{listing.address}
 										</p>
 									</div>
 								</a>

@@ -5,11 +5,7 @@ import { Newsletter } from "@marketing/home/components/Newsletter";
 import { PricingSection } from "@marketing/home/components/PricingSection";
 import { setRequestLocale } from "next-intl/server";
 
-export default async function Home({
-	params,
-}: {
-	params: { locale: string };
-}) {
+export default async function Home({ params }: any) {
 	const { locale } = params;
 	setRequestLocale(locale);
 

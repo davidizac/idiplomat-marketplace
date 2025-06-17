@@ -65,7 +65,7 @@ export function DeleteOrganizationForm() {
 				)}
 			>
 				<div className="mt-4 flex justify-end">
-					<Button variant="error" onClick={handleDelete}>
+					<Button variant="destructive" onClick={handleDelete}>
 						{t("organizations.settings.deleteOrganization.submit")}
 					</Button>
 				</div>

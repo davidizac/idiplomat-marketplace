@@ -70,8 +70,8 @@ export function ConfirmationAlertProvider({ children }: PropsWithChildren) {
 						<Button
 							variant={
 								confirmOptions?.destructive
-									? "error"
-									: "primary"
+									? "destructive"
+									: "default"
 							}
 							onClick={async () => {
 								await confirmOptions?.onConfirm();

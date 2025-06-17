@@ -251,11 +251,11 @@ export default function UserStart({ userId }: UserStartProps) {
 																{listing.title}
 															</h3>
 															<div className="flex items-center gap-4 text-sm text-muted-foreground">
-																{listing.location && (
+																{listing.address && (
 																	<span className="flex items-center gap-1">
 																		<MapPinIcon className="h-3 w-3" />
 																		{
-																			listing.location
+																			listing.address
 																		}
 																	</span>
 																)}

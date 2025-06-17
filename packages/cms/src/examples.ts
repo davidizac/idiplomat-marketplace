@@ -14,34 +14,34 @@ import {
 /**
  * Example: Create a complete listing with categories and attributes
  */
-async function createCompleteProductExample() {
-	// 1. First, get some categories to assign to the listing
-	const categories = await categoryService.getCategories({
-		pageSize: 5,
-	});
-	const categoryIds = categories.data.map((c) => c.id.toString());
+// async function createCompleteProductExample() {
+// 	// 1. First, get some categories to assign to the listing
+// 	const categories = await categoryService.getCategories({
+// 		pageSize: 5,
+// 	});
+// 	const categoryIds = categories.data.map((c) => c.id.toString());
 
-	// 2. Upload product images (this would normally come from a file upload)
-	// For this example, we'll assume images were already uploaded and we have IDs
-	const imageIds = ["1", "2"];
+// 	// 2. Upload product images (this would normally come from a file upload)
+// 	// For this example, we'll assume images were already uploaded and we have IDs
+// 	const imageIds = ["1", "2"];
 
-	// 3. Create the listing with relations
-	const newListing = await listingService.createListing({
-		title: "MacBook Pro M3 Max",
-		description: "Professional laptop with 32GB RAM and 1TB SSD",
-		slug: "macbook-pro-m3-max",
-		images: imageIds,
-		categories: categoryIds.slice(0, 2), // Assign first two categories
-		attributeValues: [
-			{ attributeDocumentId: "1", value: "Apple" }, // Brand
-			{ attributeDocumentId: "2", value: "Space Gray" }, // Color
-			{ attributeDocumentId: "3", value: "16 inch" }, // Size
-		],
-	});
+// 	// 3. Create the listing with relations
+// 	const newListing = await listingService.createListing({
+// 		title: "MacBook Pro M3 Max",
+// 		description: "Professional laptop with 32GB RAM and 1TB SSD",
+// 		slug: "macbook-pro-m3-max",
+// 		images: imageIds,
+// 		categories: categoryIds.slice(0, 2), // Assign first two categories
+// 		attributeValues: [
+// 			{ attributeDocumentId: "1", value: "Apple" }, // Brand
+// 			{ attributeDocumentId: "2", value: "Space Gray" }, // Color
+// 			{ attributeDocumentId: "3", value: "16 inch" }, // Size
+// 		],
+// 	});
 
-	console.log("Created listing with relations:", newListing);
-	return newListing;
-}
+// 	console.log("Created listing with relations:", newListing);
+// 	return newListing;
+// }
 
 /**
  * Example: Create a category with attributes and subcategories
@@ -161,7 +161,7 @@ async function usingStrapiClientDirectlyExample() {
 
 // Export examples for reference
 export const examples = {
-	createCompleteProductExample,
+	// createCompleteProductExample,
 	createCategoryHierarchyExample,
 	updateListingWithRelationsExample,
 	searchListingsByAttributesExample,

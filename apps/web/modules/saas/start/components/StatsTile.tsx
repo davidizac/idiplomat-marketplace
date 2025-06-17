@@ -66,7 +66,7 @@ export function StatsTile({
 						{context && <small>{context}</small>}
 					</strong>
 					{trend && (
-						<Badge status={trend > 0 ? "success" : "error"}>
+						<Badge variant={trend > 0 ? "default" : "secondary"}>
 							{formattedTrend}
 						</Badge>
 					)}

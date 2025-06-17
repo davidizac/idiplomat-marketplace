@@ -4,16 +4,7 @@ import { notFound, redirect } from "next/navigation";
 import { withQuery } from "ufo";
 import EditListingForm from "./components/EditListingForm";
 
-interface EditListingPageProps {
-	params: Promise<{
-		documentId: string;
-		locale: string;
-	}>;
-}
-
-export default async function EditListingPage({
-	params,
-}: EditListingPageProps) {
+export default async function EditListingPage({ params }: any) {
 	const { documentId } = await params;
 
 	// Retrieve server session (returns null if not authenticated)

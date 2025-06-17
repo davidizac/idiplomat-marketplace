@@ -322,7 +322,7 @@ export function LoginForm() {
 
 								{config.auth.enablePasskeys && (
 									<Button
-										variant="light"
+										variant="default"
 										className="w-full sm:col-span-2"
 										onClick={() => signInWithPasskey()}
 									>

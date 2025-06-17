@@ -35,7 +35,7 @@ export function Hero() {
 						community.
 					</p>
 					<div className="flex flex-col sm:flex-row gap-4">
-						<Button size="lg" variant="primary" asChild>
+						<Button size="lg" variant="default" asChild>
 							<Link href="/listings">
 								Browse Listings
 								<ArrowRightIcon className="ml-2 h-4 w-4" />
