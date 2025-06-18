@@ -12,7 +12,6 @@ import { Button } from "@ui/components/button";
 import { Card } from "@ui/components/card";
 import { Separator } from "@ui/components/separator";
 import { ChevronLeft, ChevronRight, Tag, User, X } from "lucide-react";
-import Image from "next/image";
 import { useEffect, useState } from "react";
 
 interface ListingDetailProps {
@@ -41,13 +40,11 @@ function ImageGallery({
 				onClick={() => onOpenModal(selectedImage)}
 				aria-label="View larger image"
 			>
-				<Image
+				<img
 					src={getStrapiImageUrl(images[selectedImage].url)}
 					alt={title}
-					fill
 					className="object-cover hover:scale-105 transition-transform duration-300"
 					sizes="(max-width: 768px) 100vw, 50vw"
-					priority
 				/>
 				<div className="absolute inset-0 bg-black/5 hover:bg-black/10 transition-colors flex items-center justify-center opacity-0 hover:opacity-100">
 					<p className="text-white bg-black/50 px-4 py-2 rounded-full text-sm font-medium">
@@ -69,10 +66,9 @@ function ImageGallery({
 						} hover:opacity-90 transition-opacity`}
 						onClick={() => setSelectedImage(index)}
 					>
-						<Image
+						<img
 							src={getStrapiImageUrl(image.url)}
 							alt={`Thumbnail ${index + 1}`}
-							fill
 							className="object-cover"
 							sizes="96px"
 						/>
@@ -134,13 +130,11 @@ function ImageModal({
 
 				{/* Main image */}
 				<div className="relative w-full h-full">
-					<Image
+					<img
 						src={getStrapiImageUrl(images[currentImage].url)}
-						alt={`Image ${currentImage + 1} of ${title}`}
-						fill
+						alt={`${title}`}
 						className="object-contain"
 						sizes="100vw"
-						priority
 					/>
 				</div>
 
@@ -357,7 +351,7 @@ function ContactAction({ onShowContact }: { onShowContact: () => void }) {
 				</Button>
 				<p className="text-muted-foreground">
 					When contacting the seller, please mention that you found
-					this listing on IDiplomat Marketplace.
+					this listing on I-Diplomat Marketplace.
 				</p>
 			</div>
 		</div>

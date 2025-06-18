@@ -27,7 +27,7 @@ export function Hero() {
 				{/* Hero content */}
 				<div className="container relative z-10 py-16 flex flex-col items-center text-center">
 					<h1 className="text-5xl md:text-7xl font-bold tracking-tight mb-6">
-						IDiplomat Marketplace
+						I-Diplomat Marketplace
 					</h1>
 					<p className="text-xl md:text-2xl text-foreground/80 max-w-3xl mx-auto mb-8">
 						A trusted marketplace exclusively for diplomats in

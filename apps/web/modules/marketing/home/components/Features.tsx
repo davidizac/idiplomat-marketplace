@@ -50,7 +50,7 @@ export function Features() {
 					<div>
 						<Image
 							src={howItWorksImage}
-							alt="How IDiplomat Marketplace works"
+							alt="How I-Diplomat Marketplace works"
 							className="w-full rounded-lg shadow-lg"
 						/>
 					</div>
@@ -59,7 +59,7 @@ export function Features() {
 							For Diplomats Only
 						</h3>
 						<p className="text-foreground/70 mb-6">
-							IDiplomat Marketplace is exclusively for the
+							I-Diplomat Marketplace is exclusively for the
 							diplomatic community in Israel. All members are
 							verified to ensure a trusted environment.
 						</p>

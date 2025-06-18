@@ -273,7 +273,7 @@ export default function ListingForm({ userId }: ListingFormProps) {
 			<footer className="border-t py-6 mt-auto">
 				<div className="container text-center text-sm text-muted-foreground">
 					<p>
-						© {new Date().getFullYear()} IDiplomat Marketplace. All
+						© {new Date().getFullYear()} I-Diplomat Marketplace. All
 						rights reserved.
 					</p>
 				</div>

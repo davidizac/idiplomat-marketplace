@@ -118,8 +118,8 @@ export function Newsletter() {
 								</h3>
 								<p className="mt-1 text-sm text-foreground/60">
 									You'll now receive updates about the
-									IDiplomat Marketplace community and listings
-									that match your interests.
+									I-Diplomat Marketplace community and
+									listings that match your interests.
 								</p>
 							</div>
 						)}

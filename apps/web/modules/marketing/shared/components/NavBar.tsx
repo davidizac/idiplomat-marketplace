@@ -91,7 +91,7 @@ export function NavBar() {
 							ID
 						</div>
 						<span className="font-bold text-lg hidden md:block">
-							IDiplomat
+							I-Diplomat
 						</span>
 					</LocaleLink>
 
