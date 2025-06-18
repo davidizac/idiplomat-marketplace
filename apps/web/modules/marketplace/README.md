@@ -278,11 +278,5 @@ When adding new features:
 4. **Add tests** for business logic
 5. **Update documentation** for new APIs
 
-## Legacy Support
-
-Legacy components remain available during migration:
-
-- `LegacyCategorySelector` - Original CategorySelector
-- `LegacyAttributesManager` - Original AttributesManager
 
 These will be removed in a future version after migration is complete. 
