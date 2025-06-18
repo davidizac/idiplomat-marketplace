@@ -25,6 +25,11 @@ const nextConfig: NextConfig = {
 				port: "1337",
 				pathname: "/uploads/**",
 			},
+			{
+				protocol: "https",
+				hostname: "useful-horses-54f6b619ab.strapiapp.com",
+				pathname: "/",
+			},
 		],
 	},
 	async redirects() {

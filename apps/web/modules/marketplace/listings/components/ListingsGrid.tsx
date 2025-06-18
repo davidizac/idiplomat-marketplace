@@ -9,6 +9,7 @@ import {
 import { getStrapiImageUrl } from "@repo/cms";
 import { Card } from "@ui/components/card";
 import { Skeleton } from "@ui/components/skeleton";
+import Image from "next/image";
 import { useState } from "react";
 import { SortFilter, type SortOption } from "./filters/SortFilter";
 
@@ -57,10 +58,12 @@ function ListingCard({
 		<LocaleLink href={`/listings/${documentId}`}>
 			<Card className="overflow-hidden hover:shadow-lg transition-shadow h-full">
 				<div className="relative h-48">
-					<img
+					<Image
 						src={imageUrl || "/images/hero-image.png"}
 						alt={title}
+						fill
 						className="object-cover"
+						sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
 					/>
 				</div>
 				<div className="p-4">
