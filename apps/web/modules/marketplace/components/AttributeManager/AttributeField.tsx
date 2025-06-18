@@ -78,7 +78,7 @@ export function AttributeField({
 
 			return (
 				<div className="space-y-4">
-					<div className="flex justify-between">
+					<div className="flex justify-start items-center gap-2">
 						<Label htmlFor={definition.documentId}>
 							{definition.name}
 							{definition.required && (
