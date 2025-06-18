@@ -67,7 +67,7 @@ export function AttributeFilter({
 			const numValue = typeof value === "number" ? value : 0;
 			return (
 				<div className="space-y-4">
-					<div className="flex justify-between">
+					<div className="flex justify-start items-center gap-2">
 						<Label htmlFor={attribute.documentId}>
 							{attribute.name}
 						</Label>

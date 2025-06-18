@@ -15,7 +15,6 @@ export * from "./lib/attribute-utils";
 
 // UI Components
 export { CategorySelector } from "./components/CategorySelector/CategorySelector";
-export { AttributeManager } from "./components/AttributeManager/AttributeManager";
 export { AttributeField } from "./components/AttributeManager/AttributeField";
 
 // Legacy components (for backward compatibility during migration)
