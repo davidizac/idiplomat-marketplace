@@ -145,6 +145,7 @@ export default function ListingForm({ userId }: ListingFormProps) {
 				categories: categories,
 				images: images,
 				attributeValues: attributeValues,
+				author: userId,
 			});
 
 			// Success notification and redirect

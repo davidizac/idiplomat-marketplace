@@ -11,7 +11,8 @@ import { Badge } from "@ui/components/badge";
 import { Button } from "@ui/components/button";
 import { Card } from "@ui/components/card";
 import { Separator } from "@ui/components/separator";
-import { ChevronLeft, ChevronRight, Tag, User, X } from "lucide-react";
+import { Check, ChevronLeft, ChevronRight, Tag, User, X } from "lucide-react";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 
 interface ListingDetailProps {
@@ -40,9 +41,10 @@ function ImageGallery({
 				onClick={() => onOpenModal(selectedImage)}
 				aria-label="View larger image"
 			>
-				<img
+				<Image
 					src={getStrapiImageUrl(images[selectedImage].url)}
 					alt={title}
+					fill
 					className="object-cover hover:scale-105 transition-transform duration-300"
 					sizes="(max-width: 768px) 100vw, 50vw"
 				/>
@@ -147,6 +149,21 @@ function ImageModal({
 	);
 }
 
+// Attribute Value Component
+function AttributeValueDisplay({ value }: { value: string }) {
+	const normalizedValue = value.toLowerCase();
+
+	if (normalizedValue === "true" || normalizedValue === "yes") {
+		return <Check className="h-4 w-4 text-green-600" />;
+	}
+
+	if (normalizedValue === "false" || normalizedValue === "no") {
+		return <X className="h-4 w-4 text-red-600" />;
+	}
+
+	return <span>{value}</span>;
+}
+
 // Categories and Attributes Component
 function CategoriesAttributes({
 	categories,
@@ -193,8 +210,10 @@ function CategoriesAttributes({
 									<span className="text-muted-foreground">
 										{attr.attribute.name}
 									</span>
-									<span className="font-medium">
-										{attr.value}
+									<span className="font-medium flex items-center">
+										<AttributeValueDisplay
+											value={attr.value}
+										/>
 									</span>
 								</div>
 							))}

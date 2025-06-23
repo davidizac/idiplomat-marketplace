@@ -96,6 +96,7 @@ export function useListings(
 		}>;
 		enabled?: boolean;
 		search?: string;
+		author?: string | null;
 	} = {},
 ) {
 	const { enabled = true, ...restParams } = params;

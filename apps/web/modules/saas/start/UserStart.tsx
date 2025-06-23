@@ -16,7 +16,6 @@ import {
 	TagIcon,
 	Trash2Icon,
 } from "lucide-react";
-import { useTranslations } from "next-intl";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -26,7 +25,6 @@ interface UserStartProps {
 }
 
 export default function UserStart({ userId }: UserStartProps) {
-	const t = useTranslations();
 	const [listings, setListings] = useState<Listing[]>([]);
 	const [loading, setLoading] = useState(true);
 	const [activeTab, setActiveTab] = useState("all");
@@ -39,8 +37,10 @@ export default function UserStart({ userId }: UserStartProps) {
 	const fetchListings = async () => {
 		try {
 			setLoading(true);
+			console.log("userId", userId);
 			// TODO: Filter by userId when backend supports it
 			const response = await listingService.getListings({
+				author: userId,
 				pageSize: 100, // Get all user listings
 			});
 			setListings(response.data);
@@ -52,7 +52,7 @@ export default function UserStart({ userId }: UserStartProps) {
 	};
 
 	const handleDelete = async (documentId: string) => {
-		if (!confirm(t("listings.confirmDelete"))) {
+		if (!confirm("Are you sure you want to delete this listing?")) {
 			return;
 		}
 
@@ -62,7 +62,7 @@ export default function UserStart({ userId }: UserStartProps) {
 			await fetchListings();
 		} catch (error) {
 			console.error("Failed to delete listing:", error);
-			alert(t("listings.deleteFailed"));
+			alert("Failed to delete listing. Please try again.");
 		} finally {
 			setDeletingId(null);
 		}
@@ -117,7 +117,7 @@ export default function UserStart({ userId }: UserStartProps) {
 				<Card>
 					<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
 						<CardTitle className="text-sm font-medium">
-							{t("listings.stats.total")}
+							Total Listings
 						</CardTitle>
 						<TagIcon className="h-4 w-4 text-muted-foreground" />
 					</CardHeader>
@@ -128,7 +128,7 @@ export default function UserStart({ userId }: UserStartProps) {
 				<Card>
 					<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
 						<CardTitle className="text-sm font-medium">
-							{t("listings.stats.active")}
+							Active
 						</CardTitle>
 						<AlertCircleIcon className="h-4 w-4 text-green-600" />
 					</CardHeader>
@@ -139,7 +139,7 @@ export default function UserStart({ userId }: UserStartProps) {
 				<Card>
 					<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
 						<CardTitle className="text-sm font-medium">
-							{t("listings.stats.draft")}
+							Draft
 						</CardTitle>
 						<Edit2Icon className="h-4 w-4 text-yellow-600" />
 					</CardHeader>
@@ -150,7 +150,7 @@ export default function UserStart({ userId }: UserStartProps) {
 				<Card>
 					<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
 						<CardTitle className="text-sm font-medium">
-							{t("listings.stats.sold")}
+							Sold
 						</CardTitle>
 						<TagIcon className="h-4 w-4 text-gray-600" />
 					</CardHeader>
@@ -163,11 +163,11 @@ export default function UserStart({ userId }: UserStartProps) {
 			{/* Listings Management */}
 			<Card>
 				<CardHeader className="flex flex-row items-center justify-between">
-					<CardTitle>{t("listings.yourListings")}</CardTitle>
+					<CardTitle>Your Listings</CardTitle>
 					<Link href="/create-listing">
 						<Button>
 							<PlusIcon className="mr-2 h-4 w-4" />
-							{t("listings.createNew")}
+							Create New Listing
 						</Button>
 					</Link>
 				</CardHeader>
@@ -175,16 +175,16 @@ export default function UserStart({ userId }: UserStartProps) {
 					<Tabs value={activeTab} onValueChange={setActiveTab}>
 						<TabsList className="grid w-full grid-cols-4">
 							<TabsTrigger value="all">
-								{t("listings.tabs.all")} ({stats.total})
+								All ({stats.total})
 							</TabsTrigger>
 							<TabsTrigger value="active">
-								{t("listings.tabs.active")} ({stats.active})
+								Active ({stats.active})
 							</TabsTrigger>
 							<TabsTrigger value="draft">
-								{t("listings.tabs.draft")} ({stats.draft})
+								Draft ({stats.draft})
 							</TabsTrigger>
 							<TabsTrigger value="sold">
-								{t("listings.tabs.sold")} ({stats.sold})
+								Sold ({stats.sold})
 							</TabsTrigger>
 						</TabsList>
 
@@ -192,7 +192,7 @@ export default function UserStart({ userId }: UserStartProps) {
 							{loading ? (
 								<div className="flex items-center justify-center py-8">
 									<p className="text-muted-foreground">
-										{t("common.loading")}
+										Loading...
 									</p>
 								</div>
 							) : filteredListings.length === 0 ? (
@@ -200,10 +200,8 @@ export default function UserStart({ userId }: UserStartProps) {
 									<TagIcon className="h-12 w-12 text-muted-foreground/20 mb-4" />
 									<p className="text-muted-foreground">
 										{activeTab === "all"
-											? t("listings.noListings")
-											: t(
-													"listings.noListingsInCategory",
-												)}
+											? "No listings found"
+											: "No listings in this category"}
 									</p>
 									<Link href="/create-listing">
 										<Button
@@ -211,7 +209,7 @@ export default function UserStart({ userId }: UserStartProps) {
 											variant="outline"
 										>
 											<PlusIcon className="mr-2 h-4 w-4" />
-											{t("listings.createFirst")}
+											Create Your First Listing
 										</Button>
 									</Link>
 								</div>

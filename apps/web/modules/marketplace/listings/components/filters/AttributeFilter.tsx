@@ -72,7 +72,8 @@ export function AttributeFilter({
 							{attribute.name}
 						</Label>
 						<span className="text-sm text-muted-foreground">
-							{numValue}
+							{numValue}{" "}
+							{(attribute.metadata?.unit as string) || ""}
 						</span>
 					</div>
 					<Slider
@@ -91,8 +92,8 @@ export function AttributeFilter({
 
 		case "boolean": {
 			return (
-				<div className="flex items-center justify-between">
-					<Label htmlFor={attribute.documentId} className="flex-1">
+				<div className="flex justify-start items-center gap-2">
+					<Label htmlFor={attribute.documentId}>
 						{attribute.name}
 					</Label>
 					<Switch
@@ -130,9 +131,11 @@ export function AttributeFilter({
 							<Calendar
 								mode="single"
 								selected={dateValue || undefined}
-								onSelect={(date: Date | undefined) =>
-									onChange(attribute.documentId, date || null)
-								}
+								onSelect={(date: Date | undefined) => {
+									if (date) {
+										onChange(attribute.documentId, date);
+									}
+								}}
 								initialFocus
 							/>
 						</PopoverContent>

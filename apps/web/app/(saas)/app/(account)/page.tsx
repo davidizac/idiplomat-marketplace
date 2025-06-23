@@ -20,7 +20,7 @@ export default async function AppStartPage() {
 				subtitle={t("start.subtitle")}
 			/>
 
-			<UserStart />
+			<UserStart userId={session?.user.id} />
 		</div>
 	);
 }

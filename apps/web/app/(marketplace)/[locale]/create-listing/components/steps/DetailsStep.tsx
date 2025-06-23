@@ -53,6 +53,7 @@ export default function DetailsStep({
 	onNext,
 }: DetailsStepProps) {
 	const [errors, setErrors] = useState<Record<string, string>>({});
+	const [citySearchTerm, setCitySearchTerm] = useState("");
 
 	// Handle category selection changes
 	const handleSelectionChange = useCallback(
@@ -69,6 +70,20 @@ export default function DetailsStep({
 			updateField("attributes", attributes);
 		},
 		[updateField],
+	);
+
+	// Handle city selection
+	const handleCityChange = useCallback(
+		(selectedValue: string) => {
+			updateField("address", selectedValue);
+			setCitySearchTerm(""); // Clear search when selection is made
+		},
+		[updateField],
+	);
+
+	// Filter cities based on search term
+	const filteredCities = ISRAELI_CITIES.filter((city: string) =>
+		city.toLowerCase().includes(citySearchTerm.toLowerCase()),
 	);
 
 	// Validate the form before moving to the next step
@@ -176,6 +191,49 @@ export default function DetailsStep({
 				)}
 			</div>
 
+			{/* Address */}
+			<div className="space-y-2">
+				<Label htmlFor="address">Which city is the listing in?</Label>
+				<Select
+					value={formState.address || ""}
+					onValueChange={handleCityChange}
+				>
+					<SelectTrigger>
+						<SelectValue placeholder="Select a city" />
+					</SelectTrigger>
+					<SelectContent className="max-h-[200px] overflow-y-auto">
+						{/* Search input */}
+						<div className="p-2 border-b">
+							<input
+								type="text"
+								placeholder="Search cities..."
+								value={citySearchTerm}
+								onChange={(e) =>
+									setCitySearchTerm(e.target.value)
+								}
+								className="w-full px-2 py-1 text-sm border rounded focus:outline-none focus:ring-1 focus:ring-primary"
+								onClick={(e) => e.stopPropagation()} // Prevent dropdown from closing
+							/>
+						</div>
+
+						{filteredCities.length > 0 ? (
+							filteredCities.map((city) => (
+								<SelectItem key={city} value={city}>
+									{city}
+								</SelectItem>
+							))
+						) : (
+							<div className="p-2 text-sm text-muted-foreground text-center">
+								No cities found
+							</div>
+						)}
+					</SelectContent>
+				</Select>
+				{errors.address && (
+					<p className="text-sm text-destructive">{errors.address}</p>
+				)}
+			</div>
+
 			<div className="space-y-2">
 				<Label htmlFor="title">Title</Label>
 				<Input
@@ -202,29 +260,6 @@ export default function DetailsStep({
 					<p className="text-sm text-destructive">
 						{errors.description}
 					</p>
-				)}
-			</div>
-
-			{/* Address */}
-			<div className="space-y-2">
-				<Label htmlFor="address">City</Label>
-				<Select
-					value={formState.address || ""}
-					onValueChange={(value) => updateField("address", value)}
-				>
-					<SelectTrigger>
-						<SelectValue placeholder="Select a city" />
-					</SelectTrigger>
-					<SelectContent>
-						{ISRAELI_CITIES.map((city) => (
-							<SelectItem key={city} value={city}>
-								{city}
-							</SelectItem>
-						))}
-					</SelectContent>
-				</Select>
-				{errors.address && (
-					<p className="text-sm text-destructive">{errors.address}</p>
 				)}
 			</div>
 

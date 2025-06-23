@@ -109,6 +109,7 @@ export interface Listing extends BaseAttributes {
 	product_attribute_values: AttributeValue[];
 	type: "rent" | "sale" | "free";
 	rental_price?: number;
+	author: string;
 	rental_period?: "hourly" | "daily" | "weekly" | "monthly";
 }
 
@@ -135,6 +136,7 @@ export interface ListingFilterParams {
 	 * Optional category slug to filter listings by their category.
 	 */
 	category?: string;
+	author?: string | null;
 }
 
 // Pagination params

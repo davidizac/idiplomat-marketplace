@@ -7,8 +7,10 @@ import {
 	useListings,
 } from "@marketplace/api";
 import { getStrapiImageUrl } from "@repo/cms";
+import { useSession } from "@saas/auth/hooks/use-session";
 import { Card } from "@ui/components/card";
 import { Skeleton } from "@ui/components/skeleton";
+import Image from "next/image";
 import { useState } from "react";
 import { SortFilter, type SortOption } from "./filters/SortFilter";
 
@@ -57,9 +59,10 @@ function ListingCard({
 		<LocaleLink href={`/listings/${documentId}`}>
 			<Card className="overflow-hidden hover:shadow-lg transition-shadow h-full">
 				<div className="relative h-48">
-					<img
+					<Image
 						src={imageUrl || "/images/hero-image.png"}
 						alt={title}
+						fill
 						className="object-cover"
 						sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
 					/>
@@ -136,6 +139,7 @@ function processListings(data: any): ListingCardProps[] {
 }
 
 export function ListingsGrid({ strapiQuery, onSortChange }: ListingsGridProps) {
+	const { user } = useSession();
 	const [sortOption, setSortOption] = useState<SortOption>(
 		(strapiQuery.sort?.startsWith("price:asc")
 			? "price-low-high"
@@ -159,6 +163,7 @@ export function ListingsGrid({ strapiQuery, onSortChange }: ListingsGridProps) {
 	const { data, isLoading, isError } = useListings({
 		...strapiQuery,
 		page: currentPage,
+		author: user?.id,
 	});
 
 	// Process listings

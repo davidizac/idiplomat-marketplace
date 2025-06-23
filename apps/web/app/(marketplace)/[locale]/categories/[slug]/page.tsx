@@ -14,6 +14,7 @@ export default async function CategoryPage({ params }: any) {
 	// Load listings for this category
 	const { data: listings } = await getListings({
 		subCategories: [category.slug],
+		author: "1",
 		page: 1,
 		pageSize: 12,
 	});

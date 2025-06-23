@@ -67,7 +67,7 @@ export class ListingService {
 				query.where({
 					product_attribute_values: {
 						attribute: {
-							name: { $eq: filter.attribute },
+							name: { $eq: filter.attribute.toString() },
 						},
 						value: { $eq: filter.value },
 					},
@@ -100,6 +100,14 @@ export class ListingService {
 			query.where({
 				address: {
 					$containsi: cityTerm,
+				},
+			});
+		}
+
+		if (params.author) {
+			query.where({
+				author: {
+					$eq: params.author,
 				},
 			});
 		}
@@ -211,6 +219,7 @@ export class ListingService {
 			string | number | { data: Blob | Buffer | File; filename?: string }
 		>;
 		categories?: string[];
+		author: string;
 		attributeValues?: Array<{
 			attributeDocumentId: string;
 			value: string;
@@ -223,6 +232,7 @@ export class ListingService {
 			address: data.address,
 			type: data.type,
 			slug: data.slug,
+			author: data.author,
 		};
 
 		// Add pricing fields based on type
