@@ -7,7 +7,6 @@ import {
 	useListings,
 } from "@marketplace/api";
 import { getStrapiImageUrl } from "@repo/cms";
-import { useSession } from "@saas/auth/hooks/use-session";
 import { Card } from "@ui/components/card";
 import { Skeleton } from "@ui/components/skeleton";
 import Image from "next/image";
@@ -139,7 +138,6 @@ function processListings(data: any): ListingCardProps[] {
 }
 
 export function ListingsGrid({ strapiQuery, onSortChange }: ListingsGridProps) {
-	const { user } = useSession();
 	const [sortOption, setSortOption] = useState<SortOption>(
 		(strapiQuery.sort?.startsWith("price:asc")
 			? "price-low-high"
@@ -163,7 +161,6 @@ export function ListingsGrid({ strapiQuery, onSortChange }: ListingsGridProps) {
 	const { data, isLoading, isError } = useListings({
 		...strapiQuery,
 		page: currentPage,
-		author: user?.id,
 	});
 
 	// Process listings
