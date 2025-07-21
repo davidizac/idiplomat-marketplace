@@ -12,12 +12,12 @@ import Link from "next/link";
 
 const faqItems = [
 	{
-		question: "Who can use the I-Diplomat Marketplace?",
-		answer: "The I-Diplomat Marketplace is exclusively available to verified members of the diplomatic community in Israel, including diplomats, embassy staff, and their families.",
+		question: "Who can use the i-Diplomat Marketplace?",
+		answer: "The i-Diplomat Marketplace is exclusively available to verified members of the diplomatic community in Israel, including diplomats, embassy staff, and their families.",
 	},
 	{
 		question: "Is there a fee to list items on the marketplace?",
-		answer: "No, listing items on the I-Diplomat Marketplace is completely free for all verified diplomatic personnel.",
+		answer: "No, listing items on the i-Diplomat Marketplace is completely free for all verified diplomatic personnel.",
 	},
 	{
 		question: "How do I verify my diplomatic status?",
@@ -29,7 +29,7 @@ const faqItems = [
 	},
 	{
 		question: "How are payments handled?",
-		answer: "The I-Diplomat Marketplace is a platform for connecting buyers and sellers. Payments are arranged directly between the parties involved. We recommend secure payment methods and meeting in safe locations.",
+		answer: "The i-Diplomat Marketplace is a platform for connecting buyers and sellers. Payments are arranged directly between the parties involved. We recommend secure payment methods and meeting in safe locations.",
 	},
 	{
 		question: "Can I list services as well as products?",
@@ -47,7 +47,7 @@ export function FaqSection() {
 							Watch How It Works
 						</h2>
 						<p className="text-foreground/70 mb-8">
-							See how the I-Diplomat Marketplace works in practice
+							See how the i-Diplomat Marketplace works in practice
 							and how it can help you buy and sell within the
 							diplomatic community in Israel.
 						</p>
@@ -92,7 +92,7 @@ export function FaqSection() {
 							<iframe
 								className="w-full h-full"
 								src="https://www.youtube.com/embed/dQw4w9WgXcQ"
-								title="I-Diplomat Marketplace Tutorial"
+								title="i-Diplomat Marketplace Tutorial"
 								frameBorder="0"
 								allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
 								allowFullScreen
@@ -106,7 +106,7 @@ export function FaqSection() {
 						Frequently Asked Questions
 					</h2>
 					<p className="text-lg text-foreground/60 max-w-2xl mx-auto">
-						Got questions about the I-Diplomat Marketplace? We've
+						Got questions about the i-Diplomat Marketplace? We've
 						got answers to the most common questions.
 					</p>
 				</div>

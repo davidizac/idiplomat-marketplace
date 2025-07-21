@@ -1,7 +1,7 @@
 import type { Config } from "./types";
 
 export const config = {
-	appName: "I-Diplomat Marketplace",
+	appName: "i-Diplomat Marketplace",
 	// Internationalization
 	i18n: {
 		// Whether internationalization should be enabled (if disabled, you still need to define the locale you want to use below and set it as the default locale)

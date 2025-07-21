@@ -3,6 +3,7 @@
 import { LocaleLink, useLocalePathname } from "@i18n/routing";
 import { config } from "@repo/config";
 import { useSession } from "@saas/auth/hooks/use-session";
+import { Logo } from "@shared/components/Logo";
 import { Button } from "@ui/components/button";
 import { Input } from "@ui/components/input";
 import {
@@ -82,17 +83,11 @@ export function NavBar() {
 		>
 			<div className="container">
 				<div className="flex items-center justify-between gap-2">
-					{/* Logo */}
 					<LocaleLink
 						href="/"
 						className="flex items-center gap-2 hover:no-underline shrink-0"
 					>
-						<div className="h-8 w-8 rounded-full bg-primary flex items-center justify-center text-white font-bold">
-							ID
-						</div>
-						<span className="font-bold text-lg hidden md:block">
-							I-Diplomat
-						</span>
+						<Logo className="h-10" />
 					</LocaleLink>
 
 					{/* Search Bar - Centered in navbar */}

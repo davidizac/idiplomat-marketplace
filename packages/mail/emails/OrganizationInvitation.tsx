@@ -49,7 +49,7 @@ OrganizationInvitation.PreviewProps = {
 	locale: defaultLocale,
 	translations: defaultTranslations,
 	url: "#",
-	organizationName: "I-Diplomat Marketplace",
+	organizationName: "i-Diplomat Marketplace",
 };
 
 export default OrganizationInvitation;

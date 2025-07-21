@@ -72,7 +72,7 @@ export function PricingSection() {
 	return (
 		<section className="py-20 bg-gradient-to-b from-background to-muted/20">
 			<div className="container max-w-6xl">
-				<div className="mb-12 text-center">
+				{/* <div className="mb-12 text-center">
 					<h2 className="font-bold text-4xl mb-4">
 						Find What You're Looking For
 					</h2>
@@ -80,10 +80,10 @@ export function PricingSection() {
 						Browse listings by category or location to find exactly
 						what you need within the diplomatic community.
 					</p>
-				</div>
+				</div> */}
 
 				{/* Popular Categories */}
-				<div className="mb-16">
+				{/* <div className="mb-16">
 					<div className="flex items-center justify-between mb-6">
 						<h3 className="text-2xl font-bold">
 							Popular Categories
@@ -120,7 +120,7 @@ export function PricingSection() {
 							</Link>
 						))}
 					</div>
-				</div>
+				</div> */}
 
 				{/* Featured Locations */}
 				<div className="mb-16">
@@ -162,9 +162,9 @@ export function PricingSection() {
 									</div>
 								</div>
 								<div className="p-4 flex justify-between items-center">
-									<span className="text-sm font-medium">
+									{/* <span className="text-sm font-medium">
 										{location.count} listings
-									</span>
+									</span> */}
 									<Button
 										variant="ghost"
 										size="sm"

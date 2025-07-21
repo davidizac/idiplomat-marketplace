@@ -44,7 +44,7 @@ export function useCategories(
 	// Make sure we're populating the categories relationship for subcategories
 	const enhancedParams = {
 		...restParams,
-		populate: ["categories"], // Include subcategories
+		populate: ["categories", "icon"], // Include subcategories
 	};
 
 	return useQuery({

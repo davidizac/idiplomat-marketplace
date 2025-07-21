@@ -370,7 +370,7 @@ function ContactAction({ onShowContact }: { onShowContact: () => void }) {
 				</Button>
 				<p className="text-muted-foreground">
 					When contacting the seller, please mention that you found
-					this listing on I-Diplomat Marketplace.
+					this listing on i-Diplomat Marketplace.
 				</p>
 			</div>
 		</div>

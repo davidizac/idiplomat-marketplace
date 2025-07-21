@@ -1,8 +1,6 @@
 "use client";
 import { BadgeCheck, MessageCircle, Search, Upload } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
-import howItWorksImage from "../../../../public/images/hero.svg";
 
 export const howItWorksSteps = [
 	{
@@ -46,23 +44,25 @@ export function Features() {
 					</p>
 				</div>
 
-				<div className="grid gap-8 md:grid-cols-2 lg:gap-12 items-center mb-12">
-					<div>
+				<div className="grid gap-8 md:grid-cols-2 lg:gap-12  mb-12">
+					{/* <div>
 						<Image
 							src={howItWorksImage}
-							alt="How I-Diplomat Marketplace works"
+							alt="How i-Diplomat Marketplace works"
 							className="w-full rounded-lg shadow-lg"
 						/>
-					</div>
+					</div> */}
 					<div>
 						<h3 className="text-2xl font-bold mb-4">
 							For Diplomats Only
 						</h3>
 						<p className="text-foreground/70 mb-6">
-							I-Diplomat Marketplace is exclusively for the
+							i-Diplomat Marketplace is exclusively for the
 							diplomatic community in Israel. All members are
 							verified to ensure a trusted environment.
 						</p>
+					</div>
+					<div>
 						<h3 className="text-2xl font-bold mb-4">
 							Direct Connections
 						</h3>

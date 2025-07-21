@@ -14,19 +14,14 @@ export function Footer() {
 				</div>
 
 				<div className="flex flex-col gap-2">
-					<LocaleLink href="/blog" className="block">
+					<LocaleLink
+						href="https://blog.i-diplomat.com"
+						className="block"
+					>
 						Blog
 					</LocaleLink>
-
-					<a href="#features" className="block">
-						Features
-					</a>
-
-					<a href="/#pricing" className="block">
-						Pricing
-					</a>
 				</div>
-
+				{/* 
 				<div className="flex flex-col gap-2">
 					<LocaleLink href="/legal/privacy-policy" className="block">
 						Privacy policy
@@ -35,7 +30,7 @@ export function Footer() {
 					<LocaleLink href="/legal/terms" className="block">
 						Terms and conditions
 					</LocaleLink>
-				</div>
+				</div> */}
 			</div>
 		</footer>
 	);

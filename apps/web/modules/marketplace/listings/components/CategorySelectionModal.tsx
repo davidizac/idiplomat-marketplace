@@ -104,16 +104,17 @@ export function CategorySelectionModal({
 									}
 									aria-label={`Select ${category.name} category`}
 								>
-									<div className="aspect-square relative">
+									<div className="aspect-square relative flex items-center justify-center">
 										{category.icon ? (
 											<Image
 												src={getStrapiImageUrl(
 													category.icon.url,
 												)}
 												alt={category.name}
-												fill
-												className="object-cover"
-												sizes="(max-width: 640px) 50vw, 25vw"
+												width={64}
+												height={64}
+												className="object-cover rounded-md"
+												sizes="64px"
 											/>
 										) : (
 											<div className="w-full h-full bg-muted flex items-center justify-center">

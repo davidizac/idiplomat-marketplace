@@ -85,7 +85,7 @@ export function NavBar() {
 						})}
 					>
 						<Link href="/app" className="block">
-							<Logo />
+							<Logo className="h-10" />
 						</Link>
 
 						{config.organizations.enable &&
