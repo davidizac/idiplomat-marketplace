@@ -12,7 +12,6 @@ import {
 } from "@ui/components/dialog";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
-import { useState } from "react";
 import { type Category, useCategories } from "../../api";
 
 interface CategorySelectionModalProps {
@@ -32,10 +31,6 @@ export function CategorySelectionModal({
 		pageSize: 8, // Get only top categories for the modal
 	});
 
-	const [selectedCategorySlug, setSelectedCategorySlug] = useState<
-		string | null
-	>(null);
-
 	// Filter root categories (those without a parent)
 	const rootCategories =
 		categoriesResponse?.data?.filter(
@@ -43,20 +38,14 @@ export function CategorySelectionModal({
 		) || [];
 
 	const handleCategorySelect = (categorySlug: string) => {
-		setSelectedCategorySlug(categorySlug);
-	};
+		// Preserve all existing URL parameters and add/update the category
+		const params = new URLSearchParams(searchParams.toString());
+		params.set("category", categorySlug);
+		params.delete("subcategory"); // Clear subcategory when category changes
 
-	const handleContinue = () => {
-		if (selectedCategorySlug) {
-			// Preserve all existing URL parameters and add/update the category
-			const params = new URLSearchParams(searchParams.toString());
-			params.set("category", selectedCategorySlug);
-			params.delete("subcategory"); // Clear subcategory when category changes
-
-			// Use replace instead of push to force a page refresh
-			router.replace(`/listings?${params.toString()}`);
-			onOpenChange(false);
-		}
+		// Use replace instead of push to force a page refresh
+		router.replace(`/listings?${params.toString()}`);
+		onOpenChange(false);
 	};
 
 	const handleViewAllCategories = () => {
@@ -94,11 +83,7 @@ export function CategorySelectionModal({
 								<button
 									key={category.id}
 									type="button"
-									className={`rounded-lg overflow-hidden border-2 cursor-pointer transition-all w-full text-left ${
-										selectedCategorySlug === category.slug
-											? "border-primary shadow-md scale-105"
-											: "border-transparent hover:border-primary/30"
-									}`}
+									className="rounded-lg overflow-hidden border-2 border-transparent hover:border-primary/30 cursor-pointer transition-all w-full text-left"
 									onClick={() =>
 										handleCategorySelect(category.slug)
 									}
@@ -123,21 +108,7 @@ export function CategorySelectionModal({
 												</span>
 											</div>
 										)}
-										<div
-											className={`absolute inset-0 flex items-center justify-center ${
-												selectedCategorySlug ===
-												category.slug
-													? "bg-primary/10"
-													: "bg-black/0 hover:bg-black/5"
-											}`}
-										>
-											{selectedCategorySlug ===
-												category.slug && (
-												<div className="bg-primary text-primary-foreground rounded-full w-8 h-8 flex items-center justify-center">
-													✓
-												</div>
-											)}
-										</div>
+										<div className="absolute inset-0 flex items-center justify-center bg-black/0 hover:bg-black/5" />
 									</div>
 									<div className="p-2 text-center font-medium">
 										{category.name}
@@ -146,18 +117,12 @@ export function CategorySelectionModal({
 							))}
 						</div>
 
-						<div className="flex gap-4 justify-between mt-4">
+						<div className="flex justify-start mt-4">
 							<Button
 								variant="outline"
 								onClick={handleViewAllCategories}
 							>
 								View All Categories
-							</Button>
-							<Button
-								onClick={handleContinue}
-								disabled={!selectedCategorySlug}
-							>
-								Continue
 							</Button>
 						</div>
 					</>
