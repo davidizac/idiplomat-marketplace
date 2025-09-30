@@ -3,7 +3,10 @@
 import type { Category } from "@repo/cms";
 import { useSearchParams } from "next/navigation";
 import { useCallback } from "react";
-import { CategorySelector } from "../../../../marketplace/components/CategorySelector";
+import {
+	type SimpleCategorySelection,
+	SimpleCategorySelector,
+} from "../../../components/SimpleCategorySelector";
 
 interface HierarchicalCategoryFilterProps {
 	onSelectCategory: (category: Category | null) => void;
@@ -14,33 +17,25 @@ export function HierarchicalCategoryFilter({
 	onSelectCategory,
 	onSelectSubcategory,
 }: HierarchicalCategoryFilterProps) {
-	const params = useSearchParams(); // Handle category selection at different levels
-	console.log(params.get("category"));
-	const handleCategorySelect = useCallback(
-		(level: number, category: Category | null) => {
-			if (level === 0) {
-				onSelectCategory(category);
-			} else {
-				onSelectSubcategory(category);
-			}
+	const searchParams = useSearchParams();
+	const categorySlug = searchParams.get("category");
+	const subcategorySlug = searchParams.get("subcategory");
+
+	const handleChange = useCallback(
+		(selection: SimpleCategorySelection) => {
+			onSelectCategory(selection.primary);
+			onSelectSubcategory(selection.subcategory);
 		},
 		[onSelectCategory, onSelectSubcategory],
 	);
 
 	return (
-		<CategorySelector
+		<SimpleCategorySelector
 			label="Categories"
 			allowSelectAll={true}
-			showSelectionPath={true}
-			levelLabels={{
-				root: "Select Category",
-				subcategory: "Subcategories",
-			}}
-			placeholders={{
-				root: "All Categories",
-				subcategory: "All Subcategories",
-			}}
-			onCategorySelect={handleCategorySelect}
+			initialPrimarySlug={categorySlug}
+			initialSubcategorySlug={subcategorySlug}
+			onChange={handleChange}
 		/>
 	);
 }

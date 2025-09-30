@@ -14,6 +14,7 @@ import {
 	SelectValue,
 } from "@ui/components/select";
 import { Skeleton } from "@ui/components/skeleton";
+import { useEffect, useMemo } from "react";
 import {
 	useCategoryBySlug,
 	useRootCategories,
@@ -65,11 +66,59 @@ export function CategorySelector({
 		error: rootError,
 	} = useRootCategories();
 
-	// Fetch subcategories when primary is selected
-	const { data: primaryCategory, isLoading: isPrimaryLoading } =
+	// Determine if we need to fetch subcategories
+	// Only fetch if primary is selected AND it doesn't already have children
+	const needsSubcategoryFetch = useMemo(() => {
+		if (!selectionState.selection.primary) {
+			return false;
+		}
+		const hasChildren =
+			selectionState.selection.primary.children?.length > 0;
+		return !hasChildren;
+	}, [selectionState.selection.primary]);
+
+	// Fetch subcategories when primary is selected and doesn't have children
+	const { data: fetchedPrimaryCategory, isLoading: isPrimaryLoading } =
 		useCategoryBySlug(selectionState.selection.primary?.slug || null, {
-			enabled: Boolean(selectionState.selection.primary?.slug),
+			enabled: needsSubcategoryFetch,
 		});
+
+	// Get the current subcategories from either the selected primary or the fetched data
+	const availableSubcategories = useMemo(() => {
+		if (!selectionState.selection.primary) {
+			return [];
+		}
+
+		// First try to use children from the selected primary category
+		if (selectionState.selection.primary.children?.length > 0) {
+			return selectionState.selection.primary.children;
+		}
+
+		// Otherwise use the fetched category's children
+		return fetchedPrimaryCategory?.children || [];
+	}, [selectionState.selection.primary, fetchedPrimaryCategory]);
+
+	// Clear subcategory when primary category changes
+	useEffect(() => {
+		// When primary changes, ensure subcategory is cleared if it's not valid
+		if (
+			selectionState.selection.subcategory &&
+			selectionState.selection.primary
+		) {
+			const isValidSubcategory = availableSubcategories.some(
+				(sub) =>
+					sub.slug === selectionState.selection.subcategory?.slug,
+			);
+			if (!isValidSubcategory) {
+				actions.setSubcategory(null);
+			}
+		}
+	}, [
+		selectionState.selection.primary,
+		availableSubcategories,
+		selectionState.selection.subcategory,
+		actions,
+	]);
 
 	// Handle primary category selection
 	const handlePrimarySelect = (slug: string) => {
@@ -81,6 +130,7 @@ export function CategorySelector({
 
 		const category = rootCategories?.find((cat) => cat.slug === slug);
 		if (category) {
+			// Setting primary will automatically clear subcategory via reducer
 			actions.setPrimary(category);
 			onSelectionChange?.(category, null);
 		}
@@ -94,7 +144,7 @@ export function CategorySelector({
 			return;
 		}
 
-		const subcategory = primaryCategory?.children?.find(
+		const subcategory = availableSubcategories.find(
 			(cat) => cat.slug === slug,
 		);
 		if (subcategory) {
@@ -127,8 +177,7 @@ export function CategorySelector({
 		);
 	}
 
-	const hasSubcategories =
-		primaryCategory?.children && primaryCategory.children.length > 0;
+	const hasSubcategories = availableSubcategories.length > 0;
 
 	return (
 		<div className={`space-y-4 ${className}`}>
@@ -137,7 +186,7 @@ export function CategorySelector({
 			<div className="space-y-3">
 				{/* Primary Category Selection */}
 				<div className="space-y-1">
-					<Label className="text-sm">Category</Label>
+					<Label className="text-sm">Main Category</Label>
 					<Select
 						value={selectionState.selection.primary?.slug || ""}
 						onValueChange={handlePrimarySelect}
@@ -164,14 +213,15 @@ export function CategorySelector({
 				</div>
 
 				{/* Subcategory Selection */}
-				{selectionState.selection.primary && hasSubcategories && (
+				{selectionState.selection.primary && (
 					<div className="space-y-1">
-						<Label className="text-sm">
-							{selectionState.selection.primary.name}{" "}
-							Subcategories
-						</Label>
-						{isPrimaryLoading ? (
+						<Label className="text-sm">Subcategory</Label>
+						{isPrimaryLoading && needsSubcategoryFetch ? (
 							<Skeleton className="h-10 w-full" />
+						) : !hasSubcategories ? (
+							<div className="text-sm text-muted-foreground py-2">
+								No subcategories available
+							</div>
 						) : (
 							<Select
 								value={
@@ -189,7 +239,7 @@ export function CategorySelector({
 											All Subcategories
 										</SelectItem>
 									)}
-									{primaryCategory?.children?.map(
+									{availableSubcategories.map(
 										(subcategory) => (
 											<SelectItem
 												key={subcategory.slug}

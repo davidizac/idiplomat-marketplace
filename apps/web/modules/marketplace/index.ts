@@ -7,15 +7,12 @@
 export * from "./data/category-service";
 export * from "./data/category-hooks";
 
-// State Management
-export * from "./state/category-context";
-
 // Business Logic
 export * from "./lib/attribute-utils";
 
 // UI Components
-export { CategorySelector } from "./components/CategorySelector/CategorySelector";
-
-// Legacy components (for backward compatibility during migration)
-export { CategorySelector as LegacyCategorySelector } from "./components/CategorySelector";
+export {
+	SimpleCategorySelector,
+	type SimpleCategorySelection,
+} from "./components/SimpleCategorySelector";
 export { AttributesManager } from "./components/AttributesManager";

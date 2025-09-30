@@ -17,9 +17,9 @@ import {
 	AttributesManager,
 } from "../../../../../../modules/marketplace/components/AttributesManager";
 import {
-	type CategorySelectionData,
-	CategorySelector,
-} from "../../../../../../modules/marketplace/components/CategorySelector";
+	type SimpleCategorySelection,
+	SimpleCategorySelector,
+} from "../../../../../../modules/marketplace/components/SimpleCategorySelector";
 import { ISRAELI_CITIES } from "../../../../../../modules/marketplace/constants/cities";
 
 interface FormState {
@@ -56,10 +56,30 @@ export default function DetailsStep({
 	const [citySearchTerm, setCitySearchTerm] = useState("");
 
 	// Handle category selection changes
-	const handleSelectionChange = useCallback(
-		(data: CategorySelectionData) => {
-			// Update the form state with the selected categories
-			updateField("categories", data.selectedCategories);
+	const handleCategoryChange = useCallback(
+		(selection: SimpleCategorySelection) => {
+			// Build categories array from selection
+			const categories = [];
+
+			if (selection.primary) {
+				categories.push({
+					slug: selection.primary.slug,
+					name: selection.primary.name,
+					documentId: selection.primary.documentId,
+					level: 0,
+				});
+			}
+
+			if (selection.subcategory) {
+				categories.push({
+					slug: selection.subcategory.slug,
+					name: selection.subcategory.name,
+					documentId: selection.subcategory.documentId,
+					level: 1,
+				});
+			}
+
+			updateField("categories", categories);
 		},
 		[updateField],
 	);
@@ -148,20 +168,21 @@ export default function DetailsStep({
 
 			{/* Category Selection */}
 			<div>
-				<CategorySelector
-					label=""
+				<SimpleCategorySelector
+					initialPrimarySlug={formState.categories?.[0]?.slug || null}
+					initialSubcategorySlug={
+						formState.categories?.[1]?.slug || null
+					}
 					allowSelectAll={false}
-					showSelectionPath={true}
-					initialSelection={formState.categories || []}
-					levelLabels={{
-						root: "Main Category",
-						subcategory: "Subcategories",
+					labels={{
+						primary: "Main Category",
+						subcategory: "Subcategory",
 					}}
 					placeholders={{
-						root: "Select a category",
+						primary: "Select a category",
 						subcategory: "Select a subcategory",
 					}}
-					onSelectionChange={handleSelectionChange}
+					onChange={handleCategoryChange}
 				/>
 				{errors.category && (
 					<p className="text-sm text-destructive mt-1">
