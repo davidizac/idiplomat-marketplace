@@ -13,7 +13,7 @@ import {
 	SheetTrigger,
 } from "@ui/components/sheet";
 import { cn } from "@ui/lib";
-import { MenuIcon, PlusCircle, Search } from "lucide-react";
+import { ArrowLeft, MenuIcon, PlusCircle, Search } from "lucide-react";
 import NextLink from "next/link";
 import { useEffect, useState } from "react";
 import { useDebounceCallback } from "usehooks-ts";
@@ -83,12 +83,26 @@ export function NavBar() {
 		>
 			<div className="container">
 				<div className="flex items-center justify-between gap-2">
-					<LocaleLink
-						href="/"
-						className="flex items-center gap-2 hover:no-underline shrink-0"
-					>
-						<Logo className="h-10" />
-					</LocaleLink>
+					<div className="flex items-center gap-2">
+						{/* Back Arrow Button */}
+						<Button
+							variant="ghost"
+							size="icon"
+							className="shrink-0"
+							asChild
+						>
+							<NextLink href="https://app.diplomat.com">
+								<ArrowLeft className="h-5 w-5" />
+							</NextLink>
+						</Button>
+
+						<LocaleLink
+							href="/"
+							className="flex items-center gap-2 hover:no-underline shrink-0"
+						>
+							<Logo className="h-10" />
+						</LocaleLink>
+					</div>
 
 					{/* Search Bar - Centered in navbar */}
 					<div className="flex-1 max-w-xl mx-auto px-4">

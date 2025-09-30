@@ -308,8 +308,9 @@ export function CategorySelector({
 							isLoading: false,
 						};
 
-						// Add next level if there are subcategories
-						if (hasSubcategories) {
+						// Only create a second (subcategory) level when the user is selecting from the root level (level === 0).
+						// This prevents rendering deeper nested dropdowns like "Parent subcategories" that are not needed.
+						if (hasSubcategories && level === 0) {
 							updatedLevels.push({
 								level: level + 1,
 								isLoading: false,
