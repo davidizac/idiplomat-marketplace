@@ -68,6 +68,17 @@ export default function DetailsStep({
 					documentId: selection.primary.documentId,
 					level: 0,
 				});
+
+				// Automatically set listing type to "rent" for apartments category
+				const isApartments =
+					selection.primary.slug.toLowerCase() === "apartment" ||
+					selection.primary.slug.toLowerCase() === "apartments" ||
+					selection.primary.slug.toLowerCase() === "real-estate" ||
+					selection.primary.name.toLowerCase().includes("apartment");
+
+				if (isApartments && formState.type !== "rent") {
+					updateField("type", "rent");
+				}
 			}
 
 			if (selection.subcategory) {
@@ -81,7 +92,7 @@ export default function DetailsStep({
 
 			updateField("categories", categories);
 		},
-		[updateField],
+		[updateField, formState.type],
 	);
 
 	// Handle attribute updates
@@ -157,6 +168,18 @@ export default function DetailsStep({
 			{} as Record<string, string>,
 		) || {};
 
+	// Check if the selected category is apartments (should be rent-only)
+	const isApartmentsCategory = formState.categories?.some((cat) => {
+		const slug = cat.slug.toLowerCase();
+		const name = cat.name.toLowerCase();
+		return (
+			slug === "apartment" ||
+			slug === "apartments" ||
+			slug === "real-estate" ||
+			name.includes("apartment")
+		);
+	});
+
 	return (
 		<div className="space-y-6">
 			<div className="space-y-2">
@@ -193,12 +216,22 @@ export default function DetailsStep({
 
 			{/* Listing Type */}
 			<div className="space-y-2">
-				<Label htmlFor="type">Listing Type</Label>
+				<Label htmlFor="type">
+					Listing Type
+					{isApartmentsCategory && (
+						<span className="text-sm text-muted-foreground ml-2">
+							(Apartments are always for rent)
+						</span>
+					)}
+				</Label>
 				<Select
-					value={formState.type || "sale"}
+					value={
+						isApartmentsCategory ? "rent" : formState.type || "sale"
+					}
 					onValueChange={(value) => updateField("type", value)}
+					disabled={isApartmentsCategory}
 				>
-					<SelectTrigger>
+					<SelectTrigger disabled={isApartmentsCategory}>
 						<SelectValue placeholder="Select listing type" />
 					</SelectTrigger>
 					<SelectContent>
