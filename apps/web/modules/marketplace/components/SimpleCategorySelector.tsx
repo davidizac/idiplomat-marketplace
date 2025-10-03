@@ -9,16 +9,10 @@
 import { categoryService } from "@repo/cms";
 import type { Category } from "@repo/cms";
 import { useQuery } from "@tanstack/react-query";
+import { Combobox } from "@ui/components/combobox";
 import { Label } from "@ui/components/label";
-import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from "@ui/components/select";
 import { Skeleton } from "@ui/components/skeleton";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 export interface SimpleCategorySelection {
 	primary: Category | null;
@@ -124,6 +118,30 @@ export function SimpleCategorySelector({
 	// Get subcategories from primary category
 	const subcategories = primaryCategory?.categories || [];
 
+	// Convert categories to combobox options
+	const primaryOptions = useMemo(() => {
+		if (!rootCategories) {
+			return [];
+		}
+		const options = rootCategories.map((cat) => ({
+			value: cat.slug,
+			label: cat.name,
+		}));
+		return allowSelectAll
+			? [{ value: "all", label: "All Categories" }, ...options]
+			: options;
+	}, [rootCategories, allowSelectAll]);
+
+	const subcategoryOptions = useMemo(() => {
+		const options = subcategories.map((cat) => ({
+			value: cat.slug,
+			label: cat.name,
+		}));
+		return allowSelectAll
+			? [{ value: "all", label: "All Subcategories" }, ...options]
+			: options;
+	}, [subcategories, allowSelectAll]);
+
 	// Handle primary category change
 	const handlePrimaryChange = (value: string) => {
 		if (value === "all") {
@@ -211,29 +229,15 @@ export function SimpleCategorySelector({
 				{/* Primary Category Selection */}
 				<div className="space-y-1">
 					<Label className="text-sm">{labels.primary}</Label>
-					<Select
+					<Combobox
+						options={primaryOptions}
 						value={primarySlug || ""}
 						onValueChange={handlePrimaryChange}
-					>
-						<SelectTrigger>
-							<SelectValue placeholder={placeholders.primary} />
-						</SelectTrigger>
-						<SelectContent>
-							{allowSelectAll && (
-								<SelectItem value="all">
-									All Categories
-								</SelectItem>
-							)}
-							{rootCategories?.map((category) => (
-								<SelectItem
-									key={category.slug}
-									value={category.slug}
-								>
-									{category.name}
-								</SelectItem>
-							))}
-						</SelectContent>
-					</Select>
+						placeholder={placeholders.primary}
+						searchPlaceholder="Search categories..."
+						emptyText="No categories found."
+						allowClear={allowSelectAll}
+					/>
 				</div>
 
 				{/* Subcategory Selection */}
@@ -247,31 +251,15 @@ export function SimpleCategorySelector({
 								No subcategories available
 							</div>
 						) : (
-							<Select
+							<Combobox
+								options={subcategoryOptions}
 								value={subcategorySlug || ""}
 								onValueChange={handleSubcategoryChange}
-							>
-								<SelectTrigger>
-									<SelectValue
-										placeholder={placeholders.subcategory}
-									/>
-								</SelectTrigger>
-								<SelectContent>
-									{allowSelectAll && (
-										<SelectItem value="all">
-											All Subcategories
-										</SelectItem>
-									)}
-									{subcategories.map((subcategory) => (
-										<SelectItem
-											key={subcategory.slug}
-											value={subcategory.slug}
-										>
-											{subcategory.name}
-										</SelectItem>
-									))}
-								</SelectContent>
-							</Select>
+								placeholder={placeholders.subcategory}
+								searchPlaceholder="Search subcategories..."
+								emptyText="No subcategories found."
+								allowClear={allowSelectAll}
+							/>
 						)}
 					</div>
 				)}
