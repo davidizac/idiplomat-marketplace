@@ -13,7 +13,7 @@
 		"./types": "./src/types/index.ts"
 	},
 	"dependencies": {
-		"@strapi/client": "^1.4.0",
+		"@strapi/client": "^1.5.0",
 		"qs": "^6.11.2",
 		"server-only": "^0.0.1"
 	},
