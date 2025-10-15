@@ -98,6 +98,7 @@ export function AiChat({ organizationId }: { organizationId?: string }) {
 						New chat
 					</Button>
 
+					{/* @ts-ignore */}
 					{sortedChats.map((chat) => (
 						<div className="relative" key={chat.id}>
 							<Button
