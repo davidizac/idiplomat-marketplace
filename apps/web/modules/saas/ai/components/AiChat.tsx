@@ -74,8 +74,8 @@ export function AiChat({ organizationId }: { organizationId?: string }) {
 
 	const sortedChats = useMemo(() => {
 		return (
-			// @ts-ignore
 			chats?.sort(
+				// @ts-ignore
 				(a, b) =>
 					new Date(b.createdAt).getTime() -
 					new Date(a.createdAt).getTime(),
