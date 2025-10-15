@@ -3,10 +3,15 @@
 import { useLocaleRouter } from "@i18n/routing";
 import { useCategoryBySlug } from "@marketplace/api";
 import type { Category } from "@repo/cms";
+import { Button } from "@ui/components/button";
+import { SlidersHorizontal } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ListingsGrid } from "../../../../modules/marketplace/listings/components/ListingsGrid";
 import { ListingsSidebar } from "../../../../modules/marketplace/listings/components/ListingsSidebar";
+import { MobileCategoryModal } from "../../../../modules/marketplace/listings/components/MobileCategoryModal";
+import { MobileFilterButton } from "../../../../modules/marketplace/listings/components/MobileFilterButton";
+import { MobileFiltersModal } from "../../../../modules/marketplace/listings/components/MobileFiltersModal";
 import type { SortOption } from "../../../../modules/marketplace/listings/components/filters/SortFilter";
 import { useFilterManager } from "../../../../modules/marketplace/listings/hooks/useFilterManager";
 
@@ -25,6 +30,10 @@ export default function ListingsPage() {
 	);
 	const [selectedSubcategory, setSelectedSubcategory] =
 		useState<Category | null>(null);
+
+	// Mobile modal states
+	const [showMobileModal, setShowMobileModal] = useState(false);
+	const [showFiltersModal, setShowFiltersModal] = useState(false);
 
 	// Update selected category when data is fetched
 	useEffect(() => {
@@ -142,47 +151,102 @@ export default function ListingsPage() {
 	};
 
 	return (
-		<div className="py-4 md:py-8">
-			<div className="container mx-auto px-4">
-				<h1 className="text-2xl md:text-3xl font-bold mb-6 md:mb-8">
-					{selectedSubcategory
-						? `${selectedSubcategory.name} Listings${cityQuery ? ` in ${cityQuery}` : ""}`
-						: selectedCategory
-							? `${selectedCategory.name} Listings${cityQuery ? ` in ${cityQuery}` : ""}`
-							: searchQuery
-								? `Search Results: ${searchQuery}${cityQuery ? ` in ${cityQuery}` : ""}`
-								: cityQuery
-									? `Listings in ${cityQuery}`
-									: "Browse Listings"}
-				</h1>
+		<>
+			{/* Mobile Category Modal */}
+			<MobileCategoryModal
+				isOpen={showMobileModal}
+				onOpenChange={setShowMobileModal}
+				selectedCategory={selectedCategory}
+				selectedSubcategory={selectedSubcategory}
+				onSelectCategory={handleCategorySelect}
+				onSelectSubcategory={handleSubcategorySelect}
+			/>
 
-				<div className="flex flex-col lg:flex-row gap-6 lg:gap-8">
-					{/* Sidebar */}
-					<div className="w-full lg:w-auto">
-						<ListingsSidebar
-							filterManager={filterManager}
-							selectedCategory={selectedCategory}
-							onUpdateAttributeFilter={updateAttributeFilter}
-							onUpdateCategory={handleCategorySelect}
-							onUpdateSubcategory={handleSubcategorySelect}
-							onUpdateSearch={handleSearchUpdate}
-							onUpdateAddress={handleCityUpdate}
-							onClearFilters={clearAllFilters}
-						/>
-					</div>
+			{/* Mobile Filters Modal */}
+			<MobileFiltersModal
+				isOpen={showFiltersModal}
+				onOpenChange={setShowFiltersModal}
+				selectedCategory={selectedCategory}
+				filterManager={filterManager}
+				onUpdateAttributeFilter={updateAttributeFilter}
+				onUpdateSearch={handleSearchUpdate}
+				onUpdateAddress={handleCityUpdate}
+				onClearFilters={clearAllFilters}
+			/>
 
-					{/* Main Content */}
-					<div className="flex-1 min-w-0">
-						<ListingsGrid
-							strapiQuery={strapiQuery}
-							onSortChange={handleSortChange}
-							selectedCategory={selectedCategory}
-							selectedSubcategory={selectedSubcategory}
-							onSelectSubcategory={handleSubcategorySelect}
-						/>
+			<div className="py-4 md:py-8">
+				<div className="container mx-auto px-4">
+					<h1 className="text-2xl md:text-3xl font-bold mb-6 md:mb-8">
+						{selectedSubcategory
+							? `${selectedSubcategory.name} Listings${cityQuery ? ` in ${cityQuery}` : ""}`
+							: selectedCategory
+								? `${selectedCategory.name} Listings${cityQuery ? ` in ${cityQuery}` : ""}`
+								: searchQuery
+									? `Search Results: ${searchQuery}${cityQuery ? ` in ${cityQuery}` : ""}`
+									: cityQuery
+										? `Listings in ${cityQuery}`
+										: "Browse Listings"}
+					</h1>
+
+					<div className="flex flex-col lg:flex-row gap-6 lg:gap-8">
+						{/* Desktop Sidebar - Hidden on mobile */}
+						<div className="hidden lg:block w-auto">
+							<ListingsSidebar
+								filterManager={filterManager}
+								selectedCategory={selectedCategory}
+								onUpdateAttributeFilter={updateAttributeFilter}
+								onUpdateCategory={handleCategorySelect}
+								onUpdateSubcategory={handleSubcategorySelect}
+								onUpdateSearch={handleSearchUpdate}
+								onUpdateAddress={handleCityUpdate}
+								onClearFilters={clearAllFilters}
+							/>
+						</div>
+
+						{/* Main Content */}
+						<div className="flex-1 min-w-0">
+							{/* Mobile Filter Buttons - Only visible on mobile */}
+							<div className="lg:hidden mb-4 space-y-3">
+								{/* Category Selection Button */}
+								<MobileFilterButton
+									selectedCategory={selectedCategory}
+									selectedSubcategory={selectedSubcategory}
+									onClick={() => setShowMobileModal(true)}
+								/>
+
+								{/* Additional Filters Button - Only show when category is selected */}
+								{selectedCategory && (
+									<Button
+										onClick={() =>
+											setShowFiltersModal(true)
+										}
+										className="w-full justify-between gap-2 h-auto py-3"
+										variant="outline"
+									>
+										<div className="flex items-center gap-2">
+											<SlidersHorizontal className="h-4 w-4 flex-shrink-0" />
+											<span className="font-medium">
+												More Filters
+											</span>
+										</div>
+										<span className="text-xs text-muted-foreground whitespace-nowrap">
+											Search, Location & More
+										</span>
+									</Button>
+								)}
+							</div>
+
+							<ListingsGrid
+								strapiQuery={strapiQuery}
+								onSortChange={handleSortChange}
+								selectedCategory={selectedCategory}
+								selectedSubcategory={selectedSubcategory}
+								onSelectSubcategory={handleSubcategorySelect}
+							/>
+						</div>
 					</div>
 				</div>
 			</div>
-		</div>
+		</>
 	);
 }
