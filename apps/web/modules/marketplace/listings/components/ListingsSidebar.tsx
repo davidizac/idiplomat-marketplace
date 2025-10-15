@@ -3,11 +3,12 @@
 import type { Category, FilterManager } from "@repo/cms";
 import { Button } from "@ui/components/button";
 import { Card } from "@ui/components/card";
-import { useState } from "react";
+import { Separator } from "@ui/components/separator";
+import { useEffect, useState } from "react";
 import { AttributesManager } from "../../components/AttributesManager";
 import type { AttributeValue } from "./filters/AttributeFilter";
+import { CategoryButtonFilter } from "./filters/CategoryButtonFilter";
 import { CityFilter } from "./filters/CityFilter";
-import { HierarchicalCategoryFilter } from "./filters/HierarchicalCategoryFilter";
 import { SearchFilter } from "./filters/SearchFilter";
 import type { SortOption } from "./filters/SortFilter";
 
@@ -20,6 +21,7 @@ export interface SidebarFilters {
 
 interface ListingsSidebarProps {
 	filterManager: FilterManager;
+	selectedCategory: Category | null;
 	onUpdateAttributeFilter: (
 		attributeDocumentId: string,
 		attributeName: string,
@@ -34,6 +36,7 @@ interface ListingsSidebarProps {
 
 export function ListingsSidebar({
 	filterManager,
+	selectedCategory,
 	onUpdateAttributeFilter,
 	onUpdateCategory,
 	onUpdateSubcategory,
@@ -51,76 +54,43 @@ export function ListingsSidebar({
 		}>
 	>([]);
 
+	// Update selected categories when the category prop changes
+	useEffect(() => {
+		if (selectedCategory) {
+			setSelectedCategories([
+				{
+					slug: selectedCategory.slug,
+					name: selectedCategory.name,
+					documentId: selectedCategory.documentId,
+					level: 0,
+				},
+			]);
+		} else {
+			setSelectedCategories([]);
+		}
+	}, [selectedCategory]);
+
 	// Handle category selection
 	const handleCategorySelect = (category: Category | null) => {
 		if (category) {
 			// Update the selected categories for attributes
-			setSelectedCategories((prev) => {
-				// Find if we already have a level 0 category
-				const hasPrimary = prev.some((cat) => cat.level === 0);
-
-				if (hasPrimary) {
-					// Replace the primary category and remove any subcategories
-					return [
-						{
-							slug: category.slug,
-							name: category.name,
-							documentId: category.documentId,
-							level: 0,
-						},
-					];
-				}
-
-				// Add as the primary category
-				return [
-					...prev,
-					{
-						slug: category.slug,
-						name: category.name,
-						documentId: category.documentId,
-						level: 0,
-					},
-				];
-			});
+			setSelectedCategories([
+				{
+					slug: category.slug,
+					name: category.name,
+					documentId: category.documentId,
+					level: 0,
+				},
+			]);
 		} else {
 			// Clear all selected categories
 			setSelectedCategories([]);
 		}
 
+		// Clear subcategory when category changes
+		onUpdateSubcategory(null);
 		// Notify parent component
 		onUpdateCategory(category);
-	};
-
-	// Handle subcategory selection
-	const handleSubcategorySelect = (subcategory: Category | null) => {
-		if (subcategory) {
-			// Update the selected categories for attributes
-			setSelectedCategories((prev) => {
-				// Filter out any existing subcategories (level > 0)
-				const withoutSubcategories = prev.filter(
-					(cat) => cat.level === 0,
-				);
-
-				// Add the new subcategory
-				return [
-					...withoutSubcategories,
-					{
-						slug: subcategory.slug,
-						name: subcategory.name,
-						documentId: subcategory.documentId,
-						level: 1,
-					},
-				];
-			});
-		} else {
-			// Remove subcategories, keep primary category
-			setSelectedCategories((prev) =>
-				prev.filter((cat) => cat.level === 0),
-			);
-		}
-
-		// Notify parent component
-		onUpdateSubcategory(subcategory);
 	};
 
 	// Get attribute values from FilterManager for display
@@ -157,7 +127,7 @@ export function ListingsSidebar({
 	};
 
 	return (
-		<Card className="h-fit w-64 flex-shrink-0 p-6">
+		<Card className="h-fit w-full md:w-72 lg:w-80 flex-shrink-0 p-4 md:p-6">
 			<div className="space-y-6">
 				{/* Search Filter */}
 				<SearchFilter
@@ -172,24 +142,33 @@ export function ListingsSidebar({
 					label="City"
 				/>
 
-				{/* Hierarchical Category Filter */}
-				<HierarchicalCategoryFilter
-					onSelectCategory={handleCategorySelect}
-					onSelectSubcategory={handleSubcategorySelect}
-				/>
+				<Separator />
 
 				{/* Dynamic attribute filters based on selected categories */}
 				{selectedCategories.length > 0 && (
-					<AttributesManager
-						selectedCategories={selectedCategories}
-						isFilter={true}
-						getAttributeValue={getAttributeValue}
-						onChange={onUpdateAttributeFilter}
-					/>
+					<>
+						<AttributesManager
+							selectedCategories={selectedCategories}
+							isFilter={true}
+							getAttributeValue={getAttributeValue}
+							onChange={onUpdateAttributeFilter}
+						/>
+						<Separator />
+					</>
 				)}
 
+				{/* Category Button Filter */}
+				<CategoryButtonFilter
+					selectedCategory={selectedCategory}
+					onSelectCategory={handleCategorySelect}
+				/>
+
 				<div className="space-y-2 pt-2">
-					<Button className="w-full" onClick={onClearFilters}>
+					<Button
+						className="w-full"
+						onClick={onClearFilters}
+						variant="outline"
+					>
 						Reset Filters
 					</Button>
 				</div>

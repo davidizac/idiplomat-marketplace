@@ -1,10 +1,10 @@
 "use client";
 
 import { useLocaleRouter } from "@i18n/routing";
+import { useCategoryBySlug } from "@marketplace/api";
 import type { Category } from "@repo/cms";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { CategorySelectionModal } from "../../../../modules/marketplace/listings/components/CategorySelectionModal";
 import { ListingsGrid } from "../../../../modules/marketplace/listings/components/ListingsGrid";
 import { ListingsSidebar } from "../../../../modules/marketplace/listings/components/ListingsSidebar";
 import type { SortOption } from "../../../../modules/marketplace/listings/components/filters/SortFilter";
@@ -18,13 +18,22 @@ export default function ListingsPage() {
 	const subcategorySlug = searchParams.get("subcategory");
 	const cityQuery = searchParams.get("city");
 
-	// State for the category modal
-	const [showCategoryModal, setShowCategoryModal] = useState(false);
+	// Fetch category data if a category slug is present
+	const { data: categoryData } = useCategoryBySlug(categorySlug || undefined);
 	const [selectedCategory, setSelectedCategory] = useState<Category | null>(
 		null,
 	);
 	const [selectedSubcategory, setSelectedSubcategory] =
 		useState<Category | null>(null);
+
+	// Update selected category when data is fetched
+	useEffect(() => {
+		if (categoryData) {
+			setSelectedCategory(categoryData);
+		} else if (!categorySlug) {
+			setSelectedCategory(null);
+		}
+	}, [categoryData, categorySlug]);
 
 	// Use the filter manager hook to manage all filters
 	const {
@@ -46,20 +55,17 @@ export default function ListingsPage() {
 		sortOption: "newest",
 	});
 
-	// If no category is selected, show the modal
+	// Update selected subcategory from URL or category data
 	useEffect(() => {
-		if (!categorySlug) {
-			setShowCategoryModal(true);
+		if (subcategorySlug && selectedCategory?.categories) {
+			const subcategory = selectedCategory.categories.find(
+				(cat) => cat.slug === subcategorySlug,
+			);
+			setSelectedSubcategory(subcategory || null);
+		} else {
+			setSelectedSubcategory(null);
 		}
-	}, [categorySlug]);
-
-	// Apply search query from URL parameters if available
-	useEffect(() => {
-		if (searchQuery) {
-			console.log("Search query:", searchQuery);
-			// We could use the search query to filter categories or other fields
-		}
-	}, [searchQuery]);
+	}, [subcategorySlug, selectedCategory]);
 
 	// Handle sort changes from the grid
 	const handleSortChange = (sort: SortOption) => {
@@ -136,48 +142,47 @@ export default function ListingsPage() {
 	};
 
 	return (
-		<>
-			{/* Category Selection Modal */}
-			<CategorySelectionModal
-				isOpen={showCategoryModal}
-				onOpenChange={setShowCategoryModal}
-				searchQuery={searchQuery}
-			/>
+		<div className="py-4 md:py-8">
+			<div className="container mx-auto px-4">
+				<h1 className="text-2xl md:text-3xl font-bold mb-6 md:mb-8">
+					{selectedSubcategory
+						? `${selectedSubcategory.name} Listings${cityQuery ? ` in ${cityQuery}` : ""}`
+						: selectedCategory
+							? `${selectedCategory.name} Listings${cityQuery ? ` in ${cityQuery}` : ""}`
+							: searchQuery
+								? `Search Results: ${searchQuery}${cityQuery ? ` in ${cityQuery}` : ""}`
+								: cityQuery
+									? `Listings in ${cityQuery}`
+									: "Browse Listings"}
+				</h1>
 
-			{/* Main Listings Content */}
-			<div className="py-8">
-				<div className="container">
-					<h1 className="text-3xl font-bold mb-8">
-						{selectedSubcategory
-							? `${selectedSubcategory.name} Listings${cityQuery ? ` in ${cityQuery}` : ""}`
-							: selectedCategory
-								? `${selectedCategory.name} Listings${cityQuery ? ` in ${cityQuery}` : ""}`
-								: searchQuery
-									? `Search Results: ${searchQuery}${cityQuery ? ` in ${cityQuery}` : ""}`
-									: cityQuery
-										? `Listings in ${cityQuery}`
-										: "Browse Listings"}
-					</h1>
+				<div className="flex flex-col lg:flex-row gap-6 lg:gap-8">
+					{/* Sidebar */}
+					<div className="w-full lg:w-auto">
+						<ListingsSidebar
+							filterManager={filterManager}
+							selectedCategory={selectedCategory}
+							onUpdateAttributeFilter={updateAttributeFilter}
+							onUpdateCategory={handleCategorySelect}
+							onUpdateSubcategory={handleSubcategorySelect}
+							onUpdateSearch={handleSearchUpdate}
+							onUpdateAddress={handleCityUpdate}
+							onClearFilters={clearAllFilters}
+						/>
+					</div>
 
-					<div className="flex flex-col md:flex-row gap-8">
-						<div className="w-full md:w-auto">
-							<ListingsSidebar
-								filterManager={filterManager}
-								onUpdateAttributeFilter={updateAttributeFilter}
-								onUpdateCategory={handleCategorySelect}
-								onUpdateSubcategory={handleSubcategorySelect}
-								onUpdateSearch={handleSearchUpdate}
-								onUpdateAddress={handleCityUpdate}
-								onClearFilters={clearAllFilters}
-							/>
-						</div>
+					{/* Main Content */}
+					<div className="flex-1 min-w-0">
 						<ListingsGrid
 							strapiQuery={strapiQuery}
 							onSortChange={handleSortChange}
+							selectedCategory={selectedCategory}
+							selectedSubcategory={selectedSubcategory}
+							onSelectSubcategory={handleSubcategorySelect}
 						/>
 					</div>
 				</div>
 			</div>
-		</>
+		</div>
 	);
 }
