@@ -7,7 +7,7 @@
 		"drizzle-zod": "^0.7.1",
 		"nanoid": "^5.1.2",
 		"pg": "^8.15.6",
-		"zod": "^3.24.3"
+		"zod": "^3.25.76"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "1.9.4",
@@ -17,7 +17,7 @@
 		"drizzle-kit": "^0.31.1",
 		"prisma": "^6.7.0",
 		"prisma-json-types-generator": "^3.3.1",
-		"zod-prisma-types": "^3.2.4"
+		"zod-prisma-types": "^3.3.5"
 	},
 	"main": "./index.ts",
 	"name": "@repo/database",
