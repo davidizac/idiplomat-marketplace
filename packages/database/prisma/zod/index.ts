@@ -771,7 +771,7 @@ export const UserWhereUniqueInputSchema: z.ZodType<Prisma.UserWhereUniqueInput> 
   }),
 ])
 .and(z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   email: z.string().optional(),
   username: z.string().optional(),
   AND: z.union([ z.lazy(() => UserWhereInputSchema), z.lazy(() => UserWhereInputSchema).array() ]).optional(),
@@ -889,7 +889,7 @@ export const SessionWhereUniqueInputSchema: z.ZodType<Prisma.SessionWhereUniqueI
   }),
 ])
 .and(z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   token: z.string().optional(),
   AND: z.union([ z.lazy(() => SessionWhereInputSchema), z.lazy(() => SessionWhereInputSchema).array() ]).optional(),
   OR: z.lazy(() => SessionWhereInputSchema).array().optional(),
@@ -980,7 +980,7 @@ export const AccountWhereUniqueInputSchema: z.ZodType<Prisma.AccountWhereUniqueI
   id: z.any(),
 })
 .and(z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   AND: z.union([ z.lazy(() => AccountWhereInputSchema), z.lazy(() => AccountWhereInputSchema).array() ]).optional(),
   OR: z.lazy(() => AccountWhereInputSchema).array().optional(),
   NOT: z.union([ z.lazy(() => AccountWhereInputSchema), z.lazy(() => AccountWhereInputSchema).array() ]).optional(),
@@ -1065,7 +1065,7 @@ export const VerificationWhereUniqueInputSchema: z.ZodType<Prisma.VerificationWh
   id: z.any(),
 })
 .and(z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   AND: z.union([ z.lazy(() => VerificationWhereInputSchema), z.lazy(() => VerificationWhereInputSchema).array() ]).optional(),
   OR: z.lazy(() => VerificationWhereInputSchema).array().optional(),
   NOT: z.union([ z.lazy(() => VerificationWhereInputSchema), z.lazy(() => VerificationWhereInputSchema).array() ]).optional(),
@@ -1135,7 +1135,7 @@ export const PasskeyWhereUniqueInputSchema: z.ZodType<Prisma.PasskeyWhereUniqueI
   id: z.any(),
 })
 .and(z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   AND: z.union([ z.lazy(() => PasskeyWhereInputSchema), z.lazy(() => PasskeyWhereInputSchema).array() ]).optional(),
   OR: z.lazy(() => PasskeyWhereInputSchema).array().optional(),
   NOT: z.union([ z.lazy(() => PasskeyWhereInputSchema), z.lazy(() => PasskeyWhereInputSchema).array() ]).optional(),
@@ -1208,7 +1208,7 @@ export const TwoFactorWhereUniqueInputSchema: z.ZodType<Prisma.TwoFactorWhereUni
   id: z.any(),
 })
 .and(z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   AND: z.union([ z.lazy(() => TwoFactorWhereInputSchema), z.lazy(() => TwoFactorWhereInputSchema).array() ]).optional(),
   OR: z.lazy(() => TwoFactorWhereInputSchema).array().optional(),
   NOT: z.union([ z.lazy(() => TwoFactorWhereInputSchema), z.lazy(() => TwoFactorWhereInputSchema).array() ]).optional(),
@@ -1282,7 +1282,7 @@ export const OrganizationWhereUniqueInputSchema: z.ZodType<Prisma.OrganizationWh
   }),
 ])
 .and(z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   slug: z.string().optional(),
   AND: z.union([ z.lazy(() => OrganizationWhereInputSchema), z.lazy(() => OrganizationWhereInputSchema).array() ]).optional(),
   OR: z.lazy(() => OrganizationWhereInputSchema).array().optional(),
@@ -1360,7 +1360,7 @@ export const MemberWhereUniqueInputSchema: z.ZodType<Prisma.MemberWhereUniqueInp
   }),
 ])
 .and(z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   organizationId_userId: z.lazy(() => MemberOrganizationIdUserIdCompoundUniqueInputSchema).optional(),
   AND: z.union([ z.lazy(() => MemberWhereInputSchema), z.lazy(() => MemberWhereInputSchema).array() ]).optional(),
   OR: z.lazy(() => MemberWhereInputSchema).array().optional(),
@@ -1426,7 +1426,7 @@ export const InvitationWhereUniqueInputSchema: z.ZodType<Prisma.InvitationWhereU
   id: z.any(),
 })
 .and(z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   AND: z.union([ z.lazy(() => InvitationWhereInputSchema), z.lazy(() => InvitationWhereInputSchema).array() ]).optional(),
   OR: z.lazy(() => InvitationWhereInputSchema).array().optional(),
   NOT: z.union([ z.lazy(() => InvitationWhereInputSchema), z.lazy(() => InvitationWhereInputSchema).array() ]).optional(),
@@ -1512,7 +1512,7 @@ export const PurchaseWhereUniqueInputSchema: z.ZodType<Prisma.PurchaseWhereUniqu
   }),
 ])
 .and(z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   subscriptionId: z.string().optional(),
   AND: z.union([ z.lazy(() => PurchaseWhereInputSchema), z.lazy(() => PurchaseWhereInputSchema).array() ]).optional(),
   OR: z.lazy(() => PurchaseWhereInputSchema).array().optional(),
@@ -1592,7 +1592,7 @@ export const AiChatWhereUniqueInputSchema: z.ZodType<Prisma.AiChatWhereUniqueInp
   id: z.any(),
 })
 .and(z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   AND: z.union([ z.lazy(() => AiChatWhereInputSchema), z.lazy(() => AiChatWhereInputSchema).array() ]).optional(),
   OR: z.lazy(() => AiChatWhereInputSchema).array().optional(),
   NOT: z.union([ z.lazy(() => AiChatWhereInputSchema), z.lazy(() => AiChatWhereInputSchema).array() ]).optional(),
@@ -1673,7 +1673,7 @@ export const ListingWhereUniqueInputSchema: z.ZodType<Prisma.ListingWhereUniqueI
   id: z.any(),
 })
 .and(z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   AND: z.union([ z.lazy(() => ListingWhereInputSchema), z.lazy(() => ListingWhereInputSchema).array() ]).optional(),
   OR: z.lazy(() => ListingWhereInputSchema).array().optional(),
   NOT: z.union([ z.lazy(() => ListingWhereInputSchema), z.lazy(() => ListingWhereInputSchema).array() ]).optional(),
@@ -1733,7 +1733,7 @@ export const ListingScalarWhereWithAggregatesInputSchema: z.ZodType<Prisma.Listi
 }).strict();
 
 export const UserCreateInputSchema: z.ZodType<Prisma.UserCreateInput> = z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   name: z.string(),
   email: z.string(),
   emailVerified: z.boolean(),
@@ -1761,7 +1761,7 @@ export const UserCreateInputSchema: z.ZodType<Prisma.UserCreateInput> = z.object
 }).strict();
 
 export const UserUncheckedCreateInputSchema: z.ZodType<Prisma.UserUncheckedCreateInput> = z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   name: z.string(),
   email: z.string(),
   emailVerified: z.boolean(),
@@ -1845,7 +1845,7 @@ export const UserUncheckedUpdateInputSchema: z.ZodType<Prisma.UserUncheckedUpdat
 }).strict();
 
 export const UserCreateManyInputSchema: z.ZodType<Prisma.UserCreateManyInput> = z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   name: z.string(),
   email: z.string(),
   emailVerified: z.boolean(),
@@ -1902,7 +1902,7 @@ export const UserUncheckedUpdateManyInputSchema: z.ZodType<Prisma.UserUncheckedU
 }).strict();
 
 export const SessionCreateInputSchema: z.ZodType<Prisma.SessionCreateInput> = z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   expiresAt: z.coerce.date(),
   ipAddress: z.string().optional().nullable(),
   userAgent: z.string().optional().nullable(),
@@ -1915,7 +1915,7 @@ export const SessionCreateInputSchema: z.ZodType<Prisma.SessionCreateInput> = z.
 }).strict();
 
 export const SessionUncheckedCreateInputSchema: z.ZodType<Prisma.SessionUncheckedCreateInput> = z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   expiresAt: z.coerce.date(),
   ipAddress: z.string().optional().nullable(),
   userAgent: z.string().optional().nullable(),
@@ -1954,7 +1954,7 @@ export const SessionUncheckedUpdateInputSchema: z.ZodType<Prisma.SessionUnchecke
 }).strict();
 
 export const SessionCreateManyInputSchema: z.ZodType<Prisma.SessionCreateManyInput> = z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   expiresAt: z.coerce.date(),
   ipAddress: z.string().optional().nullable(),
   userAgent: z.string().optional().nullable(),
@@ -1992,7 +1992,7 @@ export const SessionUncheckedUpdateManyInputSchema: z.ZodType<Prisma.SessionUnch
 }).strict();
 
 export const AccountCreateInputSchema: z.ZodType<Prisma.AccountCreateInput> = z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   accountId: z.string(),
   providerId: z.string(),
   accessToken: z.string().optional().nullable(),
@@ -2009,7 +2009,7 @@ export const AccountCreateInputSchema: z.ZodType<Prisma.AccountCreateInput> = z.
 }).strict();
 
 export const AccountUncheckedCreateInputSchema: z.ZodType<Prisma.AccountUncheckedCreateInput> = z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   accountId: z.string(),
   providerId: z.string(),
   userId: z.string(),
@@ -2060,7 +2060,7 @@ export const AccountUncheckedUpdateInputSchema: z.ZodType<Prisma.AccountUnchecke
 }).strict();
 
 export const AccountCreateManyInputSchema: z.ZodType<Prisma.AccountCreateManyInput> = z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   accountId: z.string(),
   providerId: z.string(),
   userId: z.string(),
@@ -2110,7 +2110,7 @@ export const AccountUncheckedUpdateManyInputSchema: z.ZodType<Prisma.AccountUnch
 }).strict();
 
 export const VerificationCreateInputSchema: z.ZodType<Prisma.VerificationCreateInput> = z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   identifier: z.string(),
   value: z.string(),
   expiresAt: z.coerce.date(),
@@ -2119,7 +2119,7 @@ export const VerificationCreateInputSchema: z.ZodType<Prisma.VerificationCreateI
 }).strict();
 
 export const VerificationUncheckedCreateInputSchema: z.ZodType<Prisma.VerificationUncheckedCreateInput> = z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   identifier: z.string(),
   value: z.string(),
   expiresAt: z.coerce.date(),
@@ -2146,7 +2146,7 @@ export const VerificationUncheckedUpdateInputSchema: z.ZodType<Prisma.Verificati
 }).strict();
 
 export const VerificationCreateManyInputSchema: z.ZodType<Prisma.VerificationCreateManyInput> = z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   identifier: z.string(),
   value: z.string(),
   expiresAt: z.coerce.date(),
@@ -2173,7 +2173,7 @@ export const VerificationUncheckedUpdateManyInputSchema: z.ZodType<Prisma.Verifi
 }).strict();
 
 export const PasskeyCreateInputSchema: z.ZodType<Prisma.PasskeyCreateInput> = z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   name: z.string().optional().nullable(),
   publicKey: z.string(),
   credentialID: z.string(),
@@ -2186,7 +2186,7 @@ export const PasskeyCreateInputSchema: z.ZodType<Prisma.PasskeyCreateInput> = z.
 }).strict();
 
 export const PasskeyUncheckedCreateInputSchema: z.ZodType<Prisma.PasskeyUncheckedCreateInput> = z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   name: z.string().optional().nullable(),
   publicKey: z.string(),
   userId: z.string(),
@@ -2225,7 +2225,7 @@ export const PasskeyUncheckedUpdateInputSchema: z.ZodType<Prisma.PasskeyUnchecke
 }).strict();
 
 export const PasskeyCreateManyInputSchema: z.ZodType<Prisma.PasskeyCreateManyInput> = z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   name: z.string().optional().nullable(),
   publicKey: z.string(),
   userId: z.string(),
@@ -2263,14 +2263,14 @@ export const PasskeyUncheckedUpdateManyInputSchema: z.ZodType<Prisma.PasskeyUnch
 }).strict();
 
 export const TwoFactorCreateInputSchema: z.ZodType<Prisma.TwoFactorCreateInput> = z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   secret: z.string(),
   backupCodes: z.string(),
   user: z.lazy(() => UserCreateNestedOneWithoutTwofactorsInputSchema),
 }).strict();
 
 export const TwoFactorUncheckedCreateInputSchema: z.ZodType<Prisma.TwoFactorUncheckedCreateInput> = z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   secret: z.string(),
   backupCodes: z.string(),
   userId: z.string(),
@@ -2291,7 +2291,7 @@ export const TwoFactorUncheckedUpdateInputSchema: z.ZodType<Prisma.TwoFactorUnch
 }).strict();
 
 export const TwoFactorCreateManyInputSchema: z.ZodType<Prisma.TwoFactorCreateManyInput> = z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   secret: z.string(),
   backupCodes: z.string(),
   userId: z.string(),
@@ -2311,7 +2311,7 @@ export const TwoFactorUncheckedUpdateManyInputSchema: z.ZodType<Prisma.TwoFactor
 }).strict();
 
 export const OrganizationCreateInputSchema: z.ZodType<Prisma.OrganizationCreateInput> = z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   name: z.string(),
   slug: z.string().optional().nullable(),
   logo: z.string().optional().nullable(),
@@ -2325,7 +2325,7 @@ export const OrganizationCreateInputSchema: z.ZodType<Prisma.OrganizationCreateI
 }).strict();
 
 export const OrganizationUncheckedCreateInputSchema: z.ZodType<Prisma.OrganizationUncheckedCreateInput> = z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   name: z.string(),
   slug: z.string().optional().nullable(),
   logo: z.string().optional().nullable(),
@@ -2367,7 +2367,7 @@ export const OrganizationUncheckedUpdateInputSchema: z.ZodType<Prisma.Organizati
 }).strict();
 
 export const OrganizationCreateManyInputSchema: z.ZodType<Prisma.OrganizationCreateManyInput> = z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   name: z.string(),
   slug: z.string().optional().nullable(),
   logo: z.string().optional().nullable(),
@@ -2397,7 +2397,7 @@ export const OrganizationUncheckedUpdateManyInputSchema: z.ZodType<Prisma.Organi
 }).strict();
 
 export const MemberCreateInputSchema: z.ZodType<Prisma.MemberCreateInput> = z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   role: z.string(),
   createdAt: z.coerce.date(),
   organization: z.lazy(() => OrganizationCreateNestedOneWithoutMembersInputSchema),
@@ -2405,7 +2405,7 @@ export const MemberCreateInputSchema: z.ZodType<Prisma.MemberCreateInput> = z.ob
 }).strict();
 
 export const MemberUncheckedCreateInputSchema: z.ZodType<Prisma.MemberUncheckedCreateInput> = z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   organizationId: z.string(),
   userId: z.string(),
   role: z.string(),
@@ -2429,7 +2429,7 @@ export const MemberUncheckedUpdateInputSchema: z.ZodType<Prisma.MemberUncheckedU
 }).strict();
 
 export const MemberCreateManyInputSchema: z.ZodType<Prisma.MemberCreateManyInput> = z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   organizationId: z.string(),
   userId: z.string(),
   role: z.string(),
@@ -2451,7 +2451,7 @@ export const MemberUncheckedUpdateManyInputSchema: z.ZodType<Prisma.MemberUnchec
 }).strict();
 
 export const InvitationCreateInputSchema: z.ZodType<Prisma.InvitationCreateInput> = z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   email: z.string(),
   role: z.string().optional().nullable(),
   status: z.string(),
@@ -2461,7 +2461,7 @@ export const InvitationCreateInputSchema: z.ZodType<Prisma.InvitationCreateInput
 }).strict();
 
 export const InvitationUncheckedCreateInputSchema: z.ZodType<Prisma.InvitationUncheckedCreateInput> = z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   organizationId: z.string(),
   email: z.string(),
   role: z.string().optional().nullable(),
@@ -2491,7 +2491,7 @@ export const InvitationUncheckedUpdateInputSchema: z.ZodType<Prisma.InvitationUn
 }).strict();
 
 export const InvitationCreateManyInputSchema: z.ZodType<Prisma.InvitationCreateManyInput> = z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   organizationId: z.string(),
   email: z.string(),
   role: z.string().optional().nullable(),
@@ -2519,7 +2519,7 @@ export const InvitationUncheckedUpdateManyInputSchema: z.ZodType<Prisma.Invitati
 }).strict();
 
 export const PurchaseCreateInputSchema: z.ZodType<Prisma.PurchaseCreateInput> = z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   type: z.lazy(() => PurchaseTypeSchema),
   customerId: z.string(),
   subscriptionId: z.string().optional().nullable(),
@@ -2532,7 +2532,7 @@ export const PurchaseCreateInputSchema: z.ZodType<Prisma.PurchaseCreateInput> = 
 }).strict();
 
 export const PurchaseUncheckedCreateInputSchema: z.ZodType<Prisma.PurchaseUncheckedCreateInput> = z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   organizationId: z.string().optional().nullable(),
   userId: z.string().optional().nullable(),
   type: z.lazy(() => PurchaseTypeSchema),
@@ -2571,7 +2571,7 @@ export const PurchaseUncheckedUpdateInputSchema: z.ZodType<Prisma.PurchaseUnchec
 }).strict();
 
 export const PurchaseCreateManyInputSchema: z.ZodType<Prisma.PurchaseCreateManyInput> = z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   organizationId: z.string().optional().nullable(),
   userId: z.string().optional().nullable(),
   type: z.lazy(() => PurchaseTypeSchema),
@@ -2608,7 +2608,7 @@ export const PurchaseUncheckedUpdateManyInputSchema: z.ZodType<Prisma.PurchaseUn
 }).strict();
 
 export const AiChatCreateInputSchema: z.ZodType<Prisma.AiChatCreateInput> = z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   title: z.string().optional().nullable(),
   messages: z.union([ z.lazy(() => JsonNullValueInputSchema), z.array(z.object({ role: z.enum(['user', 'assistant']), content: z.string() })) ]).optional(),
   createdAt: z.coerce.date().optional(),
@@ -2618,7 +2618,7 @@ export const AiChatCreateInputSchema: z.ZodType<Prisma.AiChatCreateInput> = z.ob
 }).strict();
 
 export const AiChatUncheckedCreateInputSchema: z.ZodType<Prisma.AiChatUncheckedCreateInput> = z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   organizationId: z.string().optional().nullable(),
   userId: z.string().optional().nullable(),
   title: z.string().optional().nullable(),
@@ -2648,7 +2648,7 @@ export const AiChatUncheckedUpdateInputSchema: z.ZodType<Prisma.AiChatUncheckedU
 }).strict();
 
 export const AiChatCreateManyInputSchema: z.ZodType<Prisma.AiChatCreateManyInput> = z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   organizationId: z.string().optional().nullable(),
   userId: z.string().optional().nullable(),
   title: z.string().optional().nullable(),
@@ -2676,7 +2676,7 @@ export const AiChatUncheckedUpdateManyInputSchema: z.ZodType<Prisma.AiChatUnchec
 }).strict();
 
 export const ListingCreateInputSchema: z.ZodType<Prisma.ListingCreateInput> = z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   title: z.string(),
   description: z.string(),
   price: z.number(),
@@ -2692,7 +2692,7 @@ export const ListingCreateInputSchema: z.ZodType<Prisma.ListingCreateInput> = z.
 }).strict();
 
 export const ListingUncheckedCreateInputSchema: z.ZodType<Prisma.ListingUncheckedCreateInput> = z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   title: z.string(),
   description: z.string(),
   price: z.number(),
@@ -2740,7 +2740,7 @@ export const ListingUncheckedUpdateInputSchema: z.ZodType<Prisma.ListingUnchecke
 }).strict();
 
 export const ListingCreateManyInputSchema: z.ZodType<Prisma.ListingCreateManyInput> = z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   title: z.string(),
   description: z.string(),
   price: z.number(),
@@ -4676,7 +4676,7 @@ export const NestedEnumListingStatusWithAggregatesFilterSchema: z.ZodType<Prisma
 }).strict();
 
 export const SessionCreateWithoutUserInputSchema: z.ZodType<Prisma.SessionCreateWithoutUserInput> = z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   expiresAt: z.coerce.date(),
   ipAddress: z.string().optional().nullable(),
   userAgent: z.string().optional().nullable(),
@@ -4688,7 +4688,7 @@ export const SessionCreateWithoutUserInputSchema: z.ZodType<Prisma.SessionCreate
 }).strict();
 
 export const SessionUncheckedCreateWithoutUserInputSchema: z.ZodType<Prisma.SessionUncheckedCreateWithoutUserInput> = z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   expiresAt: z.coerce.date(),
   ipAddress: z.string().optional().nullable(),
   userAgent: z.string().optional().nullable(),
@@ -4710,7 +4710,7 @@ export const SessionCreateManyUserInputEnvelopeSchema: z.ZodType<Prisma.SessionC
 }).strict();
 
 export const AccountCreateWithoutUserInputSchema: z.ZodType<Prisma.AccountCreateWithoutUserInput> = z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   accountId: z.string(),
   providerId: z.string(),
   accessToken: z.string().optional().nullable(),
@@ -4726,7 +4726,7 @@ export const AccountCreateWithoutUserInputSchema: z.ZodType<Prisma.AccountCreate
 }).strict();
 
 export const AccountUncheckedCreateWithoutUserInputSchema: z.ZodType<Prisma.AccountUncheckedCreateWithoutUserInput> = z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   accountId: z.string(),
   providerId: z.string(),
   accessToken: z.string().optional().nullable(),
@@ -4752,7 +4752,7 @@ export const AccountCreateManyUserInputEnvelopeSchema: z.ZodType<Prisma.AccountC
 }).strict();
 
 export const PasskeyCreateWithoutUserInputSchema: z.ZodType<Prisma.PasskeyCreateWithoutUserInput> = z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   name: z.string().optional().nullable(),
   publicKey: z.string(),
   credentialID: z.string(),
@@ -4764,7 +4764,7 @@ export const PasskeyCreateWithoutUserInputSchema: z.ZodType<Prisma.PasskeyCreate
 }).strict();
 
 export const PasskeyUncheckedCreateWithoutUserInputSchema: z.ZodType<Prisma.PasskeyUncheckedCreateWithoutUserInput> = z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   name: z.string().optional().nullable(),
   publicKey: z.string(),
   credentialID: z.string(),
@@ -4786,7 +4786,7 @@ export const PasskeyCreateManyUserInputEnvelopeSchema: z.ZodType<Prisma.PasskeyC
 }).strict();
 
 export const InvitationCreateWithoutUserInputSchema: z.ZodType<Prisma.InvitationCreateWithoutUserInput> = z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   email: z.string(),
   role: z.string().optional().nullable(),
   status: z.string(),
@@ -4795,7 +4795,7 @@ export const InvitationCreateWithoutUserInputSchema: z.ZodType<Prisma.Invitation
 }).strict();
 
 export const InvitationUncheckedCreateWithoutUserInputSchema: z.ZodType<Prisma.InvitationUncheckedCreateWithoutUserInput> = z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   organizationId: z.string(),
   email: z.string(),
   role: z.string().optional().nullable(),
@@ -4814,7 +4814,7 @@ export const InvitationCreateManyUserInputEnvelopeSchema: z.ZodType<Prisma.Invit
 }).strict();
 
 export const PurchaseCreateWithoutUserInputSchema: z.ZodType<Prisma.PurchaseCreateWithoutUserInput> = z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   type: z.lazy(() => PurchaseTypeSchema),
   customerId: z.string(),
   subscriptionId: z.string().optional().nullable(),
@@ -4826,7 +4826,7 @@ export const PurchaseCreateWithoutUserInputSchema: z.ZodType<Prisma.PurchaseCrea
 }).strict();
 
 export const PurchaseUncheckedCreateWithoutUserInputSchema: z.ZodType<Prisma.PurchaseUncheckedCreateWithoutUserInput> = z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   organizationId: z.string().optional().nullable(),
   type: z.lazy(() => PurchaseTypeSchema),
   customerId: z.string(),
@@ -4848,14 +4848,14 @@ export const PurchaseCreateManyUserInputEnvelopeSchema: z.ZodType<Prisma.Purchas
 }).strict();
 
 export const MemberCreateWithoutUserInputSchema: z.ZodType<Prisma.MemberCreateWithoutUserInput> = z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   role: z.string(),
   createdAt: z.coerce.date(),
   organization: z.lazy(() => OrganizationCreateNestedOneWithoutMembersInputSchema),
 }).strict();
 
 export const MemberUncheckedCreateWithoutUserInputSchema: z.ZodType<Prisma.MemberUncheckedCreateWithoutUserInput> = z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   organizationId: z.string(),
   role: z.string(),
   createdAt: z.coerce.date(),
@@ -4872,13 +4872,13 @@ export const MemberCreateManyUserInputEnvelopeSchema: z.ZodType<Prisma.MemberCre
 }).strict();
 
 export const TwoFactorCreateWithoutUserInputSchema: z.ZodType<Prisma.TwoFactorCreateWithoutUserInput> = z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   secret: z.string(),
   backupCodes: z.string(),
 }).strict();
 
 export const TwoFactorUncheckedCreateWithoutUserInputSchema: z.ZodType<Prisma.TwoFactorUncheckedCreateWithoutUserInput> = z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   secret: z.string(),
   backupCodes: z.string(),
 }).strict();
@@ -4894,7 +4894,7 @@ export const TwoFactorCreateManyUserInputEnvelopeSchema: z.ZodType<Prisma.TwoFac
 }).strict();
 
 export const AiChatCreateWithoutUserInputSchema: z.ZodType<Prisma.AiChatCreateWithoutUserInput> = z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   title: z.string().optional().nullable(),
   messages: z.union([ z.lazy(() => JsonNullValueInputSchema), z.array(z.object({ role: z.enum(['user', 'assistant']), content: z.string() })) ]).optional(),
   createdAt: z.coerce.date().optional(),
@@ -4903,7 +4903,7 @@ export const AiChatCreateWithoutUserInputSchema: z.ZodType<Prisma.AiChatCreateWi
 }).strict();
 
 export const AiChatUncheckedCreateWithoutUserInputSchema: z.ZodType<Prisma.AiChatUncheckedCreateWithoutUserInput> = z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   organizationId: z.string().optional().nullable(),
   title: z.string().optional().nullable(),
   messages: z.union([ z.lazy(() => JsonNullValueInputSchema), z.array(z.object({ role: z.enum(['user', 'assistant']), content: z.string() })) ]).optional(),
@@ -4922,7 +4922,7 @@ export const AiChatCreateManyUserInputEnvelopeSchema: z.ZodType<Prisma.AiChatCre
 }).strict();
 
 export const ListingCreateWithoutUserInputSchema: z.ZodType<Prisma.ListingCreateWithoutUserInput> = z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   title: z.string(),
   description: z.string(),
   price: z.number(),
@@ -4937,7 +4937,7 @@ export const ListingCreateWithoutUserInputSchema: z.ZodType<Prisma.ListingCreate
 }).strict();
 
 export const ListingUncheckedCreateWithoutUserInputSchema: z.ZodType<Prisma.ListingUncheckedCreateWithoutUserInput> = z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   title: z.string(),
   description: z.string(),
   price: z.number(),
@@ -5240,7 +5240,7 @@ export const ListingScalarWhereInputSchema: z.ZodType<Prisma.ListingScalarWhereI
 }).strict();
 
 export const UserCreateWithoutSessionsInputSchema: z.ZodType<Prisma.UserCreateWithoutSessionsInput> = z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   name: z.string(),
   email: z.string(),
   emailVerified: z.boolean(),
@@ -5267,7 +5267,7 @@ export const UserCreateWithoutSessionsInputSchema: z.ZodType<Prisma.UserCreateWi
 }).strict();
 
 export const UserUncheckedCreateWithoutSessionsInputSchema: z.ZodType<Prisma.UserUncheckedCreateWithoutSessionsInput> = z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   name: z.string(),
   email: z.string(),
   emailVerified: z.boolean(),
@@ -5364,7 +5364,7 @@ export const UserUncheckedUpdateWithoutSessionsInputSchema: z.ZodType<Prisma.Use
 }).strict();
 
 export const UserCreateWithoutAccountsInputSchema: z.ZodType<Prisma.UserCreateWithoutAccountsInput> = z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   name: z.string(),
   email: z.string(),
   emailVerified: z.boolean(),
@@ -5391,7 +5391,7 @@ export const UserCreateWithoutAccountsInputSchema: z.ZodType<Prisma.UserCreateWi
 }).strict();
 
 export const UserUncheckedCreateWithoutAccountsInputSchema: z.ZodType<Prisma.UserUncheckedCreateWithoutAccountsInput> = z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   name: z.string(),
   email: z.string(),
   emailVerified: z.boolean(),
@@ -5488,7 +5488,7 @@ export const UserUncheckedUpdateWithoutAccountsInputSchema: z.ZodType<Prisma.Use
 }).strict();
 
 export const UserCreateWithoutPasskeysInputSchema: z.ZodType<Prisma.UserCreateWithoutPasskeysInput> = z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   name: z.string(),
   email: z.string(),
   emailVerified: z.boolean(),
@@ -5515,7 +5515,7 @@ export const UserCreateWithoutPasskeysInputSchema: z.ZodType<Prisma.UserCreateWi
 }).strict();
 
 export const UserUncheckedCreateWithoutPasskeysInputSchema: z.ZodType<Prisma.UserUncheckedCreateWithoutPasskeysInput> = z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   name: z.string(),
   email: z.string(),
   emailVerified: z.boolean(),
@@ -5612,7 +5612,7 @@ export const UserUncheckedUpdateWithoutPasskeysInputSchema: z.ZodType<Prisma.Use
 }).strict();
 
 export const UserCreateWithoutTwofactorsInputSchema: z.ZodType<Prisma.UserCreateWithoutTwofactorsInput> = z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   name: z.string(),
   email: z.string(),
   emailVerified: z.boolean(),
@@ -5639,7 +5639,7 @@ export const UserCreateWithoutTwofactorsInputSchema: z.ZodType<Prisma.UserCreate
 }).strict();
 
 export const UserUncheckedCreateWithoutTwofactorsInputSchema: z.ZodType<Prisma.UserUncheckedCreateWithoutTwofactorsInput> = z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   name: z.string(),
   email: z.string(),
   emailVerified: z.boolean(),
@@ -5736,14 +5736,14 @@ export const UserUncheckedUpdateWithoutTwofactorsInputSchema: z.ZodType<Prisma.U
 }).strict();
 
 export const MemberCreateWithoutOrganizationInputSchema: z.ZodType<Prisma.MemberCreateWithoutOrganizationInput> = z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   role: z.string(),
   createdAt: z.coerce.date(),
   user: z.lazy(() => UserCreateNestedOneWithoutMembersInputSchema),
 }).strict();
 
 export const MemberUncheckedCreateWithoutOrganizationInputSchema: z.ZodType<Prisma.MemberUncheckedCreateWithoutOrganizationInput> = z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   userId: z.string(),
   role: z.string(),
   createdAt: z.coerce.date(),
@@ -5760,7 +5760,7 @@ export const MemberCreateManyOrganizationInputEnvelopeSchema: z.ZodType<Prisma.M
 }).strict();
 
 export const InvitationCreateWithoutOrganizationInputSchema: z.ZodType<Prisma.InvitationCreateWithoutOrganizationInput> = z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   email: z.string(),
   role: z.string().optional().nullable(),
   status: z.string(),
@@ -5769,7 +5769,7 @@ export const InvitationCreateWithoutOrganizationInputSchema: z.ZodType<Prisma.In
 }).strict();
 
 export const InvitationUncheckedCreateWithoutOrganizationInputSchema: z.ZodType<Prisma.InvitationUncheckedCreateWithoutOrganizationInput> = z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   email: z.string(),
   role: z.string().optional().nullable(),
   status: z.string(),
@@ -5788,7 +5788,7 @@ export const InvitationCreateManyOrganizationInputEnvelopeSchema: z.ZodType<Pris
 }).strict();
 
 export const PurchaseCreateWithoutOrganizationInputSchema: z.ZodType<Prisma.PurchaseCreateWithoutOrganizationInput> = z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   type: z.lazy(() => PurchaseTypeSchema),
   customerId: z.string(),
   subscriptionId: z.string().optional().nullable(),
@@ -5800,7 +5800,7 @@ export const PurchaseCreateWithoutOrganizationInputSchema: z.ZodType<Prisma.Purc
 }).strict();
 
 export const PurchaseUncheckedCreateWithoutOrganizationInputSchema: z.ZodType<Prisma.PurchaseUncheckedCreateWithoutOrganizationInput> = z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   userId: z.string().optional().nullable(),
   type: z.lazy(() => PurchaseTypeSchema),
   customerId: z.string(),
@@ -5822,7 +5822,7 @@ export const PurchaseCreateManyOrganizationInputEnvelopeSchema: z.ZodType<Prisma
 }).strict();
 
 export const AiChatCreateWithoutOrganizationInputSchema: z.ZodType<Prisma.AiChatCreateWithoutOrganizationInput> = z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   title: z.string().optional().nullable(),
   messages: z.union([ z.lazy(() => JsonNullValueInputSchema), z.array(z.object({ role: z.enum(['user', 'assistant']), content: z.string() })) ]).optional(),
   createdAt: z.coerce.date().optional(),
@@ -5831,7 +5831,7 @@ export const AiChatCreateWithoutOrganizationInputSchema: z.ZodType<Prisma.AiChat
 }).strict();
 
 export const AiChatUncheckedCreateWithoutOrganizationInputSchema: z.ZodType<Prisma.AiChatUncheckedCreateWithoutOrganizationInput> = z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   userId: z.string().optional().nullable(),
   title: z.string().optional().nullable(),
   messages: z.union([ z.lazy(() => JsonNullValueInputSchema), z.array(z.object({ role: z.enum(['user', 'assistant']), content: z.string() })) ]).optional(),
@@ -5914,7 +5914,7 @@ export const AiChatUpdateManyWithWhereWithoutOrganizationInputSchema: z.ZodType<
 }).strict();
 
 export const OrganizationCreateWithoutMembersInputSchema: z.ZodType<Prisma.OrganizationCreateWithoutMembersInput> = z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   name: z.string(),
   slug: z.string().optional().nullable(),
   logo: z.string().optional().nullable(),
@@ -5927,7 +5927,7 @@ export const OrganizationCreateWithoutMembersInputSchema: z.ZodType<Prisma.Organ
 }).strict();
 
 export const OrganizationUncheckedCreateWithoutMembersInputSchema: z.ZodType<Prisma.OrganizationUncheckedCreateWithoutMembersInput> = z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   name: z.string(),
   slug: z.string().optional().nullable(),
   logo: z.string().optional().nullable(),
@@ -5945,7 +5945,7 @@ export const OrganizationCreateOrConnectWithoutMembersInputSchema: z.ZodType<Pri
 }).strict();
 
 export const UserCreateWithoutMembersInputSchema: z.ZodType<Prisma.UserCreateWithoutMembersInput> = z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   name: z.string(),
   email: z.string(),
   emailVerified: z.boolean(),
@@ -5972,7 +5972,7 @@ export const UserCreateWithoutMembersInputSchema: z.ZodType<Prisma.UserCreateWit
 }).strict();
 
 export const UserUncheckedCreateWithoutMembersInputSchema: z.ZodType<Prisma.UserUncheckedCreateWithoutMembersInput> = z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   name: z.string(),
   email: z.string(),
   emailVerified: z.boolean(),
@@ -6106,7 +6106,7 @@ export const UserUncheckedUpdateWithoutMembersInputSchema: z.ZodType<Prisma.User
 }).strict();
 
 export const OrganizationCreateWithoutInvitationsInputSchema: z.ZodType<Prisma.OrganizationCreateWithoutInvitationsInput> = z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   name: z.string(),
   slug: z.string().optional().nullable(),
   logo: z.string().optional().nullable(),
@@ -6119,7 +6119,7 @@ export const OrganizationCreateWithoutInvitationsInputSchema: z.ZodType<Prisma.O
 }).strict();
 
 export const OrganizationUncheckedCreateWithoutInvitationsInputSchema: z.ZodType<Prisma.OrganizationUncheckedCreateWithoutInvitationsInput> = z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   name: z.string(),
   slug: z.string().optional().nullable(),
   logo: z.string().optional().nullable(),
@@ -6137,7 +6137,7 @@ export const OrganizationCreateOrConnectWithoutInvitationsInputSchema: z.ZodType
 }).strict();
 
 export const UserCreateWithoutInvitationsInputSchema: z.ZodType<Prisma.UserCreateWithoutInvitationsInput> = z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   name: z.string(),
   email: z.string(),
   emailVerified: z.boolean(),
@@ -6164,7 +6164,7 @@ export const UserCreateWithoutInvitationsInputSchema: z.ZodType<Prisma.UserCreat
 }).strict();
 
 export const UserUncheckedCreateWithoutInvitationsInputSchema: z.ZodType<Prisma.UserUncheckedCreateWithoutInvitationsInput> = z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   name: z.string(),
   email: z.string(),
   emailVerified: z.boolean(),
@@ -6298,7 +6298,7 @@ export const UserUncheckedUpdateWithoutInvitationsInputSchema: z.ZodType<Prisma.
 }).strict();
 
 export const OrganizationCreateWithoutPurchasesInputSchema: z.ZodType<Prisma.OrganizationCreateWithoutPurchasesInput> = z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   name: z.string(),
   slug: z.string().optional().nullable(),
   logo: z.string().optional().nullable(),
@@ -6311,7 +6311,7 @@ export const OrganizationCreateWithoutPurchasesInputSchema: z.ZodType<Prisma.Org
 }).strict();
 
 export const OrganizationUncheckedCreateWithoutPurchasesInputSchema: z.ZodType<Prisma.OrganizationUncheckedCreateWithoutPurchasesInput> = z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   name: z.string(),
   slug: z.string().optional().nullable(),
   logo: z.string().optional().nullable(),
@@ -6329,7 +6329,7 @@ export const OrganizationCreateOrConnectWithoutPurchasesInputSchema: z.ZodType<P
 }).strict();
 
 export const UserCreateWithoutPurchasesInputSchema: z.ZodType<Prisma.UserCreateWithoutPurchasesInput> = z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   name: z.string(),
   email: z.string(),
   emailVerified: z.boolean(),
@@ -6356,7 +6356,7 @@ export const UserCreateWithoutPurchasesInputSchema: z.ZodType<Prisma.UserCreateW
 }).strict();
 
 export const UserUncheckedCreateWithoutPurchasesInputSchema: z.ZodType<Prisma.UserUncheckedCreateWithoutPurchasesInput> = z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   name: z.string(),
   email: z.string(),
   emailVerified: z.boolean(),
@@ -6490,7 +6490,7 @@ export const UserUncheckedUpdateWithoutPurchasesInputSchema: z.ZodType<Prisma.Us
 }).strict();
 
 export const OrganizationCreateWithoutAiChatsInputSchema: z.ZodType<Prisma.OrganizationCreateWithoutAiChatsInput> = z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   name: z.string(),
   slug: z.string().optional().nullable(),
   logo: z.string().optional().nullable(),
@@ -6503,7 +6503,7 @@ export const OrganizationCreateWithoutAiChatsInputSchema: z.ZodType<Prisma.Organ
 }).strict();
 
 export const OrganizationUncheckedCreateWithoutAiChatsInputSchema: z.ZodType<Prisma.OrganizationUncheckedCreateWithoutAiChatsInput> = z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   name: z.string(),
   slug: z.string().optional().nullable(),
   logo: z.string().optional().nullable(),
@@ -6521,7 +6521,7 @@ export const OrganizationCreateOrConnectWithoutAiChatsInputSchema: z.ZodType<Pri
 }).strict();
 
 export const UserCreateWithoutAiChatsInputSchema: z.ZodType<Prisma.UserCreateWithoutAiChatsInput> = z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   name: z.string(),
   email: z.string(),
   emailVerified: z.boolean(),
@@ -6548,7 +6548,7 @@ export const UserCreateWithoutAiChatsInputSchema: z.ZodType<Prisma.UserCreateWit
 }).strict();
 
 export const UserUncheckedCreateWithoutAiChatsInputSchema: z.ZodType<Prisma.UserUncheckedCreateWithoutAiChatsInput> = z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   name: z.string(),
   email: z.string(),
   emailVerified: z.boolean(),
@@ -6682,7 +6682,7 @@ export const UserUncheckedUpdateWithoutAiChatsInputSchema: z.ZodType<Prisma.User
 }).strict();
 
 export const UserCreateWithoutListingsInputSchema: z.ZodType<Prisma.UserCreateWithoutListingsInput> = z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   name: z.string(),
   email: z.string(),
   emailVerified: z.boolean(),
@@ -6709,7 +6709,7 @@ export const UserCreateWithoutListingsInputSchema: z.ZodType<Prisma.UserCreateWi
 }).strict();
 
 export const UserUncheckedCreateWithoutListingsInputSchema: z.ZodType<Prisma.UserUncheckedCreateWithoutListingsInput> = z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   name: z.string(),
   email: z.string(),
   emailVerified: z.boolean(),
@@ -6806,7 +6806,7 @@ export const UserUncheckedUpdateWithoutListingsInputSchema: z.ZodType<Prisma.Use
 }).strict();
 
 export const SessionCreateManyUserInputSchema: z.ZodType<Prisma.SessionCreateManyUserInput> = z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   expiresAt: z.coerce.date(),
   ipAddress: z.string().optional().nullable(),
   userAgent: z.string().optional().nullable(),
@@ -6818,7 +6818,7 @@ export const SessionCreateManyUserInputSchema: z.ZodType<Prisma.SessionCreateMan
 }).strict();
 
 export const AccountCreateManyUserInputSchema: z.ZodType<Prisma.AccountCreateManyUserInput> = z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   accountId: z.string(),
   providerId: z.string(),
   accessToken: z.string().optional().nullable(),
@@ -6834,7 +6834,7 @@ export const AccountCreateManyUserInputSchema: z.ZodType<Prisma.AccountCreateMan
 }).strict();
 
 export const PasskeyCreateManyUserInputSchema: z.ZodType<Prisma.PasskeyCreateManyUserInput> = z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   name: z.string().optional().nullable(),
   publicKey: z.string(),
   credentialID: z.string(),
@@ -6846,7 +6846,7 @@ export const PasskeyCreateManyUserInputSchema: z.ZodType<Prisma.PasskeyCreateMan
 }).strict();
 
 export const InvitationCreateManyUserInputSchema: z.ZodType<Prisma.InvitationCreateManyUserInput> = z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   organizationId: z.string(),
   email: z.string(),
   role: z.string().optional().nullable(),
@@ -6855,7 +6855,7 @@ export const InvitationCreateManyUserInputSchema: z.ZodType<Prisma.InvitationCre
 }).strict();
 
 export const PurchaseCreateManyUserInputSchema: z.ZodType<Prisma.PurchaseCreateManyUserInput> = z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   organizationId: z.string().optional().nullable(),
   type: z.lazy(() => PurchaseTypeSchema),
   customerId: z.string(),
@@ -6867,20 +6867,20 @@ export const PurchaseCreateManyUserInputSchema: z.ZodType<Prisma.PurchaseCreateM
 }).strict();
 
 export const MemberCreateManyUserInputSchema: z.ZodType<Prisma.MemberCreateManyUserInput> = z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   organizationId: z.string(),
   role: z.string(),
   createdAt: z.coerce.date(),
 }).strict();
 
 export const TwoFactorCreateManyUserInputSchema: z.ZodType<Prisma.TwoFactorCreateManyUserInput> = z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   secret: z.string(),
   backupCodes: z.string(),
 }).strict();
 
 export const AiChatCreateManyUserInputSchema: z.ZodType<Prisma.AiChatCreateManyUserInput> = z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   organizationId: z.string().optional().nullable(),
   title: z.string().optional().nullable(),
   messages: z.union([ z.lazy(() => JsonNullValueInputSchema), z.array(z.object({ role: z.enum(['user', 'assistant']), content: z.string() })) ]).optional(),
@@ -6889,7 +6889,7 @@ export const AiChatCreateManyUserInputSchema: z.ZodType<Prisma.AiChatCreateManyU
 }).strict();
 
 export const ListingCreateManyUserInputSchema: z.ZodType<Prisma.ListingCreateManyUserInput> = z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   title: z.string(),
   description: z.string(),
   price: z.number(),
@@ -7198,14 +7198,14 @@ export const ListingUncheckedUpdateManyWithoutUserInputSchema: z.ZodType<Prisma.
 }).strict();
 
 export const MemberCreateManyOrganizationInputSchema: z.ZodType<Prisma.MemberCreateManyOrganizationInput> = z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   userId: z.string(),
   role: z.string(),
   createdAt: z.coerce.date(),
 }).strict();
 
 export const InvitationCreateManyOrganizationInputSchema: z.ZodType<Prisma.InvitationCreateManyOrganizationInput> = z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   email: z.string(),
   role: z.string().optional().nullable(),
   status: z.string(),
@@ -7214,7 +7214,7 @@ export const InvitationCreateManyOrganizationInputSchema: z.ZodType<Prisma.Invit
 }).strict();
 
 export const PurchaseCreateManyOrganizationInputSchema: z.ZodType<Prisma.PurchaseCreateManyOrganizationInput> = z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   userId: z.string().optional().nullable(),
   type: z.lazy(() => PurchaseTypeSchema),
   customerId: z.string(),
@@ -7226,7 +7226,7 @@ export const PurchaseCreateManyOrganizationInputSchema: z.ZodType<Prisma.Purchas
 }).strict();
 
 export const AiChatCreateManyOrganizationInputSchema: z.ZodType<Prisma.AiChatCreateManyOrganizationInput> = z.object({
-  id: z.cuid().optional(),
+  id: z.any(),
   userId: z.string().optional().nullable(),
   title: z.string().optional().nullable(),
   messages: z.union([ z.lazy(() => JsonNullValueInputSchema), z.array(z.object({ role: z.enum(['user', 'assistant']), content: z.string() })) ]).optional(),
