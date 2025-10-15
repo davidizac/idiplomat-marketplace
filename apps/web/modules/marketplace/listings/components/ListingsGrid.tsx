@@ -180,9 +180,9 @@ export function ListingsGrid({
 
 	return (
 		<div className="flex-1 w-full">
-			{/* Subcategory Chips (if category is selected and has subcategories) */}
+			{/* Subcategory Chips (desktop only - if category is selected and has subcategories) */}
 			{selectedCategory && subcategories.length > 0 && (
-				<div className="mb-6">
+				<div className="hidden lg:block mb-6">
 					<SubcategoryChips
 						subcategories={subcategories}
 						selectedSubcategory={selectedSubcategory}
