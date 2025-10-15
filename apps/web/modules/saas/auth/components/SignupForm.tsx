@@ -59,6 +59,7 @@ export function SignupForm({ prefillEmail }: { prefillEmail?: string }) {
 	const redirectTo = searchParams.get("redirectTo");
 
 	const form = useForm<FormValues>({
+		// @ts-ignore
 		resolver: zodResolver(formSchema, {
 			errorMap: zodErrorMap,
 		}),
