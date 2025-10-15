@@ -107,7 +107,7 @@ export type ListingStatusType = `${z.infer<typeof ListingStatusSchema>}`
 /////////////////////////////////////////
 
 export const UserSchema = z.object({
-  id: z.cuid(),
+  id: z.any(),
   name: z.string(),
   email: z.string(),
   emailVerified: z.boolean(),
@@ -132,7 +132,7 @@ export type User = z.infer<typeof UserSchema>
 /////////////////////////////////////////
 
 export const SessionSchema = z.object({
-  id: z.cuid(),
+  id: z.any(),
   expiresAt: z.coerce.date(),
   ipAddress: z.string().nullable(),
   userAgent: z.string().nullable(),
@@ -151,7 +151,7 @@ export type Session = z.infer<typeof SessionSchema>
 /////////////////////////////////////////
 
 export const AccountSchema = z.object({
-  id: z.cuid(),
+  id: z.any(),
   accountId: z.string(),
   providerId: z.string(),
   userId: z.string(),
@@ -174,7 +174,7 @@ export type Account = z.infer<typeof AccountSchema>
 /////////////////////////////////////////
 
 export const VerificationSchema = z.object({
-  id: z.cuid(),
+  id: z.any(),
   identifier: z.string(),
   value: z.string(),
   expiresAt: z.coerce.date(),
@@ -189,7 +189,7 @@ export type Verification = z.infer<typeof VerificationSchema>
 /////////////////////////////////////////
 
 export const PasskeySchema = z.object({
-  id: z.cuid(),
+  id: z.any(),
   name: z.string().nullable(),
   publicKey: z.string(),
   userId: z.string(),
@@ -208,7 +208,7 @@ export type Passkey = z.infer<typeof PasskeySchema>
 /////////////////////////////////////////
 
 export const TwoFactorSchema = z.object({
-  id: z.cuid(),
+  id: z.any(),
   secret: z.string(),
   backupCodes: z.string(),
   userId: z.string(),
@@ -221,7 +221,7 @@ export type TwoFactor = z.infer<typeof TwoFactorSchema>
 /////////////////////////////////////////
 
 export const OrganizationSchema = z.object({
-  id: z.cuid(),
+  id: z.any(),
   name: z.string(),
   slug: z.string().nullable(),
   logo: z.string().nullable(),
@@ -237,7 +237,7 @@ export type Organization = z.infer<typeof OrganizationSchema>
 /////////////////////////////////////////
 
 export const MemberSchema = z.object({
-  id: z.cuid(),
+  id: z.any(),
   organizationId: z.string(),
   userId: z.string(),
   role: z.string(),
@@ -251,7 +251,7 @@ export type Member = z.infer<typeof MemberSchema>
 /////////////////////////////////////////
 
 export const InvitationSchema = z.object({
-  id: z.cuid(),
+  id: z.any(),
   organizationId: z.string(),
   email: z.string(),
   role: z.string().nullable(),
@@ -268,7 +268,7 @@ export type Invitation = z.infer<typeof InvitationSchema>
 
 export const PurchaseSchema = z.object({
   type: PurchaseTypeSchema,
-  id: z.cuid(),
+  id: z.any(),
   organizationId: z.string().nullable(),
   userId: z.string().nullable(),
   customerId: z.string(),
@@ -286,7 +286,7 @@ export type Purchase = z.infer<typeof PurchaseSchema>
 /////////////////////////////////////////
 
 export const AiChatSchema = z.object({
-  id: z.cuid(),
+  id: z.any(),
   organizationId: z.string().nullable(),
   userId: z.string().nullable(),
   title: z.string().nullable(),
@@ -306,7 +306,7 @@ export type AiChat = z.infer<typeof AiChatSchema>
 
 export const ListingSchema = z.object({
   status: ListingStatusSchema,
-  id: z.cuid(),
+  id: z.any(),
   title: z.string(),
   description: z.string(),
   price: z.number(),
@@ -744,20 +744,20 @@ export const UserOrderByWithRelationInputSchema: z.ZodType<Prisma.UserOrderByWit
 
 export const UserWhereUniqueInputSchema: z.ZodType<Prisma.UserWhereUniqueInput> = z.union([
   z.object({
-    id: z.cuid(),
+    id: z.any(),
     email: z.string(),
     username: z.string(),
   }),
   z.object({
-    id: z.cuid(),
+    id: z.any(),
     email: z.string(),
   }),
   z.object({
-    id: z.cuid(),
+    id: z.any(),
     username: z.string(),
   }),
   z.object({
-    id: z.cuid(),
+    id: z.any(),
   }),
   z.object({
     email: z.string(),
@@ -878,11 +878,11 @@ export const SessionOrderByWithRelationInputSchema: z.ZodType<Prisma.SessionOrde
 
 export const SessionWhereUniqueInputSchema: z.ZodType<Prisma.SessionWhereUniqueInput> = z.union([
   z.object({
-    id: z.cuid(),
+    id: z.any(),
     token: z.string(),
   }),
   z.object({
-    id: z.cuid(),
+    id: z.any(),
   }),
   z.object({
     token: z.string(),
@@ -977,7 +977,7 @@ export const AccountOrderByWithRelationInputSchema: z.ZodType<Prisma.AccountOrde
 }).strict();
 
 export const AccountWhereUniqueInputSchema: z.ZodType<Prisma.AccountWhereUniqueInput> = z.object({
-  id: z.cuid(),
+  id: z.any(),
 })
 .and(z.object({
   id: z.cuid().optional(),
@@ -1062,7 +1062,7 @@ export const VerificationOrderByWithRelationInputSchema: z.ZodType<Prisma.Verifi
 }).strict();
 
 export const VerificationWhereUniqueInputSchema: z.ZodType<Prisma.VerificationWhereUniqueInput> = z.object({
-  id: z.cuid(),
+  id: z.any(),
 })
 .and(z.object({
   id: z.cuid().optional(),
@@ -1132,7 +1132,7 @@ export const PasskeyOrderByWithRelationInputSchema: z.ZodType<Prisma.PasskeyOrde
 }).strict();
 
 export const PasskeyWhereUniqueInputSchema: z.ZodType<Prisma.PasskeyWhereUniqueInput> = z.object({
-  id: z.cuid(),
+  id: z.any(),
 })
 .and(z.object({
   id: z.cuid().optional(),
@@ -1205,7 +1205,7 @@ export const TwoFactorOrderByWithRelationInputSchema: z.ZodType<Prisma.TwoFactor
 }).strict();
 
 export const TwoFactorWhereUniqueInputSchema: z.ZodType<Prisma.TwoFactorWhereUniqueInput> = z.object({
-  id: z.cuid(),
+  id: z.any(),
 })
 .and(z.object({
   id: z.cuid().optional(),
@@ -1271,11 +1271,11 @@ export const OrganizationOrderByWithRelationInputSchema: z.ZodType<Prisma.Organi
 
 export const OrganizationWhereUniqueInputSchema: z.ZodType<Prisma.OrganizationWhereUniqueInput> = z.union([
   z.object({
-    id: z.cuid(),
+    id: z.any(),
     slug: z.string(),
   }),
   z.object({
-    id: z.cuid(),
+    id: z.any(),
   }),
   z.object({
     slug: z.string(),
@@ -1349,11 +1349,11 @@ export const MemberOrderByWithRelationInputSchema: z.ZodType<Prisma.MemberOrderB
 
 export const MemberWhereUniqueInputSchema: z.ZodType<Prisma.MemberWhereUniqueInput> = z.union([
   z.object({
-    id: z.cuid(),
+    id: z.any(),
     organizationId_userId: z.lazy(() => MemberOrganizationIdUserIdCompoundUniqueInputSchema),
   }),
   z.object({
-    id: z.cuid(),
+    id: z.any(),
   }),
   z.object({
     organizationId_userId: z.lazy(() => MemberOrganizationIdUserIdCompoundUniqueInputSchema),
@@ -1423,7 +1423,7 @@ export const InvitationOrderByWithRelationInputSchema: z.ZodType<Prisma.Invitati
 }).strict();
 
 export const InvitationWhereUniqueInputSchema: z.ZodType<Prisma.InvitationWhereUniqueInput> = z.object({
-  id: z.cuid(),
+  id: z.any(),
 })
 .and(z.object({
   id: z.cuid().optional(),
@@ -1501,11 +1501,11 @@ export const PurchaseOrderByWithRelationInputSchema: z.ZodType<Prisma.PurchaseOr
 
 export const PurchaseWhereUniqueInputSchema: z.ZodType<Prisma.PurchaseWhereUniqueInput> = z.union([
   z.object({
-    id: z.cuid(),
+    id: z.any(),
     subscriptionId: z.string(),
   }),
   z.object({
-    id: z.cuid(),
+    id: z.any(),
   }),
   z.object({
     subscriptionId: z.string(),
@@ -1589,7 +1589,7 @@ export const AiChatOrderByWithRelationInputSchema: z.ZodType<Prisma.AiChatOrderB
 }).strict();
 
 export const AiChatWhereUniqueInputSchema: z.ZodType<Prisma.AiChatWhereUniqueInput> = z.object({
-  id: z.cuid(),
+  id: z.any(),
 })
 .and(z.object({
   id: z.cuid().optional(),
@@ -1670,7 +1670,7 @@ export const ListingOrderByWithRelationInputSchema: z.ZodType<Prisma.ListingOrde
 }).strict();
 
 export const ListingWhereUniqueInputSchema: z.ZodType<Prisma.ListingWhereUniqueInput> = z.object({
-  id: z.cuid(),
+  id: z.any(),
 })
 .and(z.object({
   id: z.cuid().optional(),
