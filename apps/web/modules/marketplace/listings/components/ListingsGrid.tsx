@@ -6,12 +6,13 @@ import {
 	type ListingFilterParams,
 	useListings,
 } from "@marketplace/api";
-import { getStrapiImageUrl } from "@repo/cms";
+import { type Category, getStrapiImageUrl } from "@repo/cms";
 import { Card } from "@ui/components/card";
 import { Skeleton } from "@ui/components/skeleton";
 import Image from "next/image";
 import { useState } from "react";
 import { SortFilter, type SortOption } from "./filters/SortFilter";
+import { SubcategoryChips } from "./filters/SubcategoryChips";
 
 interface ListingCardProps {
 	id: string;
@@ -26,7 +27,6 @@ interface ListingCardProps {
 }
 
 function ListingCard({
-	id,
 	title,
 	imageUrl,
 	documentId,
@@ -111,6 +111,9 @@ function ListingCardSkeleton() {
 interface ListingsGridProps {
 	strapiQuery: ListingFilterParams;
 	onSortChange?: (sort: SortOption) => void;
+	selectedCategory: Category | null;
+	selectedSubcategory: Category | null;
+	onSelectSubcategory: (subcategory: Category | null) => void;
 }
 
 // Helper to process listings data
@@ -137,7 +140,13 @@ function processListings(data: any): ListingCardProps[] {
 	);
 }
 
-export function ListingsGrid({ strapiQuery, onSortChange }: ListingsGridProps) {
+export function ListingsGrid({
+	strapiQuery,
+	onSortChange,
+	selectedCategory,
+	selectedSubcategory,
+	onSelectSubcategory,
+}: ListingsGridProps) {
 	const [sortOption, setSortOption] = useState<SortOption>(
 		(strapiQuery.sort?.startsWith("price:asc")
 			? "price-low-high"
@@ -166,10 +175,24 @@ export function ListingsGrid({ strapiQuery, onSortChange }: ListingsGridProps) {
 	// Process listings
 	const listings = processListings(data);
 
+	// Get subcategories from selected category
+	const subcategories = selectedCategory?.categories || [];
+
 	return (
-		<div className="flex-1">
+		<div className="flex-1 w-full">
+			{/* Subcategory Chips (if category is selected and has subcategories) */}
+			{selectedCategory && subcategories.length > 0 && (
+				<div className="mb-6">
+					<SubcategoryChips
+						subcategories={subcategories}
+						selectedSubcategory={selectedSubcategory}
+						onSelectSubcategory={onSelectSubcategory}
+					/>
+				</div>
+			)}
+
 			{/* Header with sort and results count */}
-			<div className="flex justify-between items-center mb-6">
+			<div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
 				<p className="text-sm text-muted-foreground">
 					{isLoading
 						? "Loading listings..."
@@ -183,7 +206,7 @@ export function ListingsGrid({ strapiQuery, onSortChange }: ListingsGridProps) {
 
 			{/* Results grid */}
 			{isLoading ? (
-				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+				<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
 					{Array.from({ length: 6 }).map((_, index) => (
 						<ListingCardSkeleton key={index} />
 					))}
@@ -199,7 +222,7 @@ export function ListingsGrid({ strapiQuery, onSortChange }: ListingsGridProps) {
 					</p>
 				</div>
 			) : listings.length > 0 ? (
-				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+				<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
 					{listings.map((listing) => (
 						<ListingCard key={listing.id} {...listing} />
 					))}
