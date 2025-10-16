@@ -71,10 +71,13 @@ export default function DetailsStep({
 
 				// Automatically set listing type to "rent" for apartments category
 				const isApartments =
+					selection.primary.slug.toLowerCase() === "realty" ||
 					selection.primary.slug.toLowerCase() === "apartment" ||
 					selection.primary.slug.toLowerCase() === "apartments" ||
-					selection.primary.slug.toLowerCase() === "real-estate" ||
-					selection.primary.name.toLowerCase().includes("apartment");
+					selection.primary.slug.toLowerCase() === "offices" ||
+					selection.primary.name.toLowerCase().includes("office");
+				selection.primary.name.toLowerCase().includes("building") ||
+					selection.primary.name.toLowerCase().includes("buildings");
 
 				if (isApartments && formState.type !== "rent") {
 					updateField("type", "rent");
@@ -176,7 +179,18 @@ export default function DetailsStep({
 			slug === "apartment" ||
 			slug === "apartments" ||
 			slug === "real-estate" ||
-			name.includes("apartment")
+			name.includes("apartment") ||
+			slug === "office" ||
+			slug === "offices" ||
+			slug === "realty" ||
+			name.includes("realty") ||
+			name.includes("real-estate") ||
+			name.includes("real estate") ||
+			name.includes("office") ||
+			name.includes("offices") ||
+			name.includes("realty") ||
+			name.includes("real-estate") ||
+			name.includes("real estate")
 		);
 	});
 
