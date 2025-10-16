@@ -89,7 +89,7 @@ export default async function CategoryPage({ params }: any) {
 											{listing.title}
 										</h3>
 										<p className="mt-1 font-bold text-primary">
-											${listing.price}
+											₪{listing.price}
 										</p>
 										<p className="mt-1 text-sm text-muted-foreground">
 											{listing.address}

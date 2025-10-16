@@ -263,7 +263,7 @@ export default function OrganizationStart({
 																)}
 																{listing.price && (
 																	<span className="font-medium">
-																		$
+																		₪
 																		{
 																			listing.price
 																		}

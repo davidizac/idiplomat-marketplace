@@ -41,7 +41,7 @@ function ListingCard({
 			return "Free";
 		}
 		if (type === "sale" && price) {
-			return `$${price}`;
+			return `₪${price}`;
 		}
 		if (type === "rent" && rental_price && rental_period) {
 			const periodMap = {
@@ -50,7 +50,7 @@ function ListingCard({
 				weekly: "week",
 				monthly: "month",
 			};
-			return `$${rental_price}/${periodMap[rental_period]}`;
+			return `₪${rental_price}/${periodMap[rental_period]}`;
 		}
 		return "Price not set";
 	};

@@ -170,11 +170,11 @@ export default function PricingStep({
 					<>
 						<div className="space-y-2">
 							<Label htmlFor="rental_price">
-								Rental Price ($)
+								Rental Price (₪)
 							</Label>
 							<div className="relative">
 								<span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
-									$
+									₪
 								</span>
 								<Input
 									id="rental_price"

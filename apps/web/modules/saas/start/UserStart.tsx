@@ -259,7 +259,7 @@ export default function UserStart({ userId }: UserStartProps) {
 																)}
 																{listing.price && (
 																	<span className="font-medium">
-																		$
+																		₪
 																		{
 																			listing.price
 																		}

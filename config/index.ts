@@ -10,18 +10,18 @@ export const config = {
 		// You need to define a label that is shown in the language selector and a currency that should be used for pricing with this locale
 		locales: {
 			en: {
-				currency: "USD",
+				currency: "ILS",
 				label: "English",
 			},
 			de: {
-				currency: "USD",
+				currency: "ILS",
 				label: "Deutsch",
 			},
 		},
 		// The default locale is used if no locale is provided
 		defaultLocale: "en",
 		// The default currency is used for pricing if no currency is provided
-		defaultCurrency: "USD",
+		defaultCurrency: "ILS",
 		// The name of the cookie that is used to determine the locale
 		localeCookieName: "NEXT_LOCALE",
 	},
@@ -130,7 +130,7 @@ export const config = {
 							.NEXT_PUBLIC_PRICE_ID_PRO_MONTHLY as string,
 						interval: "month",
 						amount: 29,
-						currency: "USD",
+						currency: "ILS",
 						seatBased: true,
 						trialPeriodDays: 7,
 					},
@@ -140,7 +140,7 @@ export const config = {
 							.NEXT_PUBLIC_PRICE_ID_PRO_YEARLY as string,
 						interval: "year",
 						amount: 290,
-						currency: "USD",
+						currency: "ILS",
 						seatBased: true,
 						trialPeriodDays: 7,
 					},
@@ -153,7 +153,7 @@ export const config = {
 						productId: process.env
 							.NEXT_PUBLIC_PRICE_ID_LIFETIME as string,
 						amount: 799,
-						currency: "USD",
+						currency: "ILS",
 					},
 				],
 			},

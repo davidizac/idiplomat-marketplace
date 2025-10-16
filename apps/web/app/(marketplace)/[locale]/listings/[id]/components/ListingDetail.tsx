@@ -259,7 +259,7 @@ function ListingInfo({
 			return "Free";
 		}
 		if (type === "sale" && price) {
-			return `$${price}`;
+			return `₪${price}`;
 		}
 		if (type === "rent" && rental_price && rental_period) {
 			const periodMap = {
@@ -268,7 +268,7 @@ function ListingInfo({
 				weekly: "per week",
 				monthly: "per month",
 			};
-			return `$${rental_price} ${periodMap[rental_period]}`;
+			return `₪${rental_price} ${periodMap[rental_period]}`;
 		}
 		return "Price not set";
 	};
