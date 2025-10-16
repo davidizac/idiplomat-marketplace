@@ -70,6 +70,7 @@
 		"description": "Verwalte deine Anwendung."
 	},
 	"app": {
+		"backToHome": "Zurück zur Startseite",
 		"menu": {
 			"accountSettings": "Kontoeinstellungen",
 			"admin": "Administration",

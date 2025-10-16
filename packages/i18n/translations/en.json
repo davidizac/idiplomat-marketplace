@@ -70,6 +70,7 @@
 		"description": "Manage your application."
 	},
 	"app": {
+		"backToHome": "Back to Home",
 		"menu": {
 			"accountSettings": "Account settings",
 			"admin": "Admin",

@@ -1,11 +1,14 @@
 "use client";
+import { LocaleLink } from "@i18n/routing";
 import { config } from "@repo/config";
 import { useSession } from "@saas/auth/hooks/use-session";
 import { useActiveOrganization } from "@saas/organizations/hooks/use-active-organization";
 import { UserMenu } from "@saas/shared/components/UserMenu";
 import { Logo } from "@shared/components/Logo";
+import { Button } from "@ui/components/button";
 import { cn } from "@ui/lib";
 import {
+	ArrowLeftIcon,
 	ChevronRightIcon,
 	HomeIcon,
 	SettingsIcon,
@@ -120,6 +123,12 @@ export function NavBar() {
 							},
 						)}
 					>
+						<Button variant="ghost" size="sm" asChild>
+							<LocaleLink href="/">
+								<ArrowLeftIcon className="mr-2 size-4" />
+								{t("app.backToHome")}
+							</LocaleLink>
+						</Button>
 						<UserMenu />
 					</div>
 				</div>
@@ -171,6 +180,17 @@ export function NavBar() {
 						},
 					)}
 				>
+					<Button
+						variant="ghost"
+						size="sm"
+						className="mb-2 w-full justify-start"
+						asChild
+					>
+						<LocaleLink href="/">
+							<ArrowLeftIcon className="mr-2 size-4" />
+							{t("app.backToHome")}
+						</LocaleLink>
+					</Button>
 					<UserMenu showUserName />
 				</div>
 			</div>
