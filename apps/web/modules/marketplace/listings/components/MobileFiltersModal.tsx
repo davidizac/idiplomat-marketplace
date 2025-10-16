@@ -9,6 +9,7 @@ import {
 	DialogTitle,
 } from "@ui/components/dialog";
 import { Separator } from "@ui/components/separator";
+import { useCallback, useMemo } from "react";
 import { AttributesManager } from "../../components/AttributesManager";
 import type { AttributeValue } from "./filters/AttributeFilter";
 import { CityFilter } from "./filters/CityFilter";
@@ -40,54 +41,61 @@ export function MobileFiltersModal({
 	onClearFilters,
 }: MobileFiltersModalProps) {
 	// Build selected categories array for AttributesManager
-	const selectedCategories = selectedCategory
-		? [
-				{
-					slug: selectedCategory.slug,
-					name: selectedCategory.name,
-					documentId: selectedCategory.documentId,
-					level: 0,
-				},
-			]
-		: [];
+	const selectedCategories = useMemo(
+		() =>
+			selectedCategory
+				? [
+						{
+							slug: selectedCategory.slug,
+							name: selectedCategory.name,
+							documentId: selectedCategory.documentId,
+							level: 0,
+						},
+					]
+				: [],
+		[selectedCategory],
+	);
 
 	// Get attribute values from FilterManager
-	const getAttributeValue = (attributeDocumentId: string): AttributeValue => {
-		const filterId = attributeDocumentId;
-		const filter = filterManager.getFilter(filterId);
+	const getAttributeValue = useCallback(
+		(attributeDocumentId: string): AttributeValue => {
+			const filterId = attributeDocumentId;
+			const filter = filterManager.getFilter(filterId);
 
-		if (filter) {
-			if (
-				filter.valueType === "date" &&
-				typeof filter.value === "string"
-			) {
-				return new Date(filter.value);
+			if (filter) {
+				if (
+					filter.valueType === "date" &&
+					typeof filter.value === "string"
+				) {
+					return new Date(filter.value);
+				}
+				return filter.value as AttributeValue;
 			}
-			return filter.value as AttributeValue;
-		}
-		return null;
-	};
+			return null;
+		},
+		[filterManager],
+	);
 
 	// Get current search value
-	const getCurrentSearchValue = (): string | null => {
+	const currentSearchValue = useMemo((): string | null => {
 		const searchFilter = filterManager.getFilter("search");
 		return searchFilter ? (searchFilter.value as string) : null;
-	};
+	}, [filterManager]);
 
 	// Get current address value
-	const getCurrentAddressValue = (): string | null => {
+	const currentAddressValue = useMemo((): string | null => {
 		const addressFilter = filterManager.getFilter("address");
 		return addressFilter ? (addressFilter.value as string) : null;
-	};
+	}, [filterManager]);
 
-	const handleApply = () => {
+	const handleApply = useCallback(() => {
 		onOpenChange(false);
-	};
+	}, [onOpenChange]);
 
-	const handleClearFilters = () => {
+	const handleClearFilters = useCallback(() => {
 		onClearFilters();
 		onOpenChange(false);
-	};
+	}, [onClearFilters, onOpenChange]);
 
 	return (
 		<Dialog open={isOpen} onOpenChange={onOpenChange}>
@@ -100,7 +108,7 @@ export function MobileFiltersModal({
 					<div className="py-4 space-y-6">
 						{/* Search Filter */}
 						<SearchFilter
-							value={getCurrentSearchValue()}
+							value={currentSearchValue}
 							onSearch={onUpdateSearch}
 						/>
 
@@ -108,7 +116,7 @@ export function MobileFiltersModal({
 
 						{/* City Filter */}
 						<CityFilter
-							value={getCurrentAddressValue()}
+							value={currentAddressValue}
 							onChange={onUpdateAddress}
 							label="City"
 						/>
