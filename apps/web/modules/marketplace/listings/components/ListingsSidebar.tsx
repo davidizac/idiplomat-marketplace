@@ -9,6 +9,7 @@ import { AttributesManager } from "../../components/AttributesManager";
 import type { AttributeValue } from "./filters/AttributeFilter";
 import { CategoryButtonFilter } from "./filters/CategoryButtonFilter";
 import { CityFilter } from "./filters/CityFilter";
+import { PriceRangeFilter } from "./filters/PriceRangeFilter";
 import { SearchFilter } from "./filters/SearchFilter";
 import type { SortOption } from "./filters/SortFilter";
 
@@ -31,6 +32,7 @@ interface ListingsSidebarProps {
 	onUpdateSubcategory: (subcategory: Category | null) => void;
 	onUpdateSearch: (searchTerm: string | null) => void;
 	onUpdateAddress: (address: string | null) => void;
+	onUpdatePriceRange: (range: [number, number]) => void;
 	onClearFilters: () => void;
 }
 
@@ -42,6 +44,7 @@ export function ListingsSidebar({
 	onUpdateSubcategory,
 	onUpdateSearch,
 	onUpdateAddress,
+	onUpdatePriceRange,
 	onClearFilters,
 }: ListingsSidebarProps) {
 	// Selected categories state (for attributes display)
@@ -126,6 +129,24 @@ export function ListingsSidebar({
 		return addressFilter ? (addressFilter.value as string) : null;
 	};
 
+	// Get current price range from FilterManager
+	const getCurrentPriceRange = (): [number, number] => {
+		const priceFilter = filterManager.getFilter("priceRange");
+		if (
+			priceFilter?.value &&
+			typeof priceFilter.value === "object" &&
+			"min" in priceFilter.value &&
+			"max" in priceFilter.value
+		) {
+			const { min, max } = priceFilter.value as {
+				min: number;
+				max: number;
+			};
+			return [min, max];
+		}
+		return [0, 10000]; // Default range
+	};
+
 	return (
 		<Card className="h-fit w-full md:w-72 lg:w-80 flex-shrink-0 p-4 md:p-6">
 			<div className="space-y-6">
@@ -140,6 +161,13 @@ export function ListingsSidebar({
 					value={getCurrentAddressValue()}
 					onChange={onUpdateAddress}
 					label="City"
+				/>
+
+				{/* Price Range Filter */}
+				<PriceRangeFilter
+					initialRange={getCurrentPriceRange()}
+					onChange={onUpdatePriceRange}
+					maxPrice={10000}
 				/>
 
 				<Separator />

@@ -17,6 +17,7 @@ export function useFilterManager(initialFilters?: {
 	sortOption?: SortOption;
 	search?: string | null;
 	address?: string | null;
+	priceRange?: { min: number; max: number } | null;
 	attributeValues?: Record<string, AttributeValue>;
 }) {
 	// Create filter manager instance with initial filters applied
@@ -47,6 +48,13 @@ export function useFilterManager(initialFilters?: {
 
 			if (initialFilters.address) {
 				manager.setAddressFilter(initialFilters.address);
+			}
+
+			if (initialFilters.priceRange) {
+				manager.setPriceRangeFilter(
+					initialFilters.priceRange.min,
+					initialFilters.priceRange.max,
+				);
 			}
 
 			// Set initial attribute values

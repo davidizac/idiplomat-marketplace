@@ -13,6 +13,7 @@ import { useCallback, useMemo } from "react";
 import { AttributesManager } from "../../components/AttributesManager";
 import type { AttributeValue } from "./filters/AttributeFilter";
 import { CityFilter } from "./filters/CityFilter";
+import { PriceRangeFilter } from "./filters/PriceRangeFilter";
 import { SearchFilter } from "./filters/SearchFilter";
 
 interface MobileFiltersModalProps {
@@ -27,6 +28,7 @@ interface MobileFiltersModalProps {
 	) => void;
 	onUpdateSearch: (searchTerm: string | null) => void;
 	onUpdateAddress: (address: string | null) => void;
+	onUpdatePriceRange: (range: [number, number]) => void;
 	onClearFilters: () => void;
 }
 
@@ -38,6 +40,7 @@ export function MobileFiltersModal({
 	onUpdateAttributeFilter,
 	onUpdateSearch,
 	onUpdateAddress,
+	onUpdatePriceRange,
 	onClearFilters,
 }: MobileFiltersModalProps) {
 	// Build selected categories array for AttributesManager
@@ -88,6 +91,24 @@ export function MobileFiltersModal({
 		return addressFilter ? (addressFilter.value as string) : null;
 	}, [filterManager]);
 
+	// Get current price range
+	const currentPriceRange = useMemo((): [number, number] => {
+		const priceFilter = filterManager.getFilter("priceRange");
+		if (
+			priceFilter?.value &&
+			typeof priceFilter.value === "object" &&
+			"min" in priceFilter.value &&
+			"max" in priceFilter.value
+		) {
+			const { min, max } = priceFilter.value as {
+				min: number;
+				max: number;
+			};
+			return [min, max];
+		}
+		return [0, 10000]; // Default range
+	}, [filterManager]);
+
 	const handleApply = useCallback(() => {
 		onOpenChange(false);
 	}, [onOpenChange]);
@@ -119,6 +140,15 @@ export function MobileFiltersModal({
 							value={currentAddressValue}
 							onChange={onUpdateAddress}
 							label="City"
+						/>
+
+						<Separator />
+
+						{/* Price Range Filter */}
+						<PriceRangeFilter
+							initialRange={currentPriceRange}
+							onChange={onUpdatePriceRange}
+							maxPrice={10000}
 						/>
 
 						{/* Attribute Filters - Only show if category is selected */}

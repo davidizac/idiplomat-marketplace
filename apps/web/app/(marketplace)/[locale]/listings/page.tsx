@@ -25,6 +25,8 @@ export default function ListingsPage() {
 	const categorySlug = searchParams.get("category");
 	const subcategorySlug = searchParams.get("subcategory");
 	const cityQuery = searchParams.get("city");
+	const minPriceQuery = searchParams.get("minPrice");
+	const maxPriceQuery = searchParams.get("maxPrice");
 
 	// Fetch category data if a category slug is present
 	const { data: categoryData } = useCategoryBySlug(categorySlug || undefined);
@@ -57,6 +59,7 @@ export default function ListingsPage() {
 		updateSort,
 		updateSearch,
 		updateAddress,
+		updatePriceRange,
 		clearAllFilters,
 		filterVersion,
 	} = useFilterManager({
@@ -64,6 +67,15 @@ export default function ListingsPage() {
 		subcategorySlug: subcategorySlug || null,
 		search: searchQuery || null,
 		address: cityQuery || null,
+		priceRange:
+			minPriceQuery || maxPriceQuery
+				? {
+						min: minPriceQuery ? Number.parseInt(minPriceQuery) : 0,
+						max: maxPriceQuery
+							? Number.parseInt(maxPriceQuery)
+							: 10000,
+					}
+				: null,
 		sortOption: "newest",
 	});
 
@@ -153,6 +165,22 @@ export default function ListingsPage() {
 		router.push(`/listings?${params.toString()}`);
 	};
 
+	// Handle price range updates from the sidebar
+	const handlePriceRangeUpdate = (range: [number, number]) => {
+		updatePriceRange(range[0], range[1]);
+
+		// Update URL to reflect the price range change
+		const params = new URLSearchParams(searchParams.toString());
+		if (range[0] > 0 || range[1] < 10000) {
+			params.set("minPrice", range[0].toString());
+			params.set("maxPrice", range[1].toString());
+		} else {
+			params.delete("minPrice");
+			params.delete("maxPrice");
+		}
+		router.push(`/listings?${params.toString()}`);
+	};
+
 	return (
 		<>
 			{/* Mobile Category Modal */}
@@ -174,6 +202,7 @@ export default function ListingsPage() {
 				onUpdateAttributeFilter={updateAttributeFilter}
 				onUpdateSearch={handleSearchUpdate}
 				onUpdateAddress={handleCityUpdate}
+				onUpdatePriceRange={handlePriceRangeUpdate}
 				onClearFilters={clearAllFilters}
 			/>
 
@@ -202,6 +231,7 @@ export default function ListingsPage() {
 								onUpdateSubcategory={handleSubcategorySelect}
 								onUpdateSearch={handleSearchUpdate}
 								onUpdateAddress={handleCityUpdate}
+								onUpdatePriceRange={handlePriceRangeUpdate}
 								onClearFilters={clearAllFilters}
 							/>
 						</div>
