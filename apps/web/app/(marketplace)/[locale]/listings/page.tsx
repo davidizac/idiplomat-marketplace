@@ -1,6 +1,9 @@
 "use client";
 
 import { useLocaleRouter } from "@i18n/routing";
+import { FaqSection } from "@marketing/home/components/FaqSection";
+import { Features } from "@marketing/home/components/Features";
+import { Newsletter } from "@marketing/home/components/Newsletter";
 import { useCategoryBySlug } from "@marketplace/api";
 import type { Category } from "@repo/cms";
 import { Button } from "@ui/components/button";
@@ -247,6 +250,11 @@ export default function ListingsPage() {
 					</div>
 				</div>
 			</div>
+
+			{/* Landing Page Sections */}
+			<Features />
+			<FaqSection />
+			<Newsletter />
 		</>
 	);
 }

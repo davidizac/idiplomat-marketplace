@@ -50,11 +50,11 @@ export function NavBar() {
 	const isDocsPage = localePathname.startsWith("/docs");
 
 	const menuItems = [
-		{ label: "Home", href: "/" },
+		{ label: "Home", href: "/listings" },
 		{ label: "Browse Listings", href: "/listings" },
 		{ label: "Categories", href: "/categories" },
-		{ label: "How It Works", href: "/#how-it-works" },
-		{ label: "FAQ", href: "/#faq" },
+		{ label: "How It Works", href: "/listings#how-it-works" },
+		{ label: "FAQ", href: "/listings#faq" },
 	];
 
 	const isMenuItemActive = (href: string) => localePathname.startsWith(href);
@@ -97,7 +97,7 @@ export function NavBar() {
 						</Button>
 
 						<LocaleLink
-							href="/"
+							href="/listings"
 							className="flex items-center gap-2 hover:no-underline shrink-0"
 						>
 							<Logo className="h-10" />

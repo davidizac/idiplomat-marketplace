@@ -7,7 +7,7 @@ import {
 	AccordionTrigger,
 } from "@ui/components/accordion";
 import { Button } from "@ui/components/button";
-import { ArrowRightIcon, PlayCircle } from "lucide-react";
+import {} from "lucide-react";
 import Link from "next/link";
 
 const faqItems = [
@@ -39,9 +39,9 @@ const faqItems = [
 
 export function FaqSection() {
 	return (
-		<section className="py-20 bg-muted/30">
+		<section id="faq" className="scroll-my-20 py-20 bg-muted/30">
 			<div className="container max-w-6xl">
-				<div className="grid gap-12 md:grid-cols-2 items-center mb-16">
+				{/* <div className="grid gap-12 md:grid-cols-2 items-center mb-16">
 					<div className="order-2 md:order-1">
 						<h2 className="font-bold text-3xl mb-6">
 							Watch How It Works
@@ -99,7 +99,7 @@ export function FaqSection() {
 							/>
 						</div>
 					</div>
-				</div>
+				</div> */}
 
 				<div className="mb-12 text-center">
 					<h2 className="font-bold text-4xl mb-4">
