@@ -25,6 +25,14 @@ export function useRootCategories(options: { enabled?: boolean } = {}) {
 		queryKey: categoryQueryKeys.roots(),
 		queryFn: () => categoryService.getRootCategories(),
 		staleTime: 5 * 60 * 1000, // 5 minutes
+		// Prevent refetching on window focus to reduce unnecessary API calls
+		refetchOnWindowFocus: false,
+		// Cache data for 10 minutes even when component unmounts
+		gcTime: 10 * 60 * 1000, // 10 minutes
+		// Retry failed requests only once
+		retry: 1,
+		// Don't refetch on reconnect unless data is stale
+		refetchOnReconnect: false,
 		...options,
 	});
 }
@@ -41,6 +49,14 @@ export function useCategoryBySlug(
 		queryFn: () => categoryService.getCategoryBySlug(slug!),
 		enabled: Boolean(slug) && (options.enabled ?? true),
 		staleTime: 5 * 60 * 1000, // 5 minutes
+		// Prevent refetching on window focus to reduce unnecessary API calls
+		refetchOnWindowFocus: false,
+		// Cache data for 10 minutes even when component unmounts
+		gcTime: 10 * 60 * 1000, // 10 minutes
+		// Retry failed requests only once
+		retry: 1,
+		// Don't refetch on reconnect unless data is stale
+		refetchOnReconnect: false,
 	});
 }
 
@@ -56,7 +72,15 @@ export function useCategoriesBySlug(
 			queryKey: categoryQueryKeys.bySlug(slug),
 			queryFn: () => categoryService.getCategoryBySlug(slug),
 			enabled: Boolean(slug) && (options.enabled ?? true),
-			staleTime: 5 * 60 * 1000,
+			staleTime: 5 * 60 * 1000, // 5 minutes
+			// Prevent refetching on window focus to reduce unnecessary API calls
+			refetchOnWindowFocus: false,
+			// Cache data for 10 minutes even when component unmounts
+			gcTime: 10 * 60 * 1000, // 10 minutes
+			// Retry failed requests only once
+			retry: 1,
+			// Don't refetch on reconnect unless data is stale
+			refetchOnReconnect: false,
 		})),
 	});
 }
@@ -72,7 +96,15 @@ export function useCategoryPath(
 		queryKey: categoryQueryKeys.path(slug || ""),
 		queryFn: () => categoryService.getCategoryPath(slug!),
 		enabled: Boolean(slug) && (options.enabled ?? true),
-		staleTime: 5 * 60 * 1000,
+		staleTime: 5 * 60 * 1000, // 5 minutes
+		// Prevent refetching on window focus to reduce unnecessary API calls
+		refetchOnWindowFocus: false,
+		// Cache data for 10 minutes even when component unmounts
+		gcTime: 10 * 60 * 1000, // 10 minutes
+		// Retry failed requests only once
+		retry: 1,
+		// Don't refetch on reconnect unless data is stale
+		refetchOnReconnect: false,
 	});
 }
 
@@ -88,6 +120,14 @@ export function useCategoryAttributes(
 		queryFn: () =>
 			categoryService.getAttributesForCategories(categorySlugs),
 		enabled: categorySlugs.length > 0 && (options.enabled ?? true),
-		staleTime: 5 * 60 * 1000,
+		staleTime: 5 * 60 * 1000, // 5 minutes
+		// Prevent refetching on window focus to reduce unnecessary API calls
+		refetchOnWindowFocus: false,
+		// Cache data for 10 minutes even when component unmounts
+		gcTime: 10 * 60 * 1000, // 10 minutes
+		// Retry failed requests only once
+		retry: 1,
+		// Don't refetch on reconnect unless data is stale
+		refetchOnReconnect: false,
 	});
 }

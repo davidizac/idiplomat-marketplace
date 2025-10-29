@@ -51,6 +51,16 @@ export function useCategories(
 		queryKey: [CATEGORIES_KEY, createStableQueryKey(enhancedParams)],
 		queryFn: () => categoryService.getCategories(enhancedParams),
 		enabled,
+		// Prevent refetching on window focus to reduce unnecessary API calls
+		refetchOnWindowFocus: false,
+		// Keep data fresh for 5 minutes since categories don't change often
+		staleTime: 5 * 60 * 1000, // 5 minutes
+		// Cache data for 10 minutes even when component unmounts
+		gcTime: 10 * 60 * 1000, // 10 minutes (formerly cacheTime)
+		// Retry failed requests only once
+		retry: 1,
+		// Don't refetch on reconnect unless data is stale
+		refetchOnReconnect: false,
 	});
 }
 
@@ -75,6 +85,16 @@ export function useCategoryBySlug(slug: string | undefined, enabled = true) {
 			return result;
 		},
 		enabled: Boolean(slug) && enabled,
+		// Prevent refetching on window focus to reduce unnecessary API calls
+		refetchOnWindowFocus: false,
+		// Keep data fresh for 5 minutes since categories don't change often
+		staleTime: 5 * 60 * 1000, // 5 minutes
+		// Cache data for 10 minutes even when component unmounts
+		gcTime: 10 * 60 * 1000, // 10 minutes (formerly cacheTime)
+		// Retry failed requests only once
+		retry: 1,
+		// Don't refetch on reconnect unless data is stale
+		refetchOnReconnect: false,
 	});
 }
 
