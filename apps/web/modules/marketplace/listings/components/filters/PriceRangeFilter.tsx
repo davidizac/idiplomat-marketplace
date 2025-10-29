@@ -25,7 +25,7 @@ export function PriceRangeFilter({
 	const isInitialMount = useRef(true);
 	// Keep the ref updated with the latest callback to avoid dependency issues
 	const onChangeRef = useRef(onChange);
-	
+
 	// Store the last committed values to detect external changes
 	const lastCommittedRef = useRef<[number, number]>(initialRange);
 
@@ -43,7 +43,7 @@ export function PriceRangeFilter({
 	useEffect(() => {
 		const [newMin, newMax] = initialRange;
 		const [lastMin, lastMax] = lastCommittedRef.current;
-		
+
 		// Only update if the values have changed externally
 		if (newMin !== lastMin || newMax !== lastMax) {
 			setMinInput(String(newMin));
@@ -68,12 +68,18 @@ export function PriceRangeFilter({
 			// Debounce the onChange call
 			const timer = setTimeout(() => {
 				// Constrain values before sending
-				const constrainedMin = Math.max(minPrice, Math.min(minValue, maxValue));
-				const constrainedMax = Math.min(maxPrice, Math.max(maxValue, minValue));
-				
+				const constrainedMin = Math.max(
+					minPrice,
+					Math.min(minValue, maxValue),
+				);
+				const constrainedMax = Math.min(
+					maxPrice,
+					Math.max(maxValue, minValue),
+				);
+
 				// Update the last committed values
 				lastCommittedRef.current = [constrainedMin, constrainedMax];
-				
+
 				onChangeRef.current([constrainedMin, constrainedMax]);
 			}, 500);
 
@@ -107,7 +113,10 @@ export function PriceRangeFilter({
 		// On blur, ensure we have a valid value
 		const value = minInput === "" ? minPrice : Number.parseInt(minInput);
 		if (!Number.isNaN(value)) {
-			const constrainedValue = Math.max(minPrice, Math.min(value, Number.parseInt(maxInput) || maxPrice));
+			const constrainedValue = Math.max(
+				minPrice,
+				Math.min(value, Number.parseInt(maxInput) || maxPrice),
+			);
 			setMinInput(String(constrainedValue));
 		} else {
 			setMinInput(String(minPrice));
@@ -118,7 +127,10 @@ export function PriceRangeFilter({
 		// On blur, ensure we have a valid value
 		const value = maxInput === "" ? maxPrice : Number.parseInt(maxInput);
 		if (!Number.isNaN(value)) {
-			const constrainedValue = Math.min(maxPrice, Math.max(value, Number.parseInt(minInput) || minPrice));
+			const constrainedValue = Math.min(
+				maxPrice,
+				Math.max(value, Number.parseInt(minInput) || minPrice),
+			);
 			setMaxInput(String(constrainedValue));
 		} else {
 			setMaxInput(String(maxPrice));
