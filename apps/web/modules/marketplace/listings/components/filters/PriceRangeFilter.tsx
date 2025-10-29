@@ -25,62 +25,105 @@ export function PriceRangeFilter({
 	const isInitialMount = useRef(true);
 	// Keep the ref updated with the latest callback to avoid dependency issues
 	const onChangeRef = useRef(onChange);
+	
+	// Store the last committed values to detect external changes
+	const lastCommittedRef = useRef<[number, number]>(initialRange);
 
-	// Set state from props
-	const [minValue, setMinValue] = useState<number>(initialRange[0]);
-	const [maxValue, setMaxValue] = useState<number>(initialRange[1]);
+	// Store input values as strings to allow partial input
+	const [minInput, setMinInput] = useState<string>(String(initialRange[0]));
+	const [maxInput, setMaxInput] = useState<string>(String(initialRange[1]));
 
 	// Keep the ref updated
 	useEffect(() => {
 		onChangeRef.current = onChange;
 	}, [onChange]);
 
-	// Update local state when props change
+	// Only update local state when initialRange changes from an external source
+	// (not from our own onChange callback)
 	useEffect(() => {
-		setMinValue(initialRange[0]);
-		setMaxValue(initialRange[1]);
+		const [newMin, newMax] = initialRange;
+		const [lastMin, lastMax] = lastCommittedRef.current;
+		
+		// Only update if the values have changed externally
+		if (newMin !== lastMin || newMax !== lastMax) {
+			setMinInput(String(newMin));
+			setMaxInput(String(newMax));
+			lastCommittedRef.current = initialRange;
+		}
 	}, [initialRange]);
 
-	// Only call onChange when values actually change, and not on first render
+	// Debounced onChange effect
 	useEffect(() => {
 		if (isInitialMount.current) {
 			isInitialMount.current = false;
 			return;
 		}
 
-		// Debounce the onChange call
-		const timer = setTimeout(() => {
-			onChangeRef.current([minValue, maxValue]);
-		}, 300);
+		// Parse the current input values
+		const minValue = minInput === "" ? minPrice : Number.parseInt(minInput);
+		const maxValue = maxInput === "" ? maxPrice : Number.parseInt(maxInput);
 
-		return () => clearTimeout(timer);
-	}, [minValue, maxValue]); // Removed onChange from dependencies
+		// Only call onChange if both values are valid numbers
+		if (!Number.isNaN(minValue) && !Number.isNaN(maxValue)) {
+			// Debounce the onChange call
+			const timer = setTimeout(() => {
+				// Constrain values before sending
+				const constrainedMin = Math.max(minPrice, Math.min(minValue, maxValue));
+				const constrainedMax = Math.min(maxPrice, Math.max(maxValue, minValue));
+				
+				// Update the last committed values
+				lastCommittedRef.current = [constrainedMin, constrainedMax];
+				
+				onChangeRef.current([constrainedMin, constrainedMax]);
+			}, 500);
+
+			return () => clearTimeout(timer);
+		}
+	}, [minInput, maxInput, minPrice, maxPrice]);
 
 	const handleMinChange = useCallback(
 		(e: React.ChangeEvent<HTMLInputElement>) => {
-			const value =
-				e.target.value === "" ? 0 : Number.parseInt(e.target.value);
-			if (!Number.isNaN(value)) {
-				// Ensure min doesn't exceed max and stays within bounds
-				setMinValue(Math.max(minPrice, Math.min(value, maxValue)));
+			const value = e.target.value;
+			// Allow empty string or valid number input
+			if (value === "" || /^\d+$/.test(value)) {
+				setMinInput(value);
 			}
 		},
-		[maxValue, minPrice],
+		[],
 	);
 
 	const handleMaxChange = useCallback(
 		(e: React.ChangeEvent<HTMLInputElement>) => {
-			const value =
-				e.target.value === ""
-					? maxPrice
-					: Number.parseInt(e.target.value);
-			if (!Number.isNaN(value)) {
-				// Ensure max doesn't go below min and stays within bounds
-				setMaxValue(Math.min(maxPrice, Math.max(value, minValue)));
+			const value = e.target.value;
+			// Allow empty string or valid number input
+			if (value === "" || /^\d+$/.test(value)) {
+				setMaxInput(value);
 			}
 		},
-		[minValue, maxPrice],
+		[],
 	);
+
+	const handleMinBlur = useCallback(() => {
+		// On blur, ensure we have a valid value
+		const value = minInput === "" ? minPrice : Number.parseInt(minInput);
+		if (!Number.isNaN(value)) {
+			const constrainedValue = Math.max(minPrice, Math.min(value, Number.parseInt(maxInput) || maxPrice));
+			setMinInput(String(constrainedValue));
+		} else {
+			setMinInput(String(minPrice));
+		}
+	}, [minInput, maxInput, minPrice, maxPrice]);
+
+	const handleMaxBlur = useCallback(() => {
+		// On blur, ensure we have a valid value
+		const value = maxInput === "" ? maxPrice : Number.parseInt(maxInput);
+		if (!Number.isNaN(value)) {
+			const constrainedValue = Math.min(maxPrice, Math.max(value, Number.parseInt(minInput) || minPrice));
+			setMaxInput(String(constrainedValue));
+		} else {
+			setMaxInput(String(maxPrice));
+		}
+	}, [minInput, maxInput, minPrice, maxPrice]);
 
 	return (
 		<div className="space-y-2">
@@ -96,8 +139,9 @@ export function PriceRangeFilter({
 							type="number"
 							placeholder="Min"
 							className="pl-8 h-10"
-							value={minValue || ""}
+							value={minInput}
 							onChange={handleMinChange}
+							onBlur={handleMinBlur}
 							min={minPrice}
 							max={maxPrice}
 							aria-label="Minimum price"
@@ -115,8 +159,9 @@ export function PriceRangeFilter({
 							type="number"
 							placeholder="Max"
 							className="pl-8 h-10"
-							value={maxValue || ""}
+							value={maxInput}
 							onChange={handleMaxChange}
+							onBlur={handleMaxBlur}
 							min={minPrice}
 							max={maxPrice}
 							aria-label="Maximum price"
