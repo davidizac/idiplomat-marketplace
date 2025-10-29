@@ -23,10 +23,17 @@ export function PriceRangeFilter({
 }: PriceRangeFilterProps) {
 	// Track if this is the first render
 	const isInitialMount = useRef(true);
+	// Keep the ref updated with the latest callback to avoid dependency issues
+	const onChangeRef = useRef(onChange);
 
 	// Set state from props
 	const [minValue, setMinValue] = useState<number>(initialRange[0]);
 	const [maxValue, setMaxValue] = useState<number>(initialRange[1]);
+
+	// Keep the ref updated
+	useEffect(() => {
+		onChangeRef.current = onChange;
+	}, [onChange]);
 
 	// Update local state when props change
 	useEffect(() => {
@@ -43,11 +50,11 @@ export function PriceRangeFilter({
 
 		// Debounce the onChange call
 		const timer = setTimeout(() => {
-			onChange([minValue, maxValue]);
+			onChangeRef.current([minValue, maxValue]);
 		}, 300);
 
 		return () => clearTimeout(timer);
-	}, [minValue, maxValue, onChange]);
+	}, [minValue, maxValue]); // Removed onChange from dependencies
 
 	const handleMinChange = useCallback(
 		(e: React.ChangeEvent<HTMLInputElement>) => {
