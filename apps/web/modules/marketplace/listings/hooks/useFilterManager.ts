@@ -156,6 +156,18 @@ export function useFilterManager(initialFilters?: {
 	// Handler for updating subcategory
 	const updateSubcategory = useCallback(
 		(subcategorySlug: string | null) => {
+			console.log(
+				"[useFilterManager] updateSubcategory called:",
+				JSON.stringify(
+					{
+						subcategorySlug,
+						timestamp: new Date().toISOString(),
+					},
+					null,
+					2,
+				),
+			);
+			console.log("Stack trace:", new Error().stack);
 			filterManager.setSubcategoryFilter(subcategorySlug);
 			setFilterVersion((v) => v + 1);
 		},
@@ -165,6 +177,18 @@ export function useFilterManager(initialFilters?: {
 	// Handler for updating subcategories
 	const updateSubcategories = useCallback(
 		(subcategorySlugs: string[] | null) => {
+			console.log(
+				"[useFilterManager] updateSubcategories called:",
+				JSON.stringify(
+					{
+						subcategorySlugs,
+						timestamp: new Date().toISOString(),
+					},
+					null,
+					2,
+				),
+			);
+			console.log("Stack trace:", new Error().stack);
 			filterManager.setSubcategoriesFilter(subcategorySlugs);
 			setFilterVersion((v) => v + 1);
 		},
@@ -237,6 +261,17 @@ export function useFilterManager(initialFilters?: {
 
 	// Handler for clearing all filters
 	const clearAllFilters = useCallback(() => {
+		console.log(
+			"[useFilterManager] clearAllFilters called:",
+			JSON.stringify(
+				{
+					timestamp: new Date().toISOString(),
+				},
+				null,
+				2,
+			),
+		);
+		console.log("Stack trace:", new Error().stack);
 		filterManager.clearFilters();
 		setFilterVersion((v) => v + 1);
 	}, [filterManager]);
