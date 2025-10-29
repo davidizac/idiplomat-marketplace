@@ -124,22 +124,33 @@ export function useListings(
 	// Create a stable query key by filtering out Next.js internal parameters
 	const stableParams = createStableQueryKey(restParams);
 
-	console.log("[useListings] Hook called:", {
-		timestamp: new Date().toISOString(),
-		params: restParams,
-		stableParams,
-		queryKey: [LISTINGS_KEY, stableParams],
-	});
+	console.log(
+		"[useListings] Hook called:",
+		JSON.stringify(
+			{
+				timestamp: new Date().toISOString(),
+				params: restParams,
+				stableParams,
+				queryKey: [LISTINGS_KEY, stableParams],
+			},
+			null,
+			2,
+		),
+	);
 
 	return useQuery({
 		queryKey: [LISTINGS_KEY, stableParams],
 		queryFn: () => {
 			console.log(
 				"[useListings] queryFn executing - FETCHING DATA FROM API",
-				{
-					timestamp: new Date().toISOString(),
-					params: restParams,
-				},
+				JSON.stringify(
+					{
+						timestamp: new Date().toISOString(),
+						params: restParams,
+					},
+					null,
+					2,
+				),
 			);
 			return listingService.getListings(restParams);
 		},

@@ -87,6 +87,20 @@ export function useFilterManager(initialFilters?: {
 			attributeName: string,
 			value: AttributeValue,
 		) => {
+			console.log(
+				"[useFilterManager] updateAttributeFilter called:",
+				JSON.stringify(
+					{
+						attributeDocumentId,
+						attributeName,
+						value,
+						timestamp: new Date().toISOString(),
+					},
+					null,
+					2,
+				),
+			);
+			console.log("Stack trace:", new Error().stack);
 			filterManager.addAttributeFilter(
 				attributeDocumentId,
 				attributeName,
@@ -100,6 +114,18 @@ export function useFilterManager(initialFilters?: {
 	// Handler for updating sort option
 	const updateSort = useCallback(
 		(sortOption: SortOption) => {
+			console.log(
+				"[useFilterManager] updateSort called:",
+				JSON.stringify(
+					{
+						sortOption,
+						timestamp: new Date().toISOString(),
+					},
+					null,
+					2,
+				),
+			);
+			console.log("Stack trace:", new Error().stack);
 			filterManager.setSortFilter(sortOption);
 			setFilterVersion((v) => v + 1);
 		},
@@ -109,6 +135,18 @@ export function useFilterManager(initialFilters?: {
 	// Handler for updating category
 	const updateCategory = useCallback(
 		(categorySlug: string | null) => {
+			console.log(
+				"[useFilterManager] updateCategory called:",
+				JSON.stringify(
+					{
+						categorySlug,
+						timestamp: new Date().toISOString(),
+					},
+					null,
+					2,
+				),
+			);
+			console.log("Stack trace:", new Error().stack);
 			filterManager.setCategoryFilter(categorySlug);
 			setFilterVersion((v) => v + 1);
 		},
@@ -136,6 +174,19 @@ export function useFilterManager(initialFilters?: {
 	// Handler for updating price range
 	const updatePriceRange = useCallback(
 		(min: number | null, max: number | null) => {
+			console.log(
+				"[useFilterManager] updatePriceRange called:",
+				JSON.stringify(
+					{
+						min,
+						max,
+						timestamp: new Date().toISOString(),
+					},
+					null,
+					2,
+				),
+			);
+			console.log("Stack trace:", new Error().stack);
 			filterManager.setPriceRangeFilter(min, max);
 			setFilterVersion((v) => v + 1);
 		},
@@ -145,6 +196,18 @@ export function useFilterManager(initialFilters?: {
 	// Handler for updating search term
 	const updateSearch = useCallback(
 		(searchTerm: string | null) => {
+			console.log(
+				"[useFilterManager] updateSearch called:",
+				JSON.stringify(
+					{
+						searchTerm,
+						timestamp: new Date().toISOString(),
+					},
+					null,
+					2,
+				),
+			);
+			console.log("Stack trace:", new Error().stack);
 			filterManager.setSearchFilter(searchTerm);
 			setFilterVersion((v) => v + 1);
 		},
@@ -154,6 +217,18 @@ export function useFilterManager(initialFilters?: {
 	// Handler for updating city filter
 	const updateAddress = useCallback(
 		(address: string | null) => {
+			console.log(
+				"[useFilterManager] updateAddress called:",
+				JSON.stringify(
+					{
+						address,
+						timestamp: new Date().toISOString(),
+					},
+					null,
+					2,
+				),
+			);
+			console.log("Stack trace:", new Error().stack);
 			filterManager.setAddressFilter(address);
 			setFilterVersion((v) => v + 1);
 		},
@@ -169,13 +244,20 @@ export function useFilterManager(initialFilters?: {
 	// Convert filters to Strapi query params - memoize to prevent unnecessary recalculations
 	const strapiQuery = useMemo(() => {
 		const query = toStrapiQuery(filterManager);
-		console.log("[useFilterManager] strapiQuery generated:", {
-			filterVersion,
-			query,
-			timestamp: new Date().toISOString(),
-		});
+		console.log(
+			"[useFilterManager] strapiQuery generated:",
+			JSON.stringify(
+				{
+					filterVersion,
+					query,
+					timestamp: new Date().toISOString(),
+				},
+				null,
+				2,
+			),
+		);
 		return query;
-	}, [filterVersion, filterManager]);
+	}, [filterVersion]); // filterManager is a stable reference from useState, no need to include it
 
 	return {
 		filterManager,

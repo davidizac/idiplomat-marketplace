@@ -19,9 +19,16 @@ import type { SortOption } from "../../../../modules/marketplace/listings/compon
 import { useFilterManager } from "../../../../modules/marketplace/listings/hooks/useFilterManager";
 
 export default function ListingsPage() {
-	console.log("[ListingsPage] Component rendering:", {
-		timestamp: new Date().toISOString(),
-	});
+	console.log(
+		"[ListingsPage] Component rendering:",
+		JSON.stringify(
+			{
+				timestamp: new Date().toISOString(),
+			},
+			null,
+			2,
+		),
+	);
 
 	const router = useLocaleRouter();
 	const searchParams = useSearchParams();
@@ -32,14 +39,21 @@ export default function ListingsPage() {
 	const minPriceQuery = searchParams.get("minPrice");
 	const maxPriceQuery = searchParams.get("maxPrice");
 
-	console.log("[ListingsPage] URL params:", {
-		searchQuery,
-		categorySlug,
-		subcategorySlug,
-		cityQuery,
-		minPriceQuery,
-		maxPriceQuery,
-	});
+	console.log(
+		"[ListingsPage] URL params:",
+		JSON.stringify(
+			{
+				searchQuery,
+				categorySlug,
+				subcategorySlug,
+				cityQuery,
+				minPriceQuery,
+				maxPriceQuery,
+			},
+			null,
+			2,
+		),
+	);
 
 	// Fetch category data if a category slug is present
 	const { data: categoryData } = useCategoryBySlug(categorySlug || undefined);
