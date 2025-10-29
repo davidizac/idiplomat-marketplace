@@ -22,6 +22,7 @@ export function SearchFilter({
 }: SearchFilterProps) {
 	const [searchValue, setSearchValue] = useState(value || "");
 	const onSearchRef = useRef(onSearch);
+	const isInitialMount = useRef(true);
 
 	// Keep the ref updated with the latest callback
 	useEffect(() => {
@@ -30,6 +31,12 @@ export function SearchFilter({
 
 	// Debounced search effect - removed onSearch from dependencies to prevent infinite loop
 	useEffect(() => {
+		// Skip calling onSearch on initial mount to prevent unnecessary filter updates
+		if (isInitialMount.current) {
+			isInitialMount.current = false;
+			return;
+		}
+
 		const timeoutId = setTimeout(() => {
 			if (onSearchRef.current) {
 				onSearchRef.current(
