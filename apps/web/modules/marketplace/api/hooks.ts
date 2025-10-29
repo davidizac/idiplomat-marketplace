@@ -124,9 +124,25 @@ export function useListings(
 	// Create a stable query key by filtering out Next.js internal parameters
 	const stableParams = createStableQueryKey(restParams);
 
+	console.log("[useListings] Hook called:", {
+		timestamp: new Date().toISOString(),
+		params: restParams,
+		stableParams,
+		queryKey: [LISTINGS_KEY, stableParams],
+	});
+
 	return useQuery({
 		queryKey: [LISTINGS_KEY, stableParams],
-		queryFn: () => listingService.getListings(restParams),
+		queryFn: () => {
+			console.log(
+				"[useListings] queryFn executing - FETCHING DATA FROM API",
+				{
+					timestamp: new Date().toISOString(),
+					params: restParams,
+				},
+			);
+			return listingService.getListings(restParams);
+		},
 		enabled,
 		// Prevent refetching on window focus to reduce unnecessary API calls
 		refetchOnWindowFocus: false,
@@ -137,6 +153,6 @@ export function useListings(
 		// Retry failed requests only once
 		retry: 1,
 		// Don't refetch on reconnect unless data is stale
-		refetchOnReconnect: "always",
+		refetchOnReconnect: false,
 	});
 }

@@ -167,10 +167,15 @@ export function useFilterManager(initialFilters?: {
 	}, [filterManager]);
 
 	// Convert filters to Strapi query params - memoize to prevent unnecessary recalculations
-	const strapiQuery = useMemo(
-		() => toStrapiQuery(filterManager),
-		[filterVersion],
-	);
+	const strapiQuery = useMemo(() => {
+		const query = toStrapiQuery(filterManager);
+		console.log("[useFilterManager] strapiQuery generated:", {
+			filterVersion,
+			query,
+			timestamp: new Date().toISOString(),
+		});
+		return query;
+	}, [filterVersion, filterManager]);
 
 	return {
 		filterManager,
