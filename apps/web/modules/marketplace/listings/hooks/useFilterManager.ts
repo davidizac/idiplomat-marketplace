@@ -20,8 +20,14 @@ export function useFilterManager(initialFilters?: {
 	priceRange?: { min: number; max: number } | null;
 	attributeValues?: Record<string, AttributeValue>;
 }) {
+	console.log(
+		"[useFilterManager] Hook called with initialFilters:",
+		JSON.stringify(initialFilters, null, 2),
+	);
+
 	// Create filter manager instance with initial filters applied
 	const [filterManager] = useState(() => {
+		console.log("[useFilterManager] Creating new FilterManager instance");
 		const manager = new FilterManager();
 
 		// Apply initial filters immediately during creation
@@ -79,6 +85,8 @@ export function useFilterManager(initialFilters?: {
 
 	// State to track when filters change
 	const [filterVersion, setFilterVersion] = useState(0);
+
+	console.log("[useFilterManager] Current filterVersion:", filterVersion);
 
 	// Handler for updating an attribute filter
 	const updateAttributeFilter = useCallback(
