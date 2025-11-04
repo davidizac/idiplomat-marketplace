@@ -65,6 +65,13 @@ export interface AttributesManagerProps {
 	getAttributeValue?: (attributeDocumentId: string) => AttributeValue;
 }
 
+// Interface to group attributes by category
+interface AttributeGroup {
+	categoryName: string;
+	categoryLevel: number;
+	attributes: Attribute[];
+}
+
 export function AttributesManager({
 	selectedCategories,
 	values = {},
@@ -75,46 +82,60 @@ export function AttributesManager({
 	onUpdateAttributes,
 	getAttributeValue,
 }: AttributesManagerProps) {
-	// State to store all attributes from selected categories
-	const [attributes, setAttributes] = useState<Attribute[]>([]);
+	// State to store grouped attributes from selected categories
+	const [attributeGroups, setAttributeGroups] = useState<AttributeGroup[]>([]);
 	// State to track if we're loading attributes
 	const [isLoading, setIsLoading] = useState(false);
 	// State to store attribute values for form use
 	const [attributeValues, setAttributeValues] = useState<AttributeData[]>([]);
 
-	// Fetch and combine attributes from all selected categories
+	// Fetch and group attributes from all selected categories
 	useEffect(() => {
 		const fetchCategoryAttributes = async () => {
 			if (!selectedCategories.length) {
-				setAttributes([]);
+				setAttributeGroups([]);
 				return;
 			}
 
 			setIsLoading(true);
 
 			try {
-				// Create a map to deduplicate attributes by ID
-				const attrMap = new Map<string, Attribute>();
+				const groups: AttributeGroup[] = [];
+				const seenAttributeIds = new Set<string>();
 
-				// Fetch each category's attributes
+				// Fetch each category's attributes and group them
 				for (const category of selectedCategories) {
 					const categoryDetails =
 						await categoryService.getCategoryBySlug(category.slug);
 
 					if (
 						categoryDetails.attributes &&
-						Array.isArray(categoryDetails.attributes)
+						Array.isArray(categoryDetails.attributes) &&
+						categoryDetails.attributes.length > 0
 					) {
-						// Add attributes to the map, avoiding duplicates
-						categoryDetails.attributes.forEach((attr) => {
-							attrMap.set(attr.documentId, attr);
-						});
+						// Filter out attributes we've already seen to avoid duplicates
+						const uniqueAttributes = categoryDetails.attributes.filter(
+							(attr) => {
+								if (seenAttributeIds.has(attr.documentId)) {
+									return false;
+								}
+								seenAttributeIds.add(attr.documentId);
+								return true;
+							}
+						);
+
+						// Only create a group if there are unique attributes
+						if (uniqueAttributes.length > 0) {
+							groups.push({
+								categoryName: category.name,
+								categoryLevel: category.level,
+								attributes: uniqueAttributes,
+							});
+						}
 					}
 				}
 
-				// Convert map back to array
-				const combinedAttributes = Array.from(attrMap.values());
-				setAttributes(combinedAttributes);
+				setAttributeGroups(groups);
 			} catch (error) {
 				console.error("Error fetching category attributes:", error);
 			} finally {
@@ -127,11 +148,18 @@ export function AttributesManager({
 
 	// Initialize attribute values for form use while avoiding unnecessary state churn
 	useEffect(() => {
-		if (isFilter || attributes.length === 0) {
+		if (isFilter) {
 			return;
 		}
 
-		const newAttributeValues = attributes.map((attr) => {
+		// Flatten all attributes from all groups
+		const allAttributes = attributeGroups.flatMap((group) => group.attributes);
+
+		if (allAttributes.length === 0) {
+			return;
+		}
+
+		const newAttributeValues = allAttributes.map((attr) => {
 			const existingValue = attributeValues.find(
 				(av) => av.attributeDocumentId === attr.documentId,
 			);
@@ -182,7 +210,7 @@ export function AttributesManager({
 		// We intentionally omit onUpdateAttributes to avoid cycles when the parent updates
 		// as a result of the callback that is triggered here.
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [attributes, values, isFilter]);
+	}, [attributeGroups, values, isFilter]);
 
 	// Helper to get default value based on attribute type
 	const getDefaultValue = (type: string): AttributeValue => {
@@ -210,9 +238,15 @@ export function AttributesManager({
 	) => {
 		if (isFilter) {
 			// For filter use, call the onChange callback directly
-			const attribute = attributes.find(
-				(attr) => attr.documentId === attributeDocumentId,
-			);
+			// Find attribute in any of the groups
+			let attribute: Attribute | undefined;
+			for (const group of attributeGroups) {
+				attribute = group.attributes.find(
+					(attr) => attr.documentId === attributeDocumentId,
+				);
+				if (attribute) break;
+			}
+			
 			if (attribute && onChange) {
 				onChange(attributeDocumentId, attribute.name, value);
 			}
@@ -249,13 +283,13 @@ export function AttributesManager({
 		return attr ? attr.value : null;
 	};
 
-	// If no attributes or no categories selected, don't render anything
-	if (attributes.length === 0 || selectedCategories.length === 0) {
+	// If no attribute groups or no categories selected, don't render anything
+	if (attributeGroups.length === 0 || selectedCategories.length === 0) {
 		return null;
 	}
 
 	return (
-		<div className={`space-y-4 ${className}`}>
+		<div className={`space-y-6 ${className}`}>
 			{isLoading ? (
 				<div className="animate-pulse space-y-4">
 					<div className="h-4 bg-gray-200 rounded w-1/4" />
@@ -263,47 +297,63 @@ export function AttributesManager({
 					<div className="h-10 bg-gray-200 rounded" />
 				</div>
 			) : (
-				<div className="space-y-4">
-					{attributes.length > 0 && (
-						<>
-							{!isFilter && (
-								<h3 className="text-sm font-medium">
-									Additional Details
-								</h3>
+				<div className="space-y-6">
+					{!isFilter && (
+						<h3 className="text-sm font-medium">
+							Additional Details
+						</h3>
+					)}
+
+					{attributeGroups.map((group, groupIndex) => (
+						<div key={groupIndex} className="space-y-4">
+							{/* Category header - only show if there are multiple groups or if it's a subcategory */}
+							{(attributeGroups.length > 1 || group.categoryLevel > 0) && (
+								<div className="border-b pb-2">
+									<h4 className={`font-medium ${
+										group.categoryLevel === 0 
+											? "text-base" 
+											: "text-sm text-muted-foreground"
+									}`}>
+										{group.categoryName}
+									</h4>
+								</div>
 							)}
 
-							{attributes.map((attribute) => (
-								<div
-									key={attribute.documentId}
-									className="space-y-1"
-								>
-									<AttributeFilter
-										attribute={attribute}
-										value={getValue(attribute.documentId)}
-										onChange={(
-											attributeDocumentId,
-											value,
-										) =>
-											handleAttributeChange(
+							{/* Attributes for this category */}
+							<div className="space-y-4">
+								{group.attributes.map((attribute) => (
+									<div
+										key={attribute.documentId}
+										className="space-y-1"
+									>
+										<AttributeFilter
+											attribute={attribute}
+											value={getValue(attribute.documentId)}
+											onChange={(
 												attributeDocumentId,
 												value,
-											)
-										}
-									/>
-									{!isFilter &&
-										errors[`attribute-${attribute.id}`] && (
-											<p className="text-sm text-destructive">
-												{
-													errors[
-														`attribute-${attribute.id}`
-													]
-												}
-											</p>
-										)}
-								</div>
-							))}
-						</>
-					)}
+											) =>
+												handleAttributeChange(
+													attributeDocumentId,
+													value,
+												)
+											}
+										/>
+										{!isFilter &&
+											errors[`attribute-${attribute.id}`] && (
+												<p className="text-sm text-destructive">
+													{
+														errors[
+															`attribute-${attribute.id}`
+														]
+													}
+												</p>
+											)}
+									</div>
+								))}
+							</div>
+						</div>
+					))}
 				</div>
 			)}
 		</div>
