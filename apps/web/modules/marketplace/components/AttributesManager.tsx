@@ -83,7 +83,9 @@ export function AttributesManager({
 	getAttributeValue,
 }: AttributesManagerProps) {
 	// State to store grouped attributes from selected categories
-	const [attributeGroups, setAttributeGroups] = useState<AttributeGroup[]>([]);
+	const [attributeGroups, setAttributeGroups] = useState<AttributeGroup[]>(
+		[],
+	);
 	// State to track if we're loading attributes
 	const [isLoading, setIsLoading] = useState(false);
 	// State to store attribute values for form use
@@ -114,15 +116,14 @@ export function AttributesManager({
 						categoryDetails.attributes.length > 0
 					) {
 						// Filter out attributes we've already seen to avoid duplicates
-						const uniqueAttributes = categoryDetails.attributes.filter(
-							(attr) => {
+						const uniqueAttributes =
+							categoryDetails.attributes.filter((attr) => {
 								if (seenAttributeIds.has(attr.documentId)) {
 									return false;
 								}
 								seenAttributeIds.add(attr.documentId);
 								return true;
-							}
-						);
+							});
 
 						// Only create a group if there are unique attributes
 						if (uniqueAttributes.length > 0) {
@@ -153,7 +154,9 @@ export function AttributesManager({
 		}
 
 		// Flatten all attributes from all groups
-		const allAttributes = attributeGroups.flatMap((group) => group.attributes);
+		const allAttributes = attributeGroups.flatMap(
+			(group) => group.attributes,
+		);
 
 		if (allAttributes.length === 0) {
 			return;
@@ -246,7 +249,7 @@ export function AttributesManager({
 				);
 				if (attribute) break;
 			}
-			
+
 			if (attribute && onChange) {
 				onChange(attributeDocumentId, attribute.name, value);
 			}
@@ -307,13 +310,16 @@ export function AttributesManager({
 					{attributeGroups.map((group, groupIndex) => (
 						<div key={groupIndex} className="space-y-4">
 							{/* Category header - only show if there are multiple groups or if it's a subcategory */}
-							{(attributeGroups.length > 1 || group.categoryLevel > 0) && (
+							{(attributeGroups.length > 1 ||
+								group.categoryLevel > 0) && (
 								<div className="border-b pb-2">
-									<h4 className={`font-medium ${
-										group.categoryLevel === 0 
-											? "text-base" 
-											: "text-sm text-muted-foreground"
-									}`}>
+									<h4
+										className={`font-medium ${
+											group.categoryLevel === 0
+												? "text-base"
+												: "text-sm text-muted-foreground"
+										}`}
+									>
 										{group.categoryName}
 									</h4>
 								</div>
@@ -328,7 +334,9 @@ export function AttributesManager({
 									>
 										<AttributeFilter
 											attribute={attribute}
-											value={getValue(attribute.documentId)}
+											value={getValue(
+												attribute.documentId,
+											)}
 											onChange={(
 												attributeDocumentId,
 												value,
@@ -340,7 +348,9 @@ export function AttributesManager({
 											}
 										/>
 										{!isFilter &&
-											errors[`attribute-${attribute.id}`] && (
+											errors[
+												`attribute-${attribute.id}`
+											] && (
 												<p className="text-sm text-destructive">
 													{
 														errors[
