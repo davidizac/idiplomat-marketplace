@@ -10,14 +10,14 @@
 		"zod": "^3.24.3"
 	},
 	"devDependencies": {
-		"@biomejs/biome": "1.9.4",
+		"@biomejs/biome": "2.3.3",
 		"@repo/tsconfig": "workspace:*",
-		"@types/node": "22.15.14",
-		"dotenv-cli": "^8.0.0",
-		"drizzle-kit": "^0.31.1",
-		"prisma": "^6.7.0",
-		"prisma-json-types-generator": "^3.3.1",
-		"zod-prisma-types": "^3.2.4"
+		"@types/node": "24.10.0",
+		"dotenv-cli": "^11.0.0",
+		"drizzle-kit": "^0.31.6",
+		"prisma": "^6.18.0",
+		"prisma-json-types-generator": "^3.6.2",
+		"zod-prisma-types": "^3.3.5"
 	},
 	"main": "./index.ts",
 	"name": "@repo/database",
