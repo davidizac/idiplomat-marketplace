@@ -172,24 +172,26 @@ export function ListingsSidebar({
 
 				<Separator />
 
+				{/* Category Button Filter */}
+				<CategoryButtonFilter
+					selectedCategory={selectedCategory}
+					onSelectCategory={handleCategorySelect}
+				/>
+
 				{/* Dynamic attribute filters based on selected categories */}
 				{selectedCategories.length > 0 && (
 					<>
+						<Separator />
 						<AttributesManager
 							selectedCategories={selectedCategories}
 							isFilter={true}
 							getAttributeValue={getAttributeValue}
 							onChange={onUpdateAttributeFilter}
 						/>
-						<Separator />
 					</>
 				)}
 
-				{/* Category Button Filter */}
-				<CategoryButtonFilter
-					selectedCategory={selectedCategory}
-					onSelectCategory={handleCategorySelect}
-				/>
+				<Separator />
 
 				<div className="space-y-2 pt-2">
 					<Button
