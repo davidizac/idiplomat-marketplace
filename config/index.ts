@@ -13,9 +13,17 @@ export const config = {
 				currency: "ILS",
 				label: "English",
 			},
-			de: {
+			fr: {
 				currency: "ILS",
-				label: "Deutsch",
+				label: "Français",
+			},
+			es: {
+				currency: "ILS",
+				label: "Español",
+			},
+			ru: {
+				currency: "ILS",
+				label: "Русский",
 			},
 		},
 		// The default locale is used if no locale is provided
