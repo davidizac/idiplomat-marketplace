@@ -9,35 +9,13 @@ import {
 import { Button } from "@ui/components/button";
 import {} from "lucide-react";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 
-const faqItems = [
-	{
-		question: "Who can use the i-Diplomat Marketplace?",
-		answer: "The i-Diplomat Marketplace is exclusively available to verified members of the diplomatic community in Israel, including diplomats, embassy staff, and their families.",
-	},
-	{
-		question: "Is there a fee to list items on the marketplace?",
-		answer: "No, listing items on the i-Diplomat Marketplace is completely free for all verified diplomatic personnel.",
-	},
-	{
-		question: "How do I verify my diplomatic status?",
-		answer: "During registration, you'll be asked to provide your diplomatic credentials which our team will verify. This includes your diplomatic ID, embassy information, and contact details.",
-	},
-	{
-		question: "Can I sell duty-free items?",
-		answer: "Yes, as a diplomat, you can sell duty-free items to other diplomats following the regulations set by the Israeli Ministry of Foreign Affairs regarding diplomatic privileges.",
-	},
-	{
-		question: "How are payments handled?",
-		answer: "The i-Diplomat Marketplace is a platform for connecting buyers and sellers. Payments are arranged directly between the parties involved. We recommend secure payment methods and meeting in safe locations.",
-	},
-	{
-		question: "Can I list services as well as products?",
-		answer: "Yes, the marketplace supports listings for both physical products and services that may be valuable to the diplomatic community.",
-	},
-];
+const faqItemKeys = ["1", "2", "3", "4", "5", "6"] as const;
 
 export function FaqSection() {
+	const t = useTranslations("marketing.faq");
+
 	return (
 		<section id="faq" className="scroll-my-20 py-20 bg-muted/30">
 			<div className="container max-w-6xl">
@@ -103,23 +81,22 @@ export function FaqSection() {
 
 				<div className="mb-12 text-center">
 					<h2 className="font-bold text-4xl mb-4">
-						Frequently Asked Questions
+						{t("title")}
 					</h2>
 					<p className="text-lg text-foreground/60 max-w-2xl mx-auto">
-						Got questions about the i-Diplomat Marketplace? We've
-						got answers to the most common questions.
+						{t("description")}
 					</p>
 				</div>
 
 				<div className="max-w-3xl mx-auto">
 					<Accordion type="single" collapsible className="w-full">
-						{faqItems.map((item, index) => (
-							<AccordionItem key={index} value={`item-${index}`}>
+						{faqItemKeys.map((key) => (
+							<AccordionItem key={key} value={`item-${key}`}>
 								<AccordionTrigger className="text-left font-medium">
-									{item.question}
+									{t(`items.q${key}`)}
 								</AccordionTrigger>
 								<AccordionContent className="text-foreground/70">
-									{item.answer}
+									{t(`items.a${key}`)}
 								</AccordionContent>
 							</AccordionItem>
 						))}
@@ -127,10 +104,10 @@ export function FaqSection() {
 
 					<div className="mt-8 text-center">
 						<p className="text-foreground/60 mb-4">
-							Still have questions? We're here to help.
+							{t("stillHaveQuestions")}
 						</p>
 						<Button variant="outline" asChild>
-							<Link href="/contact">Contact Support</Link>
+							<Link href="/contact">{t("contactSupport")}</Link>
 						</Button>
 					</div>
 				</div>

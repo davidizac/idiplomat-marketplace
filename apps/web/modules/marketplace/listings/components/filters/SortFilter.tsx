@@ -7,6 +7,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@ui/components/select";
+import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 
 export type SortOption = "newest" | "price-low-high" | "price-high-low";
@@ -16,13 +17,14 @@ interface SortFilterProps {
 	selectedSort: SortOption;
 }
 
-const sortOptions = [
-	{ id: "newest", name: "Newest First" },
-	{ id: "price-low-high", name: "Price: Low to High" },
-	{ id: "price-high-low", name: "Price: High to Low" },
-];
+const sortOptionKeys: Record<SortOption, string> = {
+	newest: "newestFirst",
+	"price-low-high": "priceLowHigh",
+	"price-high-low": "priceHighLow",
+};
 
 export function SortFilter({ onChange, selectedSort }: SortFilterProps) {
+	const t = useTranslations("marketplace.filters");
 	// Add local state to control the select
 	const [value, setValue] = useState<SortOption>(selectedSort);
 
@@ -42,12 +44,12 @@ export function SortFilter({ onChange, selectedSort }: SortFilterProps) {
 		<div className="w-full">
 			<Select value={value} onValueChange={handleValueChange}>
 				<SelectTrigger className="w-[200px]">
-					<SelectValue placeholder="Sort by" />
+					<SelectValue placeholder={t("sortBy")} />
 				</SelectTrigger>
 				<SelectContent>
-					{sortOptions.map((option) => (
-						<SelectItem key={option.id} value={option.id}>
-							{option.name}
+					{(Object.keys(sortOptionKeys) as SortOption[]).map((id) => (
+						<SelectItem key={id} value={id}>
+							{t(sortOptionKeys[id])}
 						</SelectItem>
 					))}
 				</SelectContent>

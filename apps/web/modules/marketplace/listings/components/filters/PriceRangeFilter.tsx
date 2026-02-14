@@ -2,6 +2,7 @@
 
 import { Input } from "@ui/components/input";
 import { Label } from "@ui/components/label";
+import { useTranslations } from "next-intl";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 interface PriceRangeFilterProps {
@@ -19,8 +20,10 @@ export function PriceRangeFilter({
 	maxPrice = 10000,
 	minPrice = 0,
 	currency = "₪",
-	label = "Price Range",
+	label,
 }: PriceRangeFilterProps) {
+	const t = useTranslations("marketplace.filters");
+	const resolvedLabel = label ?? t("priceRange");
 	// Track if this is the first render
 	const isInitialMount = useRef(true);
 	// Keep the ref updated with the latest callback to avoid dependency issues
@@ -139,7 +142,7 @@ export function PriceRangeFilter({
 
 	return (
 		<div className="space-y-2">
-			<Label className="text-sm font-medium">{label}</Label>
+			<Label className="text-sm font-medium">{resolvedLabel}</Label>
 			<div className="flex items-center gap-3">
 				<div className="flex-1">
 					<div className="relative">
@@ -149,7 +152,7 @@ export function PriceRangeFilter({
 						<Input
 							id="price-min"
 							type="number"
-							placeholder="Min"
+							placeholder={t("min")}
 							className="pl-8 h-10"
 							value={minInput}
 							onChange={handleMinChange}
@@ -160,7 +163,7 @@ export function PriceRangeFilter({
 						/>
 					</div>
 				</div>
-				<span className="text-muted-foreground text-sm">to</span>
+				<span className="text-muted-foreground text-sm">{t("to")}</span>
 				<div className="flex-1">
 					<div className="relative">
 						<span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm pointer-events-none">
@@ -169,7 +172,7 @@ export function PriceRangeFilter({
 						<Input
 							id="price-max"
 							type="number"
-							placeholder="Max"
+							placeholder={t("max")}
 							className="pl-8 h-10"
 							value={maxInput}
 							onChange={handleMaxChange}

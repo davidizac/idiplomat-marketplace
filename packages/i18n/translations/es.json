@@ -248,6 +248,122 @@
 			"menu": "Menú",
 			"postListing": "Publicar anuncio",
 			"searchPlaceholder": "Buscar anuncios..."
+		},
+		"hero": {
+			"title": "i-Diplomat Marketplace",
+			"description": "Un mercado de confianza exclusivamente para diplomáticos en Israel para comprar y vender artículos dentro de la comunidad diplomática.",
+			"browseListings": "Explorar anuncios",
+			"howItWorks": "Cómo funciona"
+		},
+		"features": {
+			"title": "Cómo funciona",
+			"description": "Una plataforma sencilla que conecta diplomáticos en Israel que quieren comprar y vender artículos",
+			"forDiplomatsOnly": "Solo para diplomáticos",
+			"forDiplomatsOnlyDesc": "i-Diplomat Marketplace es exclusivamente para la comunidad diplomática en Israel. Todos los miembros son verificados para garantizar un entorno de confianza.",
+			"directConnections": "Conexiones directas",
+			"directConnectionsDesc": "A diferencia de los mercados regulares, simplemente te ayudamos a encontrar y conectar con otros diplomáticos. Todas las comunicaciones y acuerdos se realizan directamente entre los miembros.",
+			"steps": {
+				"signUp": "Registrarse",
+				"signUpDesc": "Crea tu cuenta con tus credenciales diplomáticas",
+				"postItems": "Publicar artículos",
+				"postItemsDesc": "Publica lo que quieras vender con fotos y detalles",
+				"browseListings": "Explorar anuncios",
+				"browseListingsDesc": "Encuentra artículos de otros diplomáticos en Israel",
+				"connectDirectly": "Conectar directamente",
+				"connectDirectlyDesc": "Contacta a los vendedores a través de sus datos de contacto"
+			}
+		},
+		"faq": {
+			"title": "Preguntas frecuentes",
+			"description": "¿Tienes preguntas sobre i-Diplomat Marketplace? Aquí tenemos las respuestas a las preguntas más comunes.",
+			"stillHaveQuestions": "¿Aún tienes preguntas? Estamos aquí para ayudar.",
+			"contactSupport": "Contactar soporte",
+			"items": {
+				"q1": "¿Quién puede usar i-Diplomat Marketplace?",
+				"a1": "i-Diplomat Marketplace está disponible exclusivamente para miembros verificados de la comunidad diplomática en Israel, incluyendo diplomáticos, personal de embajadas y sus familias.",
+				"q2": "¿Hay algún costo para publicar artículos en el mercado?",
+				"a2": "No, publicar artículos en i-Diplomat Marketplace es completamente gratuito para todo el personal diplomático verificado.",
+				"q3": "¿Cómo verifico mi estatus diplomático?",
+				"a3": "Durante el registro, se te pedirá que proporciones tus credenciales diplomáticas que nuestro equipo verificará. Esto incluye tu identificación diplomática, información de la embajada y datos de contacto.",
+				"q4": "¿Puedo vender artículos libres de impuestos?",
+				"a4": "Sí, como diplomático, puedes vender artículos libres de impuestos a otros diplomáticos siguiendo las regulaciones establecidas por el Ministerio de Asuntos Exteriores de Israel sobre privilegios diplomáticos.",
+				"q5": "¿Cómo se manejan los pagos?",
+				"a5": "i-Diplomat Marketplace es una plataforma para conectar compradores y vendedores. Los pagos se organizan directamente entre las partes involucradas. Recomendamos métodos de pago seguros y reuniones en lugares seguros.",
+				"q6": "¿Puedo publicar servicios además de productos?",
+				"a6": "Sí, el mercado admite publicaciones tanto de productos físicos como de servicios que puedan ser valiosos para la comunidad diplomática."
+			}
+		},
+		"pricing": {
+			"featuredLocations": "Ubicaciones destacadas",
+			"israel": "Israel",
+			"viewListings": "Ver anuncios",
+			"exploreAllLocations": "Explorar todas las ubicaciones",
+			"wantToSell": "¿Quieres vender algo?",
+			"wantToSellDesc": "Como diplomático, puedes publicar fácilmente tus artículos en venta y conectar con compradores potenciales en la comunidad.",
+			"postListingNow": "Publicar un anuncio ahora",
+			"locations": {
+				"telAviv": "Tel Aviv",
+				"telAvivDesc": "Ciudad moderna con playas y vida nocturna",
+				"jerusalem": "Jerusalén",
+				"jerusalemDesc": "Centro histórico y cultural",
+				"herzliya": "Herzliya",
+				"herzliyaDesc": "Ciudad costera de lujo",
+				"beerSheva": "Beer Sheva",
+				"beerShevaDesc": "Puerta al desierto del Néguev"
+			}
+		},
+		"newsletter": {
+			"title": "Mantente actualizado",
+			"description": "Suscríbete para recibir las últimas actualizaciones y noticias de i-Diplomat Marketplace.",
+			"iframeTitle": "Suscripción al boletín"
+		},
+		"footer": {
+			"blog": "Blog"
+		}
+	},
+	"marketplace": {
+		"listings": {
+			"browseListings": "Explorar anuncios",
+			"free": "Gratis",
+			"priceNotSet": "Precio no establecido",
+			"loading": "Cargando anuncios...",
+			"listingCount": "{count} {count, plural, one {anuncio} other {anuncios}} encontrado(s)",
+			"errorTitle": "Error al cargar anuncios",
+			"errorDesc": "Hubo un problema al obtener los anuncios. Por favor, inténtalo de nuevo.",
+			"noResultsTitle": "No se encontraron anuncios",
+			"noResultsDesc": "Intenta ajustar tus filtros para encontrar lo que buscas.",
+			"moreFilters": "Más filtros",
+			"searchLocationMore": "Búsqueda, ubicación y más",
+			"listingsIn": "Anuncios en {city}",
+			"categoryListings": "Anuncios de {category}",
+			"categoryListingsIn": "Anuncios de {category} en {city}",
+			"searchResults": "Resultados de búsqueda: {query}",
+			"searchResultsIn": "Resultados de búsqueda: {query} en {city}"
+		},
+		"filters": {
+			"search": "Buscar",
+			"searchPlaceholder": "Buscar anuncios...",
+			"city": "Ciudad",
+			"selectCity": "Seleccionar una ciudad",
+			"searchCities": "Buscar ciudades...",
+			"allCities": "Todas las ciudades",
+			"noCitiesFound": "No se encontraron ciudades",
+			"priceRange": "Rango de precios",
+			"min": "Mín",
+			"to": "a",
+			"max": "Máx",
+			"sortBy": "Ordenar por",
+			"newestFirst": "Más recientes",
+			"priceLowHigh": "Precio: de menor a mayor",
+			"priceHighLow": "Precio: de mayor a menor",
+			"resetFilters": "Restablecer filtros",
+			"filters": "Filtros",
+			"applyFilters": "Aplicar filtros",
+			"clearAllFilters": "Borrar todos los filtros",
+			"categoryFilters": "Filtros de {category}",
+			"allCategories": "Todas las categorías",
+			"selectCategory": "Seleccionar categoría",
+			"tapToChange": "Toca para cambiar"
 		}
 	},
 	"mail": {

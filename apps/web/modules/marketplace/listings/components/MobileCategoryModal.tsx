@@ -22,6 +22,7 @@ import {
 	Sofa,
 } from "lucide-react";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 
 interface MobileCategoryModalProps {
 	isOpen: boolean;
@@ -55,6 +56,7 @@ export function MobileCategoryModal({
 	onSelectCategory,
 	onSelectSubcategory,
 }: MobileCategoryModalProps) {
+	const t = useTranslations("marketplace.filters");
 	const { data, isLoading } = useCategories({
 		pageSize: 100,
 	});
@@ -86,7 +88,7 @@ export function MobileCategoryModal({
 		<Dialog open={isOpen} onOpenChange={onOpenChange}>
 			<DialogContent className="max-w-md h-[85vh] p-0 flex flex-col">
 				<DialogHeader className="px-6 py-4 border-b">
-					<DialogTitle>Select Category</DialogTitle>
+					<DialogTitle>{t("selectCategory")}</DialogTitle>
 				</DialogHeader>
 
 				<div className="flex-1 overflow-y-auto px-6">
@@ -103,7 +105,7 @@ export function MobileCategoryModal({
 						>
 							<Boxes className="h-5 w-5 flex-shrink-0" />
 							<span className="flex-1 text-left font-medium">
-								All Categories
+								{t("allCategories")}
 							</span>
 							{!selectedCategory && (
 								<Check className="h-5 w-5 text-primary" />

@@ -8,6 +8,7 @@ import { useCategoryBySlug } from "@marketplace/api";
 import type { Category } from "@repo/cms";
 import { Button } from "@ui/components/button";
 import { SlidersHorizontal } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ListingsGrid } from "../../../../modules/marketplace/listings/components/ListingsGrid";
@@ -19,6 +20,7 @@ import type { SortOption } from "../../../../modules/marketplace/listings/compon
 import { useFilterManager } from "../../../../modules/marketplace/listings/hooks/useFilterManager";
 
 export default function ListingsPage() {
+	const t = useTranslations("marketplace.listings");
 	console.log(
 		"[ListingsPage] Component rendering:",
 		JSON.stringify(
@@ -237,14 +239,20 @@ export default function ListingsPage() {
 				<div className="container mx-auto px-4">
 					<h1 className="text-2xl md:text-3xl font-bold mb-6 md:mb-8">
 						{selectedSubcategory
-							? `${selectedSubcategory.name} Listings${cityQuery ? ` in ${cityQuery}` : ""}`
+							? cityQuery
+								? t("categoryListingsIn", { category: selectedSubcategory.name, city: cityQuery })
+								: t("categoryListings", { category: selectedSubcategory.name })
 							: selectedCategory
-								? `${selectedCategory.name} Listings${cityQuery ? ` in ${cityQuery}` : ""}`
+								? cityQuery
+									? t("categoryListingsIn", { category: selectedCategory.name, city: cityQuery })
+									: t("categoryListings", { category: selectedCategory.name })
 								: searchQuery
-									? `Search Results: ${searchQuery}${cityQuery ? ` in ${cityQuery}` : ""}`
+									? cityQuery
+										? t("searchResultsIn", { query: searchQuery, city: cityQuery })
+										: t("searchResults", { query: searchQuery })
 									: cityQuery
-										? `Listings in ${cityQuery}`
-										: "Browse Listings"}
+										? t("listingsIn", { city: cityQuery })
+										: t("browseListings")}
 					</h1>
 
 					<div className="flex flex-col lg:flex-row gap-6 lg:gap-8">
@@ -286,11 +294,11 @@ export default function ListingsPage() {
 										<div className="flex items-center gap-2">
 											<SlidersHorizontal className="h-4 w-4 flex-shrink-0" />
 											<span className="font-medium">
-												More Filters
+												{t("moreFilters")}
 											</span>
 										</div>
 										<span className="text-xs text-muted-foreground whitespace-nowrap">
-											Search, Location & More
+											{t("searchLocationMore")}
 										</span>
 									</Button>
 								)}

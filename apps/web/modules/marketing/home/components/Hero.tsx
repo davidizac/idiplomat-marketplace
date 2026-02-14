@@ -5,8 +5,10 @@ import { Button } from "@ui/components/button";
 import { ArrowRightIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 
 export function Hero() {
+	const t = useTranslations("marketing.hero");
 	return (
 		<div className="relative min-h-screen flex flex-col">
 			{/* Hero main content */}
@@ -27,23 +29,21 @@ export function Hero() {
 				{/* Hero content */}
 				<div className="container relative z-10 py-16 flex flex-col items-center text-center">
 					<h1 className="text-5xl md:text-7xl font-bold tracking-tight mb-6">
-						i-Diplomat Marketplace
+						{t("title")}
 					</h1>
 					<p className="text-xl md:text-2xl text-foreground/80 max-w-3xl mx-auto mb-8">
-						A trusted marketplace exclusively for diplomats in
-						Israel to buy and sell items within the diplomatic
-						community.
+						{t("description")}
 					</p>
 					<div className="flex flex-col sm:flex-row gap-4">
 						<Button size="lg" variant="default" asChild>
 							<Link href="/listings">
-								Browse Listings
+								{t("browseListings")}
 								<ArrowRightIcon className="ml-2 h-4 w-4" />
 							</Link>
 						</Button>
 						<Button size="lg" variant="outline" asChild>
 							<LocaleLink href="#how-it-works">
-								How It Works
+								{t("howItWorks")}
 							</LocaleLink>
 						</Button>
 					</div>

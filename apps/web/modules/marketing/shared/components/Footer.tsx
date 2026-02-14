@@ -1,8 +1,10 @@
 import { LocaleLink } from "@i18n/routing";
 import { config } from "@repo/config";
 import { Logo } from "@shared/components/Logo";
+import { useTranslations } from "next-intl";
 
 export function Footer() {
+	const t = useTranslations("marketing.footer");
 	return (
 		<footer className="border-t py-8 text-foreground/60 text-sm">
 			<div className="container grid grid-cols-1 gap-6 lg:grid-cols-3">
@@ -18,7 +20,7 @@ export function Footer() {
 						href="https://blog.i-diplomat.com"
 						className="block"
 					>
-						Blog
+						{t("blog")}
 					</LocaleLink>
 				</div>
 				{/* 

@@ -8,6 +8,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@ui/components/select";
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { ISRAELI_CITIES } from "../../../constants/cities";
 
@@ -20,8 +21,10 @@ interface CityFilterProps {
 export function CityFilter({
 	value = null,
 	onChange,
-	label = "City",
+	label,
 }: CityFilterProps) {
+	const t = useTranslations("marketplace.filters");
+	const resolvedLabel = label ?? t("city");
 	const [searchTerm, setSearchTerm] = useState("");
 
 	const handleValueChange = (selectedValue: string) => {
@@ -40,17 +43,17 @@ export function CityFilter({
 
 	return (
 		<div className="space-y-2">
-			<Label htmlFor="city-filter">{label}</Label>
+			<Label htmlFor="city-filter">{resolvedLabel}</Label>
 			<Select value={value || "all"} onValueChange={handleValueChange}>
 				<SelectTrigger id="city-filter">
-					<SelectValue placeholder="Select a city" />
+					<SelectValue placeholder={t("selectCity")} />
 				</SelectTrigger>
 				<SelectContent className="max-h-[200px] overflow-y-auto">
 					{/* Search input */}
 					<div className="p-2 border-b">
 						<input
 							type="text"
-							placeholder="Search cities..."
+							placeholder={t("searchCities")}
 							value={searchTerm}
 							onChange={(e) => setSearchTerm(e.target.value)}
 							className="w-full px-2 py-1 text-sm border rounded focus:outline-none focus:ring-1 focus:ring-primary"
@@ -58,7 +61,7 @@ export function CityFilter({
 						/>
 					</div>
 
-					<SelectItem value="all">All Cities</SelectItem>
+					<SelectItem value="all">{t("allCities")}</SelectItem>
 					{filteredCities.length > 0 ? (
 						filteredCities.map((city: string) => (
 							<SelectItem key={city} value={city}>
@@ -67,7 +70,7 @@ export function CityFilter({
 						))
 					) : (
 						<div className="p-2 text-sm text-muted-foreground text-center">
-							No cities found
+							{t("noCitiesFound")}
 						</div>
 					)}
 				</SelectContent>

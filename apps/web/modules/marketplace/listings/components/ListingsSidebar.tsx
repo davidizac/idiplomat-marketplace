@@ -4,6 +4,7 @@ import type { Category, FilterManager } from "@repo/cms";
 import { Button } from "@ui/components/button";
 import { Card } from "@ui/components/card";
 import { Separator } from "@ui/components/separator";
+import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 import { AttributesManager } from "../../components/AttributesManager";
 import type { AttributeValue } from "./filters/AttributeFilter";
@@ -47,6 +48,7 @@ export function ListingsSidebar({
 	onUpdatePriceRange,
 	onClearFilters,
 }: ListingsSidebarProps) {
+	const t = useTranslations("marketplace.filters");
 	// Selected categories state (for attributes display)
 	const [selectedCategories, setSelectedCategories] = useState<
 		Array<{
@@ -160,7 +162,6 @@ export function ListingsSidebar({
 				<CityFilter
 					value={getCurrentAddressValue()}
 					onChange={onUpdateAddress}
-					label="City"
 				/>
 
 				{/* Price Range Filter */}
@@ -199,7 +200,7 @@ export function ListingsSidebar({
 						onClick={onClearFilters}
 						variant="outline"
 					>
-						Reset Filters
+						{t("resetFilters")}
 					</Button>
 				</div>
 			</div>

@@ -248,6 +248,122 @@
 			"menu": "Menu",
 			"postListing": "Publier une annonce",
 			"searchPlaceholder": "Rechercher des annonces..."
+		},
+		"hero": {
+			"title": "i-Diplomat Marketplace",
+			"description": "Un marché de confiance exclusivement réservé aux diplomates en Israël pour acheter et vendre des articles au sein de la communauté diplomatique.",
+			"browseListings": "Parcourir les annonces",
+			"howItWorks": "Comment ça marche"
+		},
+		"features": {
+			"title": "Comment ça marche",
+			"description": "Une plateforme simple connectant les diplomates en Israël qui souhaitent acheter et vendre des articles",
+			"forDiplomatsOnly": "Réservé aux diplomates",
+			"forDiplomatsOnlyDesc": "i-Diplomat Marketplace est exclusivement réservé à la communauté diplomatique en Israël. Tous les membres sont vérifiés pour garantir un environnement de confiance.",
+			"directConnections": "Connexions directes",
+			"directConnectionsDesc": "Contrairement aux marchés classiques, nous vous aidons simplement à trouver et à vous connecter avec d'autres diplomates. Toutes les communications et arrangements se font directement entre les membres.",
+			"steps": {
+				"signUp": "S'inscrire",
+				"signUpDesc": "Créez votre compte avec vos accréditations diplomatiques",
+				"postItems": "Publier des articles",
+				"postItemsDesc": "Publiez ce que vous souhaitez vendre avec photos et détails",
+				"browseListings": "Parcourir les annonces",
+				"browseListingsDesc": "Trouvez des articles d'autres diplomates en Israël",
+				"connectDirectly": "Connecter directement",
+				"connectDirectlyDesc": "Contactez les vendeurs via leurs coordonnées fournies"
+			}
+		},
+		"faq": {
+			"title": "Questions fréquentes",
+			"description": "Vous avez des questions sur i-Diplomat Marketplace ? Nous avons les réponses aux questions les plus courantes.",
+			"stillHaveQuestions": "Vous avez encore des questions ? Nous sommes là pour vous aider.",
+			"contactSupport": "Contacter le support",
+			"items": {
+				"q1": "Qui peut utiliser i-Diplomat Marketplace ?",
+				"a1": "i-Diplomat Marketplace est exclusivement disponible pour les membres vérifiés de la communauté diplomatique en Israël, y compris les diplomates, le personnel des ambassades et leurs familles.",
+				"q2": "Y a-t-il des frais pour publier des articles sur le marché ?",
+				"a2": "Non, la publication d'articles sur i-Diplomat Marketplace est entièrement gratuite pour tout le personnel diplomatique vérifié.",
+				"q3": "Comment vérifier mon statut diplomatique ?",
+				"a3": "Lors de l'inscription, il vous sera demandé de fournir vos accréditations diplomatiques que notre équipe vérifiera. Cela inclut votre carte diplomatique, les informations de l'ambassade et vos coordonnées.",
+				"q4": "Puis-je vendre des articles hors taxes ?",
+				"a4": "Oui, en tant que diplomate, vous pouvez vendre des articles hors taxes à d'autres diplomates conformément aux réglementations du ministère israélien des Affaires étrangères concernant les privilèges diplomatiques.",
+				"q5": "Comment les paiements sont-ils gérés ?",
+				"a5": "i-Diplomat Marketplace est une plateforme pour connecter acheteurs et vendeurs. Les paiements sont organisés directement entre les parties concernées. Nous recommandons des méthodes de paiement sécurisées et des rencontres dans des lieux sûrs.",
+				"q6": "Puis-je publier des services ainsi que des produits ?",
+				"a6": "Oui, le marché prend en charge les annonces de produits physiques et de services pouvant être utiles à la communauté diplomatique."
+			}
+		},
+		"pricing": {
+			"featuredLocations": "Emplacements en vedette",
+			"israel": "Israël",
+			"viewListings": "Voir les annonces",
+			"exploreAllLocations": "Explorer tous les emplacements",
+			"wantToSell": "Vous voulez vendre quelque chose ?",
+			"wantToSellDesc": "En tant que diplomate, vous pouvez facilement publier vos articles à vendre et entrer en contact avec des acheteurs potentiels dans la communauté.",
+			"postListingNow": "Publier une annonce maintenant",
+			"locations": {
+				"telAviv": "Tel-Aviv",
+				"telAvivDesc": "Ville moderne avec plages et vie nocturne",
+				"jerusalem": "Jérusalem",
+				"jerusalemDesc": "Centre historique et culturel",
+				"herzliya": "Herzliya",
+				"herzliyaDesc": "Ville côtière haut de gamme",
+				"beerSheva": "Beer-Sheva",
+				"beerShevaDesc": "Porte du désert du Néguev"
+			}
+		},
+		"newsletter": {
+			"title": "Restez informé",
+			"description": "Abonnez-vous pour recevoir les dernières mises à jour et nouvelles d'i-Diplomat Marketplace.",
+			"iframeTitle": "Inscription à la newsletter"
+		},
+		"footer": {
+			"blog": "Blog"
+		}
+	},
+	"marketplace": {
+		"listings": {
+			"browseListings": "Parcourir les annonces",
+			"free": "Gratuit",
+			"priceNotSet": "Prix non défini",
+			"loading": "Chargement des annonces...",
+			"listingCount": "{count} {count, plural, one {annonce} other {annonces}} trouvée(s)",
+			"errorTitle": "Erreur de chargement des annonces",
+			"errorDesc": "Un problème est survenu lors du chargement des annonces. Veuillez réessayer.",
+			"noResultsTitle": "Aucune annonce trouvée",
+			"noResultsDesc": "Essayez d'ajuster vos filtres pour trouver ce que vous cherchez.",
+			"moreFilters": "Plus de filtres",
+			"searchLocationMore": "Recherche, emplacement et plus",
+			"listingsIn": "Annonces à {city}",
+			"categoryListings": "Annonces {category}",
+			"categoryListingsIn": "Annonces {category} à {city}",
+			"searchResults": "Résultats de recherche : {query}",
+			"searchResultsIn": "Résultats de recherche : {query} à {city}"
+		},
+		"filters": {
+			"search": "Rechercher",
+			"searchPlaceholder": "Rechercher des annonces...",
+			"city": "Ville",
+			"selectCity": "Sélectionner une ville",
+			"searchCities": "Rechercher des villes...",
+			"allCities": "Toutes les villes",
+			"noCitiesFound": "Aucune ville trouvée",
+			"priceRange": "Fourchette de prix",
+			"min": "Min",
+			"to": "à",
+			"max": "Max",
+			"sortBy": "Trier par",
+			"newestFirst": "Plus récentes",
+			"priceLowHigh": "Prix : croissant",
+			"priceHighLow": "Prix : décroissant",
+			"resetFilters": "Réinitialiser les filtres",
+			"filters": "Filtres",
+			"applyFilters": "Appliquer les filtres",
+			"clearAllFilters": "Effacer tous les filtres",
+			"categoryFilters": "Filtres {category}",
+			"allCategories": "Toutes les catégories",
+			"selectCategory": "Sélectionner une catégorie",
+			"tapToChange": "Appuyez pour changer"
 		}
 	},
 	"mail": {

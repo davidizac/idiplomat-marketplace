@@ -9,6 +9,7 @@ import {
 	DialogTitle,
 } from "@ui/components/dialog";
 import { Separator } from "@ui/components/separator";
+import { useTranslations } from "next-intl";
 import { useCallback, useMemo } from "react";
 import { AttributesManager } from "../../components/AttributesManager";
 import type { AttributeValue } from "./filters/AttributeFilter";
@@ -43,6 +44,7 @@ export function MobileFiltersModal({
 	onUpdatePriceRange,
 	onClearFilters,
 }: MobileFiltersModalProps) {
+	const t = useTranslations("marketplace.filters");
 	// Build selected categories array for AttributesManager
 	const selectedCategories = useMemo(
 		() =>
@@ -122,7 +124,7 @@ export function MobileFiltersModal({
 		<Dialog open={isOpen} onOpenChange={onOpenChange}>
 			<DialogContent className="max-w-md h-[85vh] p-0 flex flex-col">
 				<DialogHeader className="px-6 py-4 border-b">
-					<DialogTitle>Filters</DialogTitle>
+					<DialogTitle>{t("filters")}</DialogTitle>
 				</DialogHeader>
 
 				<div className="flex-1 overflow-y-auto px-6">
@@ -139,7 +141,6 @@ export function MobileFiltersModal({
 						<CityFilter
 							value={currentAddressValue}
 							onChange={onUpdateAddress}
-							label="City"
 						/>
 
 						<Separator />
@@ -157,7 +158,7 @@ export function MobileFiltersModal({
 								<Separator />
 								<div className="space-y-4">
 									<h3 className="text-sm font-semibold">
-										{selectedCategory.name} Filters
+										{t("categoryFilters", { category: selectedCategory.name })}
 									</h3>
 									<AttributesManager
 										selectedCategories={selectedCategories}
@@ -174,14 +175,14 @@ export function MobileFiltersModal({
 				{/* Footer */}
 				<div className="border-t px-6 py-4 space-y-2">
 					<Button className="w-full" onClick={handleApply}>
-						Apply Filters
+						{t("applyFilters")}
 					</Button>
 					<Button
 						className="w-full"
 						variant="outline"
 						onClick={handleClearFilters}
 					>
-						Clear All Filters
+						{t("clearAllFilters")}
 					</Button>
 				</div>
 			</DialogContent>

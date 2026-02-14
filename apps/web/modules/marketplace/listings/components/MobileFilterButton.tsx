@@ -3,6 +3,7 @@
 import type { Category } from "@repo/cms";
 import { Button } from "@ui/components/button";
 import { Filter } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 interface MobileFilterButtonProps {
 	selectedCategory: Category | null;
@@ -15,6 +16,7 @@ export function MobileFilterButton({
 	selectedSubcategory,
 	onClick,
 }: MobileFilterButtonProps) {
+	const t = useTranslations("marketplace.filters");
 	// Determine the button text based on selections
 	const getButtonText = () => {
 		if (selectedSubcategory) {
@@ -32,7 +34,7 @@ export function MobileFilterButton({
 		if (selectedCategory) {
 			return <span className="font-medium">{selectedCategory.name}</span>;
 		}
-		return <span className="font-medium">All Categories</span>;
+		return <span className="font-medium">{t("allCategories")}</span>;
 	};
 
 	return (
@@ -48,7 +50,7 @@ export function MobileFilterButton({
 				</div>
 			</div>
 			<span className="text-xs text-muted-foreground whitespace-nowrap">
-				Tap to change
+				{t("tapToChange")}
 			</span>
 		</Button>
 	);

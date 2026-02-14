@@ -3,6 +3,7 @@
 import { Input } from "@ui/components/input";
 import { Label } from "@ui/components/label";
 import { SearchIcon, XIcon } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 interface SearchFilterProps {
@@ -16,10 +17,13 @@ interface SearchFilterProps {
 export function SearchFilter({
 	value = "",
 	onSearch,
-	placeholder = "Search listings...",
-	label = "Search",
+	placeholder,
+	label,
 	debounceMs = 300,
 }: SearchFilterProps) {
+	const t = useTranslations("marketplace.filters");
+	const resolvedPlaceholder = placeholder ?? t("searchPlaceholder");
+	const resolvedLabel = label ?? t("search");
 	const [searchValue, setSearchValue] = useState(value || "");
 	const onSearchRef = useRef(onSearch);
 	const isInitialMount = useRef(true);
@@ -71,13 +75,13 @@ export function SearchFilter({
 
 	return (
 		<div className="space-y-2">
-			<Label htmlFor="search-input">{label}</Label>
+			<Label htmlFor="search-input">{resolvedLabel}</Label>
 			<div className="relative">
 				<SearchIcon className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
 				<Input
 					id="search-input"
 					type="text"
-					placeholder={placeholder}
+					placeholder={resolvedPlaceholder}
 					value={searchValue}
 					onChange={handleInputChange}
 					className="pl-10 pr-10"

@@ -10,6 +10,7 @@ import { type Category, getStrapiImageUrl } from "@repo/cms";
 import { Card } from "@ui/components/card";
 import { Skeleton } from "@ui/components/skeleton";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { SortFilter, type SortOption } from "./filters/SortFilter";
 import { SubcategoryChips } from "./filters/SubcategoryChips";
@@ -35,10 +36,11 @@ function ListingCard({
 	rental_price,
 	rental_period,
 }: ListingCardProps) {
+	const t = useTranslations("marketplace.listings");
 	// Helper function to format price display
 	const formatPrice = () => {
 		if (type === "free") {
-			return "Free";
+			return t("free");
 		}
 		if (type === "sale" && price) {
 			return `₪${price}`;
@@ -52,7 +54,7 @@ function ListingCard({
 			};
 			return `₪${rental_price}/${periodMap[rental_period]}`;
 		}
-		return "Price not set";
+		return t("priceNotSet");
 	};
 	return (
 		<LocaleLink href={`/listings/${documentId}`}>
@@ -147,6 +149,7 @@ export function ListingsGrid({
 	selectedSubcategory,
 	onSelectSubcategory,
 }: ListingsGridProps) {
+	const t = useTranslations("marketplace.listings");
 	const [sortOption, setSortOption] = useState<SortOption>(
 		(strapiQuery.sort?.startsWith("price:asc")
 			? "price-low-high"
@@ -195,8 +198,8 @@ export function ListingsGrid({
 			<div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
 				<p className="text-sm text-muted-foreground">
 					{isLoading
-						? "Loading listings..."
-						: `${data?.pagination?.total || 0} ${data?.pagination?.total === 1 ? "listing" : "listings"} found`}
+						? t("loading")
+						: t("listingCount", { count: data?.pagination?.total || 0 })}
 				</p>
 				<SortFilter
 					selectedSort={sortOption}
@@ -214,11 +217,10 @@ export function ListingsGrid({
 			) : isError ? (
 				<div className="py-20 text-center">
 					<h3 className="text-lg font-medium mb-2">
-						Error loading listings
+						{t("errorTitle")}
 					</h3>
 					<p className="text-muted-foreground">
-						There was a problem fetching the listings. Please try
-						again.
+						{t("errorDesc")}
 					</p>
 				</div>
 			) : listings.length > 0 ? (
@@ -230,11 +232,10 @@ export function ListingsGrid({
 			) : (
 				<div className="py-20 text-center">
 					<h3 className="text-lg font-medium mb-2">
-						No listings found
+						{t("noResultsTitle")}
 					</h3>
 					<p className="text-muted-foreground">
-						Try adjusting your filters to find what you're looking
-						for.
+						{t("noResultsDesc")}
 					</p>
 				</div>
 			)}

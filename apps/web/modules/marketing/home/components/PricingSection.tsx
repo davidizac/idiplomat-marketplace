@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 
 const popularCategories = [
 	{
@@ -33,42 +34,15 @@ const popularCategories = [
 	},
 ];
 
-const popularLocations = [
-	{
-		name: "Tel Aviv",
-		count: 32,
-		description: "Modern city with beaches and nightlife",
-		bgColor: "bg-blue-500/50",
-		textColor: "text-white",
-		imageLink: "/images/cities/telaviv-jaffa.jpg",
-	},
-	{
-		name: "Jerusalem",
-		count: 27,
-		description: "Historic and cultural center",
-		bgColor: "bg-amber-600/50",
-		textColor: "text-white",
-		imageLink: "/images/cities/jerusalem.jpg",
-	},
-	{
-		name: "Herzliya",
-		count: 18,
-		description: "Upscale coastal city",
-		bgColor: "bg-cyan-500/60",
-		textColor: "text-white",
-		imageLink: "/images/cities/hertzilia.jpg",
-	},
-	{
-		name: "Beer Sheva",
-		count: 12,
-		description: "Gateway to the Negev desert",
-		bgColor: "bg-orange-700/50",
-		textColor: "text-white",
-		imageLink: "/images/cities/beer-sheva.jpg",
-	},
-];
+const locationsMeta = [
+	{ nameKey: "locations.telAviv", descKey: "locations.telAvivDesc", imageLink: "/images/cities/telaviv-jaffa.jpg", cityParam: "Tel Aviv" },
+	{ nameKey: "locations.jerusalem", descKey: "locations.jerusalemDesc", imageLink: "/images/cities/jerusalem.jpg", cityParam: "Jerusalem" },
+	{ nameKey: "locations.herzliya", descKey: "locations.herzliyaDesc", imageLink: "/images/cities/hertzilia.jpg", cityParam: "Herzliya" },
+	{ nameKey: "locations.beerSheva", descKey: "locations.beerShevaDesc", imageLink: "/images/cities/beer-sheva.jpg", cityParam: "Beer Sheva" },
+] as const;
 
 export function PricingSection() {
+	const t = useTranslations("marketing.pricing");
 	return (
 		<section className="py-20 bg-gradient-to-b from-background to-muted/20">
 			<div className="container max-w-6xl">
@@ -126,27 +100,27 @@ export function PricingSection() {
 				<div className="mb-16">
 					<div className="flex items-center justify-between mb-6">
 						<h3 className="text-2xl font-bold">
-							Featured Locations
+							{t("featuredLocations")}
 						</h3>
 						<div className="flex items-center">
 							<MapIcon className="h-5 w-5 text-foreground/60 mr-2" />
 							<span className="text-sm text-foreground/80">
-								Israel
+								{t("israel")}
 							</span>
 						</div>
 					</div>
 
 					<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-						{popularLocations.map((location) => (
+						{locationsMeta.map((location) => (
 							<Link
-								key={location.name}
-								href={`/listings?city=${location.name}`}
+								key={location.nameKey}
+								href={`/listings?city=${location.cityParam}`}
 								className="group overflow-hidden rounded-xl border shadow-sm bg-card transition-all hover:shadow-md hover:border-primary/20"
 							>
 								<div className="relative h-48 overflow-hidden">
 									<Image
 										src={location.imageLink}
-										alt={`${location.name} cityscape`}
+										alt={`${t(location.nameKey)} cityscape`}
 										fill
 										className="object-cover transition-transform group-hover:scale-105"
 										sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
@@ -154,23 +128,20 @@ export function PricingSection() {
 									<div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
 									<div className="absolute bottom-0 left-0 p-4 text-white">
 										<h4 className="text-xl font-bold">
-											{location.name}
+											{t(location.nameKey)}
 										</h4>
 										<p className="text-sm opacity-80">
-											{location.description}
+											{t(location.descKey)}
 										</p>
 									</div>
 								</div>
 								<div className="p-4 flex justify-between items-center">
-									{/* <span className="text-sm font-medium">
-										{location.count} listings
-									</span> */}
 									<Button
 										variant="ghost"
 										size="sm"
 										className="group-hover:bg-primary/10 group-hover:text-primary"
 									>
-										View listings
+										{t("viewListings")}
 										<ArrowRightIcon className="ml-1 h-3 w-3" />
 									</Button>
 								</div>
@@ -181,7 +152,7 @@ export function PricingSection() {
 					<div className="mt-6 text-center">
 						<Button variant="outline" className="mt-4" asChild>
 							<Link href="/locations">
-								Explore all locations
+								{t("exploreAllLocations")}
 								<ArrowRightIcon className="ml-2 h-4 w-4" />
 							</Link>
 						</Button>
@@ -192,17 +163,15 @@ export function PricingSection() {
 				<div className="bg-card rounded-xl border overflow-hidden shadow-md">
 					<div className="p-8 text-center">
 						<h3 className="text-2xl font-bold mb-2">
-							Want to sell something?
+							{t("wantToSell")}
 						</h3>
 						<p className="text-foreground/60 mb-6 max-w-lg mx-auto">
-							As a diplomat, you can easily list your items for
-							sale and connect with potential buyers in the
-							community.
+							{t("wantToSellDesc")}
 						</p>
 						<Button size="lg" asChild>
 							<Link href="/create-listing">
 								<ShoppingBag className="mr-2 h-5 w-5" />
-								Post a Listing Now
+								{t("postListingNow")}
 							</Link>
 						</Button>
 					</div>

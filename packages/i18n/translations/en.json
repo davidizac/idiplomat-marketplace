@@ -248,6 +248,122 @@
 			"menu": "Menu",
 			"postListing": "Post Listing",
 			"searchPlaceholder": "Search listings..."
+		},
+		"hero": {
+			"title": "i-Diplomat Marketplace",
+			"description": "A trusted marketplace exclusively for diplomats in Israel to buy and sell items within the diplomatic community.",
+			"browseListings": "Browse Listings",
+			"howItWorks": "How It Works"
+		},
+		"features": {
+			"title": "How It Works",
+			"description": "A simple platform connecting diplomats in Israel who want to buy and sell items",
+			"forDiplomatsOnly": "For Diplomats Only",
+			"forDiplomatsOnlyDesc": "i-Diplomat Marketplace is exclusively for the diplomatic community in Israel. All members are verified to ensure a trusted environment.",
+			"directConnections": "Direct Connections",
+			"directConnectionsDesc": "Unlike regular marketplaces, we simply help you find and connect with other diplomats. All communications and arrangements happen directly between members.",
+			"steps": {
+				"signUp": "Sign Up",
+				"signUpDesc": "Create your account with your diplomatic credentials",
+				"postItems": "Post Items",
+				"postItemsDesc": "List what you want to sell with photos and details",
+				"browseListings": "Browse Listings",
+				"browseListingsDesc": "Find items from other diplomats in Israel",
+				"connectDirectly": "Connect Directly",
+				"connectDirectlyDesc": "Contact sellers through their provided details"
+			}
+		},
+		"faq": {
+			"title": "Frequently Asked Questions",
+			"description": "Got questions about the i-Diplomat Marketplace? We've got answers to the most common questions.",
+			"stillHaveQuestions": "Still have questions? We're here to help.",
+			"contactSupport": "Contact Support",
+			"items": {
+				"q1": "Who can use the i-Diplomat Marketplace?",
+				"a1": "The i-Diplomat Marketplace is exclusively available to verified members of the diplomatic community in Israel, including diplomats, embassy staff, and their families.",
+				"q2": "Is there a fee to list items on the marketplace?",
+				"a2": "No, listing items on the i-Diplomat Marketplace is completely free for all verified diplomatic personnel.",
+				"q3": "How do I verify my diplomatic status?",
+				"a3": "During registration, you'll be asked to provide your diplomatic credentials which our team will verify. This includes your diplomatic ID, embassy information, and contact details.",
+				"q4": "Can I sell duty-free items?",
+				"a4": "Yes, as a diplomat, you can sell duty-free items to other diplomats following the regulations set by the Israeli Ministry of Foreign Affairs regarding diplomatic privileges.",
+				"q5": "How are payments handled?",
+				"a5": "The i-Diplomat Marketplace is a platform for connecting buyers and sellers. Payments are arranged directly between the parties involved. We recommend secure payment methods and meeting in safe locations.",
+				"q6": "Can I list services as well as products?",
+				"a6": "Yes, the marketplace supports listings for both physical products and services that may be valuable to the diplomatic community."
+			}
+		},
+		"pricing": {
+			"featuredLocations": "Featured Locations",
+			"israel": "Israel",
+			"viewListings": "View listings",
+			"exploreAllLocations": "Explore all locations",
+			"wantToSell": "Want to sell something?",
+			"wantToSellDesc": "As a diplomat, you can easily list your items for sale and connect with potential buyers in the community.",
+			"postListingNow": "Post a Listing Now",
+			"locations": {
+				"telAviv": "Tel Aviv",
+				"telAvivDesc": "Modern city with beaches and nightlife",
+				"jerusalem": "Jerusalem",
+				"jerusalemDesc": "Historic and cultural center",
+				"herzliya": "Herzliya",
+				"herzliyaDesc": "Upscale coastal city",
+				"beerSheva": "Beer Sheva",
+				"beerShevaDesc": "Gateway to the Negev desert"
+			}
+		},
+		"newsletter": {
+			"title": "Stay Updated",
+			"description": "Subscribe to get the latest updates and news from i-Diplomat Marketplace.",
+			"iframeTitle": "Newsletter Signup"
+		},
+		"footer": {
+			"blog": "Blog"
+		}
+	},
+	"marketplace": {
+		"listings": {
+			"browseListings": "Browse Listings",
+			"free": "Free",
+			"priceNotSet": "Price not set",
+			"loading": "Loading listings...",
+			"listingCount": "{count} {count, plural, one {listing} other {listings}} found",
+			"errorTitle": "Error loading listings",
+			"errorDesc": "There was a problem fetching the listings. Please try again.",
+			"noResultsTitle": "No listings found",
+			"noResultsDesc": "Try adjusting your filters to find what you're looking for.",
+			"moreFilters": "More Filters",
+			"searchLocationMore": "Search, Location & More",
+			"listingsIn": "Listings in {city}",
+			"categoryListings": "{category} Listings",
+			"categoryListingsIn": "{category} Listings in {city}",
+			"searchResults": "Search Results: {query}",
+			"searchResultsIn": "Search Results: {query} in {city}"
+		},
+		"filters": {
+			"search": "Search",
+			"searchPlaceholder": "Search listings...",
+			"city": "City",
+			"selectCity": "Select a city",
+			"searchCities": "Search cities...",
+			"allCities": "All Cities",
+			"noCitiesFound": "No cities found",
+			"priceRange": "Price Range",
+			"min": "Min",
+			"to": "to",
+			"max": "Max",
+			"sortBy": "Sort by",
+			"newestFirst": "Newest First",
+			"priceLowHigh": "Price: Low to High",
+			"priceHighLow": "Price: High to Low",
+			"resetFilters": "Reset Filters",
+			"filters": "Filters",
+			"applyFilters": "Apply Filters",
+			"clearAllFilters": "Clear All Filters",
+			"categoryFilters": "{category} Filters",
+			"allCategories": "All Categories",
+			"selectCategory": "Select Category",
+			"tapToChange": "Tap to change"
 		}
 	},
 	"mail": {

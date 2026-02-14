@@ -1,81 +1,51 @@
 "use client";
 import { BadgeCheck, MessageCircle, Search, Upload } from "lucide-react";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 
-export const howItWorksSteps = [
-	{
-		id: "step1",
-		title: "Sign Up",
-		description: "Create your account with your diplomatic credentials",
-		icon: BadgeCheck,
-	},
-	{
-		id: "step2",
-		title: "Post Items",
-		description: "List what you want to sell with photos and details",
-		icon: Upload,
-	},
-	{
-		id: "step3",
-		title: "Browse Listings",
-		description: "Find items from other diplomats in Israel",
-		icon: Search,
-		href: "/listings",
-	},
-	{
-		id: "step4",
-		title: "Connect Directly",
-		description: "Contact sellers through their provided details",
-		icon: MessageCircle,
-	},
+const howItWorksStepsMeta = [
+	{ id: "step1", titleKey: "steps.signUp" as const, descKey: "steps.signUpDesc" as const, icon: BadgeCheck, href: undefined },
+	{ id: "step2", titleKey: "steps.postItems" as const, descKey: "steps.postItemsDesc" as const, icon: Upload, href: undefined },
+	{ id: "step3", titleKey: "steps.browseListings" as const, descKey: "steps.browseListingsDesc" as const, icon: Search, href: "/listings" as const },
+	{ id: "step4", titleKey: "steps.connectDirectly" as const, descKey: "steps.connectDirectlyDesc" as const, icon: MessageCircle, href: undefined },
 ];
 
 export function Features() {
+	const t = useTranslations("marketing.features");
+
 	return (
 		<section id="how-it-works" className="scroll-my-20 py-20 bg-muted/30">
 			<div className="container max-w-5xl">
 				<div className="mx-auto mb-12 text-center">
 					<h2 className="font-bold text-4xl lg:text-5xl mb-4">
-						How It Works
+						{t("title")}
 					</h2>
 					<p className="mt-4 text-balance text-lg text-foreground/60 max-w-2xl mx-auto">
-						A simple platform connecting diplomats in Israel who
-						want to buy and sell items
+						{t("description")}
 					</p>
 				</div>
 
 				<div className="grid gap-8 md:grid-cols-2 lg:gap-12  mb-12">
-					{/* <div>
-						<Image
-							src={howItWorksImage}
-							alt="How i-Diplomat Marketplace works"
-							className="w-full rounded-lg shadow-lg"
-						/>
-					</div> */}
 					<div>
 						<h3 className="text-2xl font-bold mb-4">
-							For Diplomats Only
+							{t("forDiplomatsOnly")}
 						</h3>
 						<p className="text-foreground/70 mb-6">
-							i-Diplomat Marketplace is exclusively for the
-							diplomatic community in Israel. All members are
-							verified to ensure a trusted environment.
+							{t("forDiplomatsOnlyDesc")}
 						</p>
 					</div>
 					<div>
 						<h3 className="text-2xl font-bold mb-4">
-							Direct Connections
+							{t("directConnections")}
 						</h3>
 						<p className="text-foreground/70">
-							Unlike regular marketplaces, we simply help you find
-							and connect with other diplomats. All communications
-							and arrangements happen directly between members.
+							{t("directConnectionsDesc")}
 						</p>
 					</div>
 				</div>
 
 				<div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-					{howItWorksSteps.map((step) => (
+					{howItWorksStepsMeta.map((step) => (
 						<div
 							key={step.id}
 							className="flex flex-col p-6 bg-card rounded-xl border shadow-sm"
@@ -86,19 +56,19 @@ export function Features() {
 							{step.href ? (
 								<Link href={step.href} className="group">
 									<h3 className="text-xl font-bold mb-2 group-hover:text-primary transition-colors">
-										{step.title}
+										{t(step.titleKey)}
 									</h3>
 									<p className="text-foreground/60">
-										{step.description}
+										{t(step.descKey)}
 									</p>
 								</Link>
 							) : (
 								<>
 									<h3 className="text-xl font-bold mb-2">
-										{step.title}
+										{t(step.titleKey)}
 									</h3>
 									<p className="text-foreground/60">
-										{step.description}
+										{t(step.descKey)}
 									</p>
 								</>
 							)}
