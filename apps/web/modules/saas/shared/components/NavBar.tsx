@@ -4,6 +4,7 @@ import { config } from "@repo/config";
 import { useSession } from "@saas/auth/hooks/use-session";
 import { useActiveOrganization } from "@saas/organizations/hooks/use-active-organization";
 import { UserMenu } from "@saas/shared/components/UserMenu";
+import { LocaleSwitch } from "@shared/components/LocaleSwitch";
 import { Logo } from "@shared/components/Logo";
 import { Button } from "@ui/components/button";
 import { cn } from "@ui/lib";
@@ -18,6 +19,7 @@ import {
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { Suspense } from "react";
 import { OrganzationSelect } from "../../organizations/components/OrganizationSelect";
 
 export function NavBar() {
@@ -129,6 +131,11 @@ export function NavBar() {
 								{t("app.backToHome")}
 							</LocaleLink>
 						</Button>
+						{config.i18n.enabled && (
+							<Suspense>
+								<LocaleSwitch withLocaleInUrl={true} />
+							</Suspense>
+						)}
 						<UserMenu />
 					</div>
 				</div>
@@ -191,6 +198,11 @@ export function NavBar() {
 							{t("app.backToHome")}
 						</LocaleLink>
 					</Button>
+					{config.i18n.enabled && (
+						<Suspense>
+							<LocaleSwitch withLocaleInUrl={true} />
+						</Suspense>
+					)}
 					<UserMenu showUserName />
 				</div>
 			</div>

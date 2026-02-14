@@ -207,6 +207,7 @@
 			"dashboard": "Dashboard",
 			"docs": "Docs",
 			"faq": "FAQ",
+			"home": "Home",
 			"login": "Login",
 			"pricing": "Pricing"
 		},
@@ -238,6 +239,16 @@
 	"faq": {
 		"description": "Do you have any questions? We have got you covered.",
 		"title": "Frequently asked questions"
+	},
+	"marketing": {
+		"navbar": {
+			"browseListings": "Browse Listings",
+			"categories": "Categories",
+			"howItWorks": "How It Works",
+			"menu": "Menu",
+			"postListing": "Post Listing",
+			"searchPlaceholder": "Search listings..."
+		}
 	},
 	"mail": {
 		"common": {

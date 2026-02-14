@@ -1,0 +1,838 @@
+{
+	"admin": {
+		"menu": {
+			"organizations": "Organisations",
+			"users": "Utilisateurs"
+		},
+		"organizations": {
+			"backToList": "Retour aux organisations",
+			"confirmDelete": {
+				"confirm": "Supprimer",
+				"message": "Voulez-vous vraiment supprimer cette organisation ? Cette action est irr\u00e9versible.",
+				"title": "Supprimer l'organisation"
+			},
+			"create": "Cr\u00e9er",
+			"delete": "Supprimer",
+			"deleteOrganization": {
+				"deleted": "L'organisation a \u00e9t\u00e9 supprim\u00e9e avec succ\u00e8s !",
+				"deleting": "Suppression de l'organisation...",
+				"notDeleted": "L'organisation n'a pas pu \u00eatre supprim\u00e9e. Veuillez r\u00e9essayer."
+			},
+			"edit": "Modifier",
+			"form": {
+				"createTitle": "Cr\u00e9er une organisation",
+				"name": "Nom de l'organisation",
+				"notifications": {
+					"error": "Impossible d'enregistrer l'organisation. Veuillez r\u00e9essayer plus tard.",
+					"success": "L'organisation a \u00e9t\u00e9 enregistr\u00e9e."
+				},
+				"save": "Enregistrer",
+				"updateTitle": "Modifier l'organisation"
+			},
+			"loading": "Chargement des organisations...",
+			"membersCount": "{count} {count, plural, one {membre} other {membres}}",
+			"search": "Rechercher une organisation...",
+			"title": "G\u00e9rer les organisations"
+		},
+		"title": "Administration",
+		"users": {
+			"confirmDelete": {
+				"confirm": "Supprimer",
+				"message": "Voulez-vous vraiment supprimer cet utilisateur ? Cette action est irr\u00e9versible.",
+				"title": "Supprimer l'utilisateur"
+			},
+			"delete": "Supprimer",
+			"deleteUser": {
+				"deleted": "L'utilisateur a \u00e9t\u00e9 supprim\u00e9 avec succ\u00e8s !",
+				"deleting": "Suppression de l'utilisateur...",
+				"notDeleted": "L'utilisateur n'a pas pu \u00eatre supprim\u00e9. Veuillez r\u00e9essayer."
+			},
+			"emailVerified": {
+				"verified": "Email v\u00e9rifi\u00e9",
+				"waiting": "Email en attente de v\u00e9rification"
+			},
+			"impersonate": "Se connecter en tant que",
+			"impersonation": {
+				"impersonating": "Connexion en tant que {name}..."
+			},
+			"loading": "Chargement des utilisateurs...",
+			"resendVerificationMail": {
+				"error": "Impossible de renvoyer l'email de v\u00e9rification. Veuillez r\u00e9essayer.",
+				"submitting": "Renvoi de l'email de v\u00e9rification...",
+				"success": "L'email de v\u00e9rification a \u00e9t\u00e9 envoy\u00e9.",
+				"title": "Renvoyer l'email de v\u00e9rification"
+			},
+			"search": "Rechercher par nom ou email...",
+			"title": "G\u00e9rer les utilisateurs",
+			"assignAdminRole": "Attribuer le r\u00f4le administrateur",
+			"removeAdminRole": "Retirer le r\u00f4le administrateur"
+		},
+		"description": "G\u00e9rez votre application."
+	},
+	"app": {
+		"backToHome": "Retour \u00e0 l'accueil",
+		"menu": {
+			"accountSettings": "Param\u00e8tres du compte",
+			"admin": "Admin",
+			"aiChatbot": "Chatbot IA",
+			"organizationSettings": "Param\u00e8tres de l'organisation",
+			"start": "Accueil"
+		},
+		"userMenu": {
+			"accountSettings": "Param\u00e8tres du compte",
+			"colorMode": "Mode de couleur",
+			"documentation": "Documentation",
+			"home": "Accueil",
+			"logout": "D\u00e9connexion"
+		}
+	},
+	"auth": {
+		"errors": {
+			"invalidEmailOrPassword": "Les identifiants saisis sont invalides. Veuillez les v\u00e9rifier et r\u00e9essayer.",
+			"unknown": "Une erreur est survenue. Veuillez r\u00e9essayer.",
+			"userNotFound": "Cet utilisateur n'existe pas",
+			"failedToCreateUser": "Impossible de cr\u00e9er l'utilisateur. Veuillez r\u00e9essayer.",
+			"failedToCreateSession": "Impossible de cr\u00e9er une session. Veuillez r\u00e9essayer.",
+			"failedToUpdateUser": "Impossible de mettre \u00e0 jour l'utilisateur. Veuillez r\u00e9essayer.",
+			"failedToGetSession": "Impossible de r\u00e9cup\u00e9rer la session.",
+			"invalidPassword": "Le mot de passe saisi est incorrect.",
+			"invalidEmail": "L'email saisi est invalide.",
+			"invalidToken": "Le jeton saisi est invalide ou a expir\u00e9.",
+			"credentialAccountNotFound": "Compte introuvable.",
+			"emailCanNotBeUpdated": "L'email n'a pas pu \u00eatre mis \u00e0 jour. Veuillez r\u00e9essayer.",
+			"emailNotVerified": "Veuillez d'abord v\u00e9rifier votre email avant de vous connecter.",
+			"failedToGetUserInfo": "Impossible de charger les informations de l'utilisateur.",
+			"idTokenNotSupported": "Le jeton d'identification n'est pas pris en charge.",
+			"passwordTooLong": "Le mot de passe est trop long.",
+			"passwordTooShort": "Le mot de passe est trop court.",
+			"providerNotFound": "Ce fournisseur n'est pas pris en charge.",
+			"socialAccountAlreadyLinked": "Ce compte est d\u00e9j\u00e0 li\u00e9 \u00e0 un utilisateur.",
+			"userEmailNotFound": "Email introuvable.",
+			"userAlreadyExists": "Cet utilisateur existe d\u00e9j\u00e0.",
+			"invalidInvitation": "L'invitation est invalide ou a expir\u00e9.",
+			"sessionExpired": "La session a expir\u00e9.",
+			"failedToUnlinkLastAccount": "Impossible de dissocier le compte",
+			"accountNotFound": "Compte introuvable"
+		},
+		"forgotPassword": {
+			"backToSignin": "Retour \u00e0 la connexion",
+			"email": "Email",
+			"hints": {
+				"linkNotSent": {
+					"message": "Nous sommes d\u00e9sol\u00e9s, mais nous n'avons pas pu vous envoyer un lien pour r\u00e9initialiser votre mot de passe. Veuillez r\u00e9essayer plus tard.",
+					"title": "Lien non envoy\u00e9"
+				},
+				"linkSent": {
+					"message": "Nous vous avons envoy\u00e9 un lien pour continuer. Veuillez v\u00e9rifier votre bo\u00eete de r\u00e9ception.",
+					"title": "Lien envoy\u00e9"
+				}
+			},
+			"message": "Veuillez saisir votre adresse email et nous vous enverrons un lien pour r\u00e9initialiser votre mot de passe.",
+			"submit": "Envoyer le lien",
+			"title": "Mot de passe oubli\u00e9 ?"
+		},
+		"login": {
+			"continueWith": "Ou continuer avec",
+			"createAnAccount": "Cr\u00e9er un compte",
+			"dontHaveAnAccount": "Vous n'avez pas encore de compte ?",
+			"forgotPassword": "Mot de passe oubli\u00e9 ?",
+			"hints": {
+				"invalidCredentials": "L'email ou le mot de passe saisi est invalide. Veuillez r\u00e9essayer.",
+				"linkSent": {
+					"message": "Nous vous avons envoy\u00e9 un lien pour continuer. Veuillez v\u00e9rifier votre bo\u00eete de r\u00e9ception.",
+					"title": "Lien envoy\u00e9"
+				}
+			},
+			"loginWithPasskey": "Se connecter avec un passkey",
+			"modes": {
+				"magicLink": "Lien magique",
+				"password": "Mot de passe"
+			},
+			"submit": "Se connecter",
+			"subtitle": "Veuillez saisir vos identifiants pour vous connecter.",
+			"title": "Bon retour parmi nous",
+			"sendMagicLink": "Envoyer le lien magique"
+		},
+		"resetPassword": {
+			"backToSignin": "Retour \u00e0 la connexion",
+			"hints": {
+				"error": "Nous sommes d\u00e9sol\u00e9s, mais nous n'avons pas pu r\u00e9initialiser votre mot de passe. Veuillez r\u00e9essayer.",
+				"success": "Votre mot de passe a \u00e9t\u00e9 r\u00e9initialis\u00e9 avec succ\u00e8s."
+			},
+			"message": "Veuillez saisir un nouveau mot de passe.",
+			"newPassword": "Nouveau mot de passe",
+			"submit": "R\u00e9initialiser le mot de passe",
+			"title": "R\u00e9initialisez votre mot de passe"
+		},
+		"signup": {
+			"alreadyHaveAccount": "Vous avez d\u00e9j\u00e0 un compte ?",
+			"email": "Email",
+			"hints": {
+				"signupFailed": "Nous sommes d\u00e9sol\u00e9s, mais nous n'avons pas pu cr\u00e9er votre compte. Veuillez r\u00e9essayer plus tard.",
+				"verifyEmail": "Nous vous avons envoy\u00e9 un lien pour v\u00e9rifier votre email. Veuillez v\u00e9rifier votre bo\u00eete de r\u00e9ception."
+			},
+			"message": "Nous sommes ravis que vous souhaitiez nous rejoindre. Veuillez remplir le formulaire ci-dessous pour cr\u00e9er votre compte.",
+			"name": "Nom",
+			"password": "Mot de passe",
+			"signIn": "Se connecter",
+			"submit": "Cr\u00e9er un compte",
+			"title": "Cr\u00e9er un compte"
+		},
+		"verify": {
+			"title": "V\u00e9rifiez votre compte",
+			"code": "Mot de passe \u00e0 usage unique",
+			"submit": "V\u00e9rifier",
+			"backToSignin": "Retour \u00e0 la connexion",
+			"message": "Saisissez le mot de passe \u00e0 usage unique de votre application d'authentification pour continuer."
+		}
+	},
+	"blog": {
+		"description": "Lisez les derni\u00e8res actualit\u00e9s de notre entreprise",
+		"title": "Mon super blog",
+		"back": "Retour au blog"
+	},
+	"changelog": {
+		"description": "Restez inform\u00e9 des derni\u00e8res modifications de notre produit.",
+		"title": "Journal des modifications"
+	},
+	"common": {
+		"confirmation": {
+			"cancel": "Annuler",
+			"confirm": "Confirmer"
+		},
+		"menu": {
+			"blog": "Blog",
+			"changelog": "Changelog",
+			"contact": "Contact",
+			"dashboard": "Tableau de bord",
+			"docs": "Documentation",
+			"faq": "FAQ",
+			"home": "Accueil",
+			"login": "Connexion",
+			"pricing": "Tarifs"
+		},
+		"tableOfContents": {
+			"title": "Sur cette page"
+		},
+		"actions": {
+			"continue": "Continuer",
+			"verify": "V\u00e9rifier"
+		}
+	},
+	"contact": {
+		"description": "Nous sommes l\u00e0 pour vous aider. Veuillez utiliser le formulaire ci-dessous pour nous contacter.",
+		"form": {
+			"email": "Email",
+			"message": "Message",
+			"name": "Nom",
+			"notifications": {
+				"error": "Nous sommes d\u00e9sol\u00e9s, mais nous n'avons pas pu envoyer votre message. Veuillez r\u00e9essayer plus tard.",
+				"success": "Votre message a \u00e9t\u00e9 envoy\u00e9 avec succ\u00e8s. Nous vous r\u00e9pondrons dans les plus brefs d\u00e9lais."
+			},
+			"submit": "Envoyer le message"
+		},
+		"title": "Contactez-nous"
+	},
+	"documentation": {
+		"title": "Documentation"
+	},
+	"faq": {
+		"description": "Vous avez des questions ? Nous avons les r\u00e9ponses.",
+		"title": "Questions fr\u00e9quentes"
+	},
+	"marketing": {
+		"navbar": {
+			"browseListings": "Parcourir les annonces",
+			"categories": "Catégories",
+			"howItWorks": "Comment ça marche",
+			"menu": "Menu",
+			"postListing": "Publier une annonce",
+			"searchPlaceholder": "Rechercher des annonces..."
+		}
+	},
+	"mail": {
+		"common": {
+			"openLinkInBrowser": "Si vous souhaitez ouvrir le lien dans un navigateur diff\u00e9rent de votre navigateur par d\u00e9faut, copiez et collez ce lien :",
+			"otp": "Mot de passe \u00e0 usage unique",
+			"useLink": "ou utilisez le lien suivant :"
+		},
+		"emailVerification": {
+			"body": "Bonjour,\nveuillez cliquer sur le lien ci-dessous pour v\u00e9rifier cette nouvelle adresse email.",
+			"confirmEmail": "V\u00e9rifier l'email",
+			"subject": "V\u00e9rifiez votre email"
+		},
+		"forgotPassword": {
+			"body": "Bonjour,\nvous avez demand\u00e9 une r\u00e9initialisation de mot de passe.\n\nCliquez sur le bouton ci-dessous pour r\u00e9initialiser votre mot de passe.",
+			"resetPassword": "R\u00e9initialiser le mot de passe",
+			"subject": "R\u00e9initialisez votre mot de passe"
+		},
+		"magicLink": {
+			"body": "Bonjour,\nvous avez demand\u00e9 un email de connexion depuis supastarter.\n\nCliquez sur le lien ci-dessous pour vous connecter.",
+			"login": "Connexion",
+			"subject": "Connexion \u00e0 supastarter"
+		},
+		"newUser": {
+			"body": "Bonjour,\nmerci de vous \u00eatre inscrit sur supastarter.\n\nPour commencer \u00e0 utiliser notre application, veuillez confirmer votre adresse email en cliquant sur le lien ci-dessous.",
+			"confirmEmail": "Confirmer l'email",
+			"subject": "Confirmez votre email"
+		},
+		"newsletterSignup": {
+			"body": "Merci de vous \u00eatre abonn\u00e9 \u00e0 la newsletter de supastarter. Nous vous tiendrons inform\u00e9 des derni\u00e8res actualit\u00e9s et mises \u00e0 jour.",
+			"subject": "Bienvenue dans notre newsletter"
+		},
+		"organizationInvitation": {
+			"body": "Vous avez \u00e9t\u00e9 invit\u00e9 \u00e0 rejoindre l'organisation {organizationName}. Cliquez sur le bouton ci-dessous ou copiez et collez le lien dans votre navigateur pour accepter l'invitation et rejoindre l'organisation.",
+			"headline": "Rejoignez l'organisation {organizationName}",
+			"join": "Rejoindre l'organisation",
+			"subject": "Vous avez \u00e9t\u00e9 invit\u00e9 \u00e0 rejoindre une organisation"
+		}
+	},
+	"newsletter": {
+		"email": "Email",
+		"hints": {
+			"error": {
+				"message": "Impossible de s'abonner \u00e0 la newsletter. Veuillez r\u00e9essayer plus tard."
+			},
+			"success": {
+				"message": "Merci de vous \u00eatre abonn\u00e9 \u00e0 notre newsletter. Nous vous tiendrons inform\u00e9.",
+				"title": "Abonn\u00e9"
+			}
+		},
+		"submit": "S'abonner",
+		"subtitle": "Soyez parmi les premiers \u00e0 acc\u00e9der \u00e0 supastarter.nextjs.",
+		"title": "Acc\u00e8s anticipé"
+	},
+	"onboarding": {
+		"account": {
+			"avatar": "Avatar",
+			"avatarDescription": "Cliquez sur le cercle ou d\u00e9posez une image pour t\u00e9l\u00e9charger votre avatar.",
+			"name": "Nom"
+		},
+		"continue": "Continuer",
+		"message": "Quelques \u00e9tapes rapides pour commencer.",
+		"notifications": {
+			"accountSetupFailed": "Nous sommes d\u00e9sol\u00e9s, mais nous n'avons pas pu configurer votre compte. Veuillez r\u00e9essayer plus tard."
+		},
+		"step": "\u00c9tape {step} / {total}",
+		"title": "Configurez votre compte"
+	},
+	"organizations": {
+		"createForm": {
+			"name": "Nom de l'organisation",
+			"notifications": {
+				"error": "Nous sommes d\u00e9sol\u00e9s, mais nous n'avons pas pu cr\u00e9er votre organisation. Veuillez r\u00e9essayer plus tard.",
+				"success": "Votre organisation a \u00e9t\u00e9 cr\u00e9\u00e9e. Vous pouvez maintenant inviter des membres."
+			},
+			"submit": "Cr\u00e9er l'organisation",
+			"subtitle": "Saisissez un nom pour votre organisation pour commencer. Vous pourrez modifier le nom plus tard dans les param\u00e8tres de l'organisation.",
+			"title": "Cr\u00e9er une organisation"
+		},
+		"invitationAlert": {
+			"description": "Vous devez vous connecter ou cr\u00e9er un compte pour rejoindre l'organisation.",
+			"title": "Vous avez \u00e9t\u00e9 invit\u00e9 \u00e0 rejoindre une organisation."
+		},
+		"invitationModal": {
+			"accept": "Accepter",
+			"decline": "Refuser",
+			"description": "Vous avez \u00e9t\u00e9 invit\u00e9 \u00e0 rejoindre l'organisation {organizationName}. Souhaitez-vous accepter l'invitation et rejoindre l'organisation ?",
+			"title": "Rejoindre l'organisation"
+		},
+		"organizationSelect": {
+			"createNewOrganization": "Cr\u00e9er une nouvelle organisation",
+			"organizations": "Organisations",
+			"personalAccount": "Compte personnel"
+		},
+		"organizationsGrid": {
+			"createNewOrganization": "Cr\u00e9er une nouvelle organisation",
+			"title": "Vos organisations"
+		},
+		"roles": {
+			"admin": "Administrateur",
+			"member": "Membre",
+			"owner": "Propri\u00e9taire"
+		},
+		"settings": {
+			"changeName": {
+				"title": "Nom de l'organisation"
+			},
+			"deleteOrganization": {
+				"confirmation": "Voulez-vous vraiment supprimer votre organisation ?",
+				"description": "Supprimez d\u00e9finitivement votre organisation. Une fois supprim\u00e9e, il n'y a pas de retour en arri\u00e8re. Pour confirmer, veuillez saisir votre mot de passe ci-dessous :",
+				"submit": "Supprimer l'organisation",
+				"title": "Supprimer l'organisation"
+			},
+			"logo": {
+				"description": "T\u00e9l\u00e9chargez un logo pour votre organisation.",
+				"title": "Logo de l'organisation"
+			},
+			"members": {
+				"activeMembers": "Membres actifs",
+				"description": "Consultez tous les membres actifs et les invitations en attente de votre organisation.",
+				"invitations": {
+					"empty": "Vous n'avez pas encore invit\u00e9 de membres.",
+					"expiresAt": "Expire le {date}",
+					"invitationStatus": {
+						"accepted": "Accept\u00e9e",
+						"canceled": "Annul\u00e9e",
+						"pending": "En attente",
+						"rejected": "Refus\u00e9e"
+					},
+					"revoke": "R\u00e9voquer l'invitation",
+					"resend": "Renvoyer l'invitation"
+				},
+				"inviteMember": {
+					"description": "Pour inviter un nouveau membre, envoyez-lui une invitation.",
+					"email": "Email",
+					"notifications": {
+						"error": {
+							"description": "Nous n'avons pas pu inviter le membre. Veuillez r\u00e9essayer plus tard.",
+							"title": "Impossible d'inviter le membre"
+						},
+						"success": {
+							"description": "Le membre a \u00e9t\u00e9 invit\u00e9.",
+							"title": "Membre invit\u00e9"
+						}
+					},
+					"role": "R\u00f4le",
+					"submit": "Inviter",
+					"title": "Inviter un membre"
+				},
+				"leaveOrganization": "Quitter l'organisation",
+				"notifications": {
+					"removeMember": {
+						"error": {
+							"description": "Impossible de retirer le membre de votre organisation. Veuillez r\u00e9essayer."
+						},
+						"loading": {
+							"description": "Retrait du membre de l'organisation..."
+						},
+						"success": {
+							"description": "Le membre a \u00e9t\u00e9 retir\u00e9 de votre organisation avec succ\u00e8s."
+						}
+					},
+					"revokeInvitation": {
+						"error": {
+							"description": "L'invitation n'a pas pu \u00eatre r\u00e9voqu\u00e9e. Veuillez r\u00e9essayer plus tard."
+						},
+						"loading": {
+							"description": "R\u00e9vocation de l'invitation..."
+						},
+						"success": {
+							"description": "L'invitation a \u00e9t\u00e9 r\u00e9voqu\u00e9e."
+						}
+					},
+					"updateMembership": {
+						"error": {
+							"description": "Impossible de mettre \u00e0 jour l'adh\u00e9sion \u00e0 l'organisation. Veuillez r\u00e9essayer."
+						},
+						"loading": {
+							"description": "Mise \u00e0 jour de l'adh\u00e9sion..."
+						},
+						"success": {
+							"description": "L'adh\u00e9sion a \u00e9t\u00e9 mise \u00e0 jour avec succ\u00e8s"
+						}
+					},
+					"resendInvitation": {
+						"loading": {
+							"description": "Renvoi de l'invitation..."
+						},
+						"success": {
+							"description": "Invitation envoy\u00e9e"
+						},
+						"error": {
+							"description": "Impossible d'envoyer l'invitation. Veuillez r\u00e9essayer."
+						}
+					}
+				},
+				"pendingInvitations": "Invitations en attente",
+				"removeMember": "Retirer le membre",
+				"title": "Membres"
+			},
+			"notifications": {
+				"organizationDeleted": "Votre organisation a \u00e9t\u00e9 supprim\u00e9e.",
+				"organizationNameNotUpdated": "Nous n'avons pas pu mettre \u00e0 jour le nom de votre organisation. Veuillez r\u00e9essayer plus tard.",
+				"organizationNameUpdated": "Le nom de votre organisation a \u00e9t\u00e9 mis \u00e0 jour.",
+				"organizationNotDeleted": "Nous n'avons pas pu supprimer votre organisation. Veuillez r\u00e9essayer plus tard."
+			},
+			"subtitle": "G\u00e9rez les param\u00e8tres de l'organisation.",
+			"title": "Organisation",
+			"dangerZone": {
+				"title": "Zone dangereuse"
+			}
+		},
+		"start": {
+			"subtitle": "Bienvenue sur la page d'accueil de cette organisation !"
+		}
+	},
+	"pricing": {
+		"choosePlan": "Choisir le forfait",
+		"contactSales": "Contacter le service commercial",
+		"description": "Choisissez le forfait qui vous convient le mieux.",
+		"getStarted": "Commencer",
+		"month": "{count, plural, one {mois} other {{count} mois}}",
+		"monthly": "Mensuel",
+		"products": {
+			"basic": {
+				"description": "Id\u00e9al pour les petites \u00e9quipes.",
+				"features": {
+					"anotherFeature": "Une autre fonctionnalit\u00e9 incroyable",
+					"limitedSupport": "Support limit\u00e9"
+				},
+				"title": "Basique"
+			},
+			"enterprise": {
+				"description": "Forfait personnalis\u00e9 adapt\u00e9 \u00e0 vos besoins",
+				"features": {
+					"enterpriseSupport": "Support entreprise",
+					"unlimitedProjects": "Projets illimit\u00e9s"
+				},
+				"title": "Entreprise"
+			},
+			"free": {
+				"description": "Commencez gratuitement",
+				"features": {
+					"anotherFeature": "Une autre fonctionnalit\u00e9 incroyable",
+					"limitedSupport": "Support limit\u00e9"
+				},
+				"title": "Gratuit"
+			},
+			"lifetime": {
+				"description": "Achetez une fois. Utilisez pour toujours.",
+				"features": {
+					"extendSupport": "Support \u00e9tendu",
+					"noRecurringCosts": "Aucun frais r\u00e9current"
+				},
+				"title": "\u00c0 vie"
+			},
+			"pro": {
+				"description": "Id\u00e9al pour les \u00e9quipes",
+				"features": {
+					"anotherFeature": "Une autre fonctionnalit\u00e9 incroyable",
+					"fiveMembers": "Jusqu'\u00e0 5 membres",
+					"fullSupport": "Support complet"
+				},
+				"title": "Pro"
+			}
+		},
+		"purchase": "Acheter",
+		"recommended": "Recommand\u00e9",
+		"subscribe": "S'abonner",
+		"title": "Tarifs",
+		"trialPeriod": "{days} {days, plural, one {jour} other {jours}} d'essai gratuit",
+		"year": "{count, plural, one {an} other {{count} ans}}",
+		"yearly": "Annuel",
+		"perSeat": "si\u00e8ge"
+	},
+	"settings": {
+		"account": {
+			"avatar": {
+				"description": "Pour modifier votre avatar, cliquez sur l'image dans ce bloc et s\u00e9lectionnez un fichier depuis votre ordinateur.",
+				"notifications": {
+					"error": "Impossible de mettre \u00e0 jour l'avatar",
+					"success": "L'avatar a \u00e9t\u00e9 mis \u00e0 jour avec succ\u00e8s"
+				},
+				"title": "Votre avatar"
+			},
+			"changeEmail": {
+				"description": "Pour modifier votre email, saisissez le nouvel email et cliquez sur enregistrer. Vous devrez confirmer le nouvel email avant qu'il ne devienne actif.",
+				"notifications": {
+					"error": "Impossible de mettre \u00e0 jour l'email",
+					"success": "L'email a \u00e9t\u00e9 mis \u00e0 jour avec succ\u00e8s"
+				},
+				"title": "Votre email"
+			},
+			"changeName": {
+				"notifications": {
+					"error": "Impossible de mettre \u00e0 jour le nom",
+					"success": "Le nom a \u00e9t\u00e9 mis \u00e0 jour avec succ\u00e8s"
+				},
+				"title": "Votre nom"
+			},
+			"deleteAccount": {
+				"confirmation": "Voulez-vous vraiment supprimer votre compte ?",
+				"description": "Supprimez d\u00e9finitivement votre compte. Une fois supprim\u00e9, il n'y a pas de retour en arri\u00e8re. Pour confirmer, veuillez saisir votre mot de passe ci-dessous :",
+				"notifications": {
+					"error": "Impossible de supprimer le compte",
+					"success": "Le compte a \u00e9t\u00e9 supprim\u00e9 avec succ\u00e8s"
+				},
+				"submit": "Supprimer le compte",
+				"title": "Supprimer le compte"
+			},
+			"language": {
+				"description": "Pour modifier la langue de l'application pour votre compte, s\u00e9lectionnez une langue dans la liste et cliquez sur enregistrer.",
+				"notifications": {
+					"error": "Impossible de mettre \u00e0 jour la langue",
+					"success": "La langue a \u00e9t\u00e9 mise \u00e0 jour avec succ\u00e8s"
+				},
+				"title": "Votre langue"
+			},
+			"security": {
+				"activeSessions": {
+					"description": "Voici toutes les sessions actives de votre compte. Cliquez sur le X pour terminer une session sp\u00e9cifique.",
+					"title": "Sessions actives",
+					"notifications": {
+						"revokeSession": {
+							"success": "Session r\u00e9voqu\u00e9e"
+						}
+					},
+					"currentSession": "Session actuelle"
+				},
+				"changePassword": {
+					"currentPassword": "Mot de passe actuel",
+					"newPassword": "Nouveau mot de passe",
+					"notifications": {
+						"error": "Impossible de mettre \u00e0 jour le mot de passe",
+						"success": "Le mot de passe a \u00e9t\u00e9 mis \u00e0 jour avec succ\u00e8s"
+					},
+					"title": "Votre mot de passe"
+				},
+				"connectedAccounts": {
+					"connect": "Connecter",
+					"disconnect": "D\u00e9connecter",
+					"title": "Comptes connect\u00e9s"
+				},
+				"passkeys": {
+					"description": "Utilisez les passkeys comme alternative s\u00e9curis\u00e9e aux mots de passe.",
+					"notifications": {
+						"addPasskey": {
+							"error": {
+								"title": "Impossible d'ajouter le passkey"
+							},
+							"success": {
+								"title": "Passkey ajout\u00e9"
+							}
+						},
+						"deletePasskey": {
+							"error": {
+								"title": "Impossible de supprimer le passkey"
+							},
+							"loading": {
+								"title": "Suppression du passkey..."
+							},
+							"success": {
+								"title": "Passkey supprim\u00e9"
+							}
+						}
+					},
+					"title": "Passkeys"
+				},
+				"setPassword": {
+					"description": "Vous n'avez pas encore d\u00e9fini de mot de passe. Pour en d\u00e9finir un, vous devez passer par la proc\u00e9dure de r\u00e9initialisation du mot de passe. Cliquez sur le bouton ci-dessous pour recevoir un email de r\u00e9initialisation et suivez les instructions.",
+					"notifications": {
+						"error": "Impossible d'envoyer le lien pour d\u00e9finir le mot de passe. Veuillez r\u00e9essayer.",
+						"success": "V\u00e9rifiez votre bo\u00eete de r\u00e9ception pour le lien de d\u00e9finition de votre mot de passe."
+					},
+					"submit": "D\u00e9finir le mot de passe",
+					"title": "Votre mot de passe"
+				},
+				"title": "S\u00e9curit\u00e9",
+				"twoFactor": {
+					"title": "Authentification \u00e0 deux facteurs",
+					"description": "Ajoutez une couche de s\u00e9curit\u00e9 suppl\u00e9mentaire \u00e0 votre compte.",
+					"dialog": {
+						"password": {
+							"title": "V\u00e9rifier avec le mot de passe",
+							"description": "Veuillez v\u00e9rifier votre compte en saisissant votre mot de passe :",
+							"label": "Votre mot de passe :"
+						},
+						"totpUrl": {
+							"description": "Utilisez votre application d'authentification pr\u00e9f\u00e9r\u00e9e et scannez le QR code ou saisissez le secret ci-dessous manuellement pour configurer l'authentification \u00e0 deux facteurs.",
+							"code": "Saisissez le code \u00e0 6 chiffres pour v\u00e9rifier la configuration :",
+							"title": "Activer l'authentification \u00e0 deux facteurs"
+						}
+					},
+					"enable": "Activer l'authentification \u00e0 deux facteurs",
+					"notifications": {
+						"verify": {
+							"success": {
+								"title": "L'authentification \u00e0 deux facteurs a \u00e9t\u00e9 activ\u00e9e avec succ\u00e8s."
+							}
+						},
+						"enable": {
+							"error": {
+								"title": "Impossible de v\u00e9rifier votre compte avec le mot de passe fourni. Veuillez r\u00e9essayer."
+							}
+						},
+						"disable": {
+							"success": {
+								"title": "L'authentification \u00e0 deux facteurs a \u00e9t\u00e9 d\u00e9sactiv\u00e9e avec succ\u00e8s."
+							}
+						}
+					},
+					"disable": "D\u00e9sactiver l'authentification \u00e0 deux facteurs",
+					"enabled": "L'authentification \u00e0 deux facteurs est activ\u00e9e pour votre compte."
+				}
+			},
+			"subtitle": "G\u00e9rez les param\u00e8tres de votre compte personnel.",
+			"title": "Param\u00e8tres du compte"
+		},
+		"billing": {
+			"createCustomerPortal": {
+				"label": "G\u00e9rer la facturation",
+				"notifications": {
+					"error": {
+						"title": "Impossible de cr\u00e9er une session de portail client. Veuillez r\u00e9essayer."
+					}
+				}
+			},
+			"activePlan": {
+				"status": {
+					"active": "Actif",
+					"canceled": "Annul\u00e9",
+					"expired": "Expir\u00e9",
+					"incomplete": "Incomplet",
+					"past_due": "En retard",
+					"paused": "En pause",
+					"trialing": "En essai",
+					"unpaid": "Impay\u00e9"
+				},
+				"title": "Votre forfait"
+			},
+			"changePlan": {
+				"description": "Choisissez un forfait auquel vous abonner.",
+				"title": "Changer de forfait"
+			},
+			"title": "Facturation"
+		},
+		"menu": {
+			"account": {
+				"billing": "Facturation",
+				"dangerZone": "Zone dangereuse",
+				"general": "G\u00e9n\u00e9ral",
+				"security": "S\u00e9curit\u00e9",
+				"title": "Compte"
+			},
+			"organization": {
+				"billing": "Facturation",
+				"general": "G\u00e9n\u00e9ral",
+				"members": "Membres",
+				"title": "Organisation",
+				"dangerZone": "Zone dangereuse"
+			}
+		},
+		"save": "Enregistrer"
+	},
+	"start": {
+		"subtitle": "Consultez les derni\u00e8res statistiques de votre entreprise.",
+		"welcome": "Bienvenue {name} !"
+	},
+	"zod": {
+		"errors": {
+			"invalid_arguments": "Arguments de fonction invalides",
+			"invalid_date": "Date invalide",
+			"invalid_enum_value": "Valeur d'\u00e9num\u00e9ration invalide. Attendu {- options}, re\u00e7u '{received}'",
+			"invalid_intersection_types": "Les r\u00e9sultats d'intersection n'ont pas pu \u00eatre fusionn\u00e9s",
+			"invalid_literal": "Valeur litt\u00e9rale invalide, attendu {expected}",
+			"invalid_return_type": "Type de retour de fonction invalide",
+			"invalid_string": {
+				"cuid": "{validation} invalide",
+				"datetime": "{validation} invalide",
+				"email": "{validation} invalide",
+				"endsWith": "Entr\u00e9e invalide : doit se terminer par \"{endsWith}\"",
+				"regex": "Invalide",
+				"startsWith": "Entr\u00e9e invalide : doit commencer par \"{startsWith}\"",
+				"url": "{validation} invalide",
+				"uuid": "{validation} invalide"
+			},
+			"invalid_type": "Attendu {expected}, re\u00e7u {received}",
+			"invalid_type_received_undefined": "Requis",
+			"invalid_union": "Entr\u00e9e invalide",
+			"invalid_union_discriminator": "Valeur de discriminant invalide. Attendu {- options}",
+			"not_finite": "Le nombre doit \u00eatre fini",
+			"not_multiple_of": "Le nombre doit \u00eatre un multiple de {multipleOf}",
+			"too_big": {
+				"array": {
+					"exact": "Le tableau doit contenir exactement {maximum} \u00e9l\u00e9ment(s)",
+					"inclusive": "Le tableau doit contenir au plus {maximum} \u00e9l\u00e9ment(s)",
+					"not_inclusive": "Le tableau doit contenir moins de {maximum} \u00e9l\u00e9ment(s)"
+				},
+				"date": {
+					"exact": "La date doit \u00eatre exactement {- maximum, datetime}",
+					"inclusive": "La date doit \u00eatre inf\u00e9rieure ou \u00e9gale \u00e0 {- maximum, datetime}",
+					"not_inclusive": "La date doit \u00eatre inf\u00e9rieure \u00e0 {- maximum, datetime}"
+				},
+				"number": {
+					"exact": "Le nombre doit \u00eatre exactement {maximum}",
+					"inclusive": "Le nombre doit \u00eatre inf\u00e9rieur ou \u00e9gal \u00e0 {maximum}",
+					"not_inclusive": "Le nombre doit \u00eatre inf\u00e9rieur \u00e0 {maximum}"
+				},
+				"set": {
+					"exact": "Entr\u00e9e invalide",
+					"inclusive": "Entr\u00e9e invalide",
+					"not_inclusive": "Entr\u00e9e invalide"
+				},
+				"string": {
+					"exact": "La cha\u00eene doit contenir exactement {maximum} caract\u00e8re(s)",
+					"inclusive": "La cha\u00eene doit contenir au plus {maximum} caract\u00e8re(s)",
+					"not_inclusive": "La cha\u00eene doit contenir moins de {maximum} caract\u00e8re(s)"
+				}
+			},
+			"too_small": {
+				"array": {
+					"exact": "Le tableau doit contenir exactement {minimum} \u00e9l\u00e9ment(s)",
+					"inclusive": "Le tableau doit contenir au moins {minimum} \u00e9l\u00e9ment(s)",
+					"not_inclusive": "Le tableau doit contenir plus de {minimum} \u00e9l\u00e9ment(s)"
+				},
+				"date": {
+					"exact": "La date doit \u00eatre exactement {- minimum, datetime}",
+					"inclusive": "La date doit \u00eatre sup\u00e9rieure ou \u00e9gale \u00e0 {- minimum, datetime}",
+					"not_inclusive": "La date doit \u00eatre sup\u00e9rieure \u00e0 {- minimum, datetime}"
+				},
+				"number": {
+					"exact": "Le nombre doit \u00eatre exactement {minimum}",
+					"inclusive": "Le nombre doit \u00eatre sup\u00e9rieur ou \u00e9gal \u00e0 {minimum}",
+					"not_inclusive": "Le nombre doit \u00eatre sup\u00e9rieur \u00e0 {minimum}"
+				},
+				"set": {
+					"exact": "Entr\u00e9e invalide",
+					"inclusive": "Entr\u00e9e invalide",
+					"not_inclusive": "Entr\u00e9e invalide"
+				},
+				"string": {
+					"exact": "La cha\u00eene doit contenir exactement {minimum} caract\u00e8re(s)",
+					"inclusive": "La cha\u00eene doit contenir au moins {minimum} caract\u00e8re(s)",
+					"not_inclusive": "La cha\u00eene doit contenir plus de {minimum} caract\u00e8re(s)"
+				}
+			},
+			"unrecognized_keys": "Cl\u00e9(s) non reconnue(s) dans l'objet : {- keys}"
+		},
+		"types": {
+			"array": "array",
+			"bigint": "bigint",
+			"boolean": "boolean",
+			"date": "date",
+			"float": "float",
+			"function": "function",
+			"integer": "integer",
+			"map": "map",
+			"nan": "nan",
+			"never": "never",
+			"null": "null",
+			"number": "number",
+			"object": "object",
+			"promise": "promise",
+			"set": "set",
+			"string": "string",
+			"symbol": "symbol",
+			"undefined": "undefined",
+			"unknown": "unknown",
+			"void": "void"
+		},
+		"validations": {
+			"cuid": "cuid",
+			"cuid2": "cuid2",
+			"datetime": "datetime",
+			"email": "email",
+			"emoji": "emoji",
+			"ip": "up",
+			"regex": "regex",
+			"ulid": "ulid",
+			"url": "url",
+			"uuid": "uuid"
+		}
+	},
+	"choosePlan": {
+		"title": "Choisissez votre forfait",
+		"description": "Pour continuer, veuillez s\u00e9lectionner un forfait."
+	}
+}
