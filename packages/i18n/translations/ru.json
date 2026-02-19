@@ -438,7 +438,9 @@
 			"description": "Описание",
 			"contactAuthor": "Связаться с автором объявления",
 			"showContactInfo": "Показать контактную информацию",
-			"contactDisclaimer": "При обращении к продавцу, пожалуйста, укажите, что вы нашли это объявление на i-Diplomat Marketplace."
+			"contactDisclaimer": "При обращении к продавцу, пожалуйста, укажите, что вы нашли это объявление на i-Diplomat Marketplace.",
+			"listingImage": "Изображение объявления",
+			"imageCounter": "{current} из {total}"
 		},
 		"createListing": {
 			"listingDetails": "Детали объявления",
@@ -480,7 +482,11 @@
 			"typeRequired": "Тип объявления обязателен",
 			"stepDetails": "Детали объявления",
 			"stepPricing": "Цена",
-			"stepPhotos": "Фотографии"
+			"stepPhotos": "Фотографии",
+			"forFree": "Бесплатно",
+			"selectCity": "Выберите город",
+			"searchCities": "Поиск городов...",
+			"noCitiesFound": "Города не найдены"
 		},
 		"pricing": {
 			"setYourPrice": "Установите цену",
@@ -507,7 +513,9 @@
 			"tip4": "Члены дипломатического сообщества часто ищут выгодные предложения",
 			"invalidPrice": "Пожалуйста, введите действительную цену больше нуля",
 			"invalidRentalPrice": "Пожалуйста, введите действительную цену аренды больше нуля",
-			"selectRentalPeriodError": "Пожалуйста, выберите период аренды"
+			"selectRentalPeriodError": "Пожалуйста, выберите период аренды",
+			"back": "Назад к деталям",
+			"continueToPhotos": "Перейти к фотографиям"
 		},
 		"photos": {
 			"title": "Фотографии",
@@ -524,7 +532,9 @@
 			"existingAndNew": "({existing} существующих, {new} новых)",
 			"onlyImageFiles": "Пожалуйста, загружайте только файлы изображений",
 			"maxPhotosError": "Вы можете загрузить максимум {max} фотографий. Вы можете добавить ещё {allowed} фотографий.",
-			"atLeastOnePhoto": "Пожалуйста, загрузите хотя бы одну фотографию"
+			"atLeastOnePhoto": "Пожалуйста, загрузите хотя бы одну фотографию",
+			"back": "Назад к ценам",
+			"submitting": "Отправка..."
 		},
 		"attributes": {
 			"categorySpecifications": "Характеристики категории",

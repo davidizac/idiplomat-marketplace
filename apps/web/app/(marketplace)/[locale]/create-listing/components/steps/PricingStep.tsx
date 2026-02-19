@@ -66,14 +66,14 @@ export default function PricingStep({
 
 		if (formState.type === "sale") {
 			if (!formState.price || formState.price <= 0) {
-				newErrors.price = t("priceRequired");
+				newErrors.price = t("invalidPrice");
 			}
 		} else if (formState.type === "rent") {
 			if (!formState.rental_price || formState.rental_price <= 0) {
-				newErrors.rental_price = t("priceRequired");
+				newErrors.rental_price = t("invalidPrice");
 			}
 			if (!formState.rental_period) {
-				newErrors.rental_period = t("rentalPeriodRequired");
+				newErrors.rental_period = t("selectRentalPeriodError");
 			}
 		}
 		// No validation needed for "free" type
@@ -101,22 +101,22 @@ export default function PricingStep({
 			case "sale":
 				return {
 					title: t("setYourPrice"),
-					description: t("setYourPriceDescription"),
+					description: t("setYourPriceDesc"),
 				};
 			case "rent":
 				return {
-					title: t("setYourRentalPrice"),
-					description: t("setYourRentalPriceDescription"),
+					title: t("setRentalPrice"),
+					description: t("setRentalPriceDesc"),
 				};
 			case "free":
 				return {
 					title: t("freeListing"),
-					description: t("freeListingDescription"),
+					description: t("freeListingDesc"),
 				};
 			default:
 				return {
-					title: t("pricing"),
-					description: t("pricingDescription"),
+					title: t("pricingTitle"),
+					description: t("pricingDesc"),
 				};
 		}
 	};
@@ -206,7 +206,7 @@ export default function PricingStep({
 								}
 							>
 								<SelectTrigger>
-									<SelectValue placeholder="Select rental period" />
+									<SelectValue placeholder={t("selectRentalPeriod")} />
 								</SelectTrigger>
 								<SelectContent>
 									<SelectItem value="hourly">
@@ -237,7 +237,7 @@ export default function PricingStep({
 					<div className="bg-card p-4 border rounded-md text-center">
 						<h3 className="font-medium mb-2">{t("freeListing")}</h3>
 						<p className="text-sm text-muted-foreground">
-							{t("freeListingToggle")}
+							{t("freeListingInfo")}
 						</p>
 					</div>
 				)}
@@ -247,10 +247,10 @@ export default function PricingStep({
 					<div className="bg-card p-4 border rounded-md">
 						<h3 className="font-medium mb-2">{t("pricingTips")}</h3>
 						<ul className="text-sm space-y-2 text-muted-foreground">
-							<li>• {t("tipResearch")}</li>
-							<li>• {t("tipCondition")}</li>
-							<li>• {t("tipExtras")}</li>
-							<li>• {t("tipOffers")}</li>
+							<li>• {t("tip1")}</li>
+							<li>• {t("tip2")}</li>
+							<li>• {t("tip3")}</li>
+							<li>• {t("tip4")}</li>
 						</ul>
 					</div>
 				)}

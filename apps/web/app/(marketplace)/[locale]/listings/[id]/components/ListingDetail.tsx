@@ -52,7 +52,7 @@ function ImageGallery({
 				/>
 				<div className="absolute inset-0 bg-black/5 hover:bg-black/10 transition-colors flex items-center justify-center opacity-0 hover:opacity-100">
 					<p className="text-white bg-black/50 px-4 py-2 rounded-full text-sm font-medium">
-						Click to enlarge
+						{t("clickToEnlarge")}
 					</p>
 				</div>
 			</button>
@@ -110,7 +110,7 @@ function ImageModal({
 					type="button"
 					onClick={onClose}
 					className="absolute top-4 right-4 z-10 bg-black/50 text-white p-2 rounded-full hover:bg-black/70 transition-colors"
-					aria-label="Close image viewer"
+					aria-label={t("closeImageViewer")}
 				>
 					<X className="h-6 w-6" />
 				</button>
@@ -278,9 +278,9 @@ function ListingInfo({
 		return t("priceNotSet");
 	};
 	// Provide fallbacks for optional fields
-	const displayAuthor = author || "Listing Owner";
-	const displayEmail = authorEmail || "N/A";
-	const displayPhone = authorPhone || "N/A";
+	const displayAuthor = author || t("listingOwner");
+	const displayEmail = authorEmail || t("notAvailable");
+	const displayPhone = authorPhone || t("notAvailable");
 
 	// Format date
 	const formattedDate =
@@ -322,11 +322,11 @@ function ListingInfo({
 					</h3>
 					<div className="space-y-2">
 						<p className="flex items-center">
-							<span className="font-medium w-16">{t("emailLabel")}</span>
+							<span className="font-medium w-16">{t("email")}</span>
 							<span>{displayEmail}</span>
 						</p>
 						<p className="flex items-center">
-							<span className="font-medium w-16">{t("phoneLabel")}</span>
+							<span className="font-medium w-16">{t("phone")}</span>
 							<span>{displayPhone}</span>
 						</p>
 					</div>

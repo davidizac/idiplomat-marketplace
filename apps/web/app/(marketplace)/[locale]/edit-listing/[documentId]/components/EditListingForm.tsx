@@ -109,8 +109,8 @@ export default function EditListingForm({
 
 	const steps = [
 		{ id: "details", label: t("listingDetails") },
-		{ id: "pricing", label: t("pricing") },
-		{ id: "photos", label: t("photosStep") },
+		{ id: "pricing", label: t("stepPricing") },
+		{ id: "photos", label: t("stepPhotos") },
 	];
 
 	// Update form field
@@ -203,13 +203,13 @@ export default function EditListingForm({
 
 			// Success notification and redirect
 			toast.success(t("updateSuccess"), {
-				description: t("updateSuccessDescription"),
+				description: t("updateSuccessDesc"),
 			});
 			router.push("/app");
 		} catch (error) {
 			console.error("Error updating listing:", error);
-			toast.error(t("updateError"), {
-				description: t("updateErrorDescription"),
+			toast.error(t("updateFailed"), {
+				description: t("updateFailedDesc"),
 			});
 		} finally {
 			setIsSubmitting(false);

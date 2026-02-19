@@ -70,8 +70,8 @@ export default function ListingForm({ userId }: ListingFormProps) {
 
 	const steps = [
 		{ id: "details", label: t("listingDetails") },
-		{ id: "pricing", label: t("pricing") },
-		{ id: "photos", label: t("photosStep") },
+		{ id: "pricing", label: t("stepPricing") },
+		{ id: "photos", label: t("stepPhotos") },
 	];
 
 	// Update form field
@@ -152,13 +152,13 @@ export default function ListingForm({ userId }: ListingFormProps) {
 
 			// Success notification and redirect
 			toast.success(t("publishSuccess"), {
-				description: t("publishSuccessDescription"),
+				description: t("publishSuccessDesc"),
 			});
 			router.push("/app");
 		} catch (error) {
 			console.error("Error creating listing:", error);
-			toast.error(t("publishError"), {
-				description: t("publishErrorDescription"),
+			toast.error(t("publishFailed"), {
+				description: t("publishFailedDesc"),
 			});
 		} finally {
 			setIsSubmitting(false);

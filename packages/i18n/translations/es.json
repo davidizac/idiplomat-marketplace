@@ -438,7 +438,9 @@
 			"description": "Descripción",
 			"contactAuthor": "Contactar al autor del anuncio",
 			"showContactInfo": "Mostrar información de contacto",
-			"contactDisclaimer": "Al contactar al vendedor, por favor mencione que encontró este anuncio en i-Diplomat Marketplace."
+			"contactDisclaimer": "Al contactar al vendedor, por favor mencione que encontró este anuncio en i-Diplomat Marketplace.",
+			"listingImage": "Imagen del anuncio",
+			"imageCounter": "{current} de {total}"
 		},
 		"createListing": {
 			"listingDetails": "Detalles del anuncio",
@@ -480,7 +482,11 @@
 			"typeRequired": "El tipo de anuncio es obligatorio",
 			"stepDetails": "Detalles del anuncio",
 			"stepPricing": "Precios",
-			"stepPhotos": "Fotos"
+			"stepPhotos": "Fotos",
+			"forFree": "Gratis",
+			"selectCity": "Seleccionar ciudad",
+			"searchCities": "Buscar ciudades...",
+			"noCitiesFound": "No se encontraron ciudades"
 		},
 		"pricing": {
 			"setYourPrice": "Establece tu precio",
@@ -507,7 +513,9 @@
 			"tip4": "Los miembros de la comunidad diplomática suelen buscar buenas ofertas",
 			"invalidPrice": "Por favor, ingresa un precio válido mayor que cero",
 			"invalidRentalPrice": "Por favor, ingresa un precio de alquiler válido mayor que cero",
-			"selectRentalPeriodError": "Por favor, selecciona un período de alquiler"
+			"selectRentalPeriodError": "Por favor, selecciona un período de alquiler",
+			"back": "Volver a detalles",
+			"continueToPhotos": "Continuar a fotos"
 		},
 		"photos": {
 			"title": "Fotos",
@@ -524,7 +532,9 @@
 			"existingAndNew": "({existing} existentes, {new} nuevas)",
 			"onlyImageFiles": "Por favor, sube solo archivos de imagen",
 			"maxPhotosError": "Puedes subir un máximo de {max} fotos en total. Puedes agregar {allowed} fotos más.",
-			"atLeastOnePhoto": "Por favor, sube al menos una foto"
+			"atLeastOnePhoto": "Por favor, sube al menos una foto",
+			"back": "Volver a precios",
+			"submitting": "Enviando..."
 		},
 		"attributes": {
 			"categorySpecifications": "Especificaciones de la categoría",

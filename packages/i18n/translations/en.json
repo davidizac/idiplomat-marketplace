@@ -438,7 +438,9 @@
 			"description": "Description",
 			"contactAuthor": "Contact the listing author",
 			"showContactInfo": "Show Contact Information",
-			"contactDisclaimer": "When contacting the seller, please mention that you found this listing on i-Diplomat Marketplace."
+			"contactDisclaimer": "When contacting the seller, please mention that you found this listing on i-Diplomat Marketplace.",
+			"listingImage": "Listing image",
+			"imageCounter": "{current} of {total}"
 		},
 		"createListing": {
 			"listingDetails": "Listing Details",
@@ -480,7 +482,11 @@
 			"typeRequired": "Listing type is required",
 			"stepDetails": "Listing Details",
 			"stepPricing": "Pricing",
-			"stepPhotos": "Photos"
+			"stepPhotos": "Photos",
+			"forFree": "Free",
+			"selectCity": "Select a city",
+			"searchCities": "Search cities...",
+			"noCitiesFound": "No cities found"
 		},
 		"pricing": {
 			"setYourPrice": "Set Your Price",
@@ -507,7 +513,9 @@
 			"tip4": "Diplomatic community members often look for good deals",
 			"invalidPrice": "Please enter a valid price greater than zero",
 			"invalidRentalPrice": "Please enter a valid rental price greater than zero",
-			"selectRentalPeriodError": "Please select a rental period"
+			"selectRentalPeriodError": "Please select a rental period",
+			"back": "Back to Details",
+			"continueToPhotos": "Continue to Photos"
 		},
 		"photos": {
 			"title": "Photos",
@@ -524,7 +532,9 @@
 			"existingAndNew": "({existing} existing, {new} new)",
 			"onlyImageFiles": "Please upload only image files",
 			"maxPhotosError": "You can upload a maximum of {max} photos total. You can add {allowed} more photos.",
-			"atLeastOnePhoto": "Please upload at least one photo"
+			"atLeastOnePhoto": "Please upload at least one photo",
+			"back": "Back to Pricing",
+			"submitting": "Submitting..."
 		},
 		"attributes": {
 			"categorySpecifications": "Category Specifications",

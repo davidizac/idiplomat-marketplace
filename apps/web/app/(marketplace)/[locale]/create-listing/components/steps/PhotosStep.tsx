@@ -78,7 +78,7 @@ export default function PhotosStep({
 			(file) => !file.type.startsWith("image/"),
 		);
 		if (invalidFiles.length > 0) {
-			setError(t("uploadFailed"));
+			setError(t("onlyImageFiles"));
 			return;
 		}
 
@@ -92,7 +92,7 @@ export default function PhotosStep({
 			const allowedNewPhotos =
 				MAX_PHOTOS - (formState.existingPhotos?.length || 0);
 			setError(
-				t("maxPhotos", { max: MAX_PHOTOS }),
+				t("addUpTo", { max: MAX_PHOTOS }),
 			);
 			combined = combined.slice(0, allowedNewPhotos);
 		} else {
@@ -125,7 +125,7 @@ export default function PhotosStep({
 	// Validate before publishing
 	const validateBeforeSubmit = () => {
 		if (totalPhotos === 0) {
-			setError(t("photoRequired"));
+			setError(t("atLeastOnePhoto"));
 			return false;
 		}
 
@@ -150,9 +150,9 @@ export default function PhotosStep({
 	return (
 		<div className="space-y-6">
 			<div className="space-y-2">
-				<h2 className="text-2xl font-bold">{t("photos")}</h2>
+				<h2 className="text-2xl font-bold">{t("title")}</h2>
 				<p className="text-muted-foreground">
-					{t("maxPhotos", { max: MAX_PHOTOS })}
+					{t("addUpTo", { max: MAX_PHOTOS })}
 				</p>
 			</div>
 
@@ -162,8 +162,7 @@ export default function PhotosStep({
 						{t("uploadPhotos")}
 					</Label>
 					<p className="text-muted-foreground text-sm mt-1">
-						Clear photos from multiple angles will attract more
-						interest
+						{t("hint")}
 					</p>
 				</div>
 
@@ -182,7 +181,7 @@ export default function PhotosStep({
 						type="button"
 						onClick={handleUploadClick}
 						className="w-full border-2 border-dashed border-primary/50 rounded-lg p-12 text-center cursor-pointer hover:bg-primary/5 transition-colors"
-						aria-label="Upload photos"
+						aria-label={t("uploadPhotosAria")}
 					>
 						<div className="flex flex-col items-center space-y-2">
 							<Upload className="h-10 w-10 text-muted-foreground" />
@@ -190,7 +189,7 @@ export default function PhotosStep({
 								{t("clickToUpload")}
 							</p>
 							<p className="text-sm text-muted-foreground">
-								or drag and drop image files
+								{t("dragAndDrop")}
 							</p>
 						</div>
 					</button>
@@ -205,7 +204,7 @@ export default function PhotosStep({
 								>
 									<Image
 										src={photo.url}
-										alt={`Existing photo ${index + 1}`}
+										alt={t("existing")}
 										fill
 										className="object-cover"
 									/>
@@ -232,7 +231,7 @@ export default function PhotosStep({
 								>
 									<Image
 										src={url}
-										alt={`New photo ${index + 1}`}
+										alt={t("new")}
 										fill
 										className="object-cover"
 									/>
@@ -263,7 +262,7 @@ export default function PhotosStep({
 						</div>
 
 						<p className="text-sm text-center text-muted-foreground">
-							{t("photosUploaded", { count: totalPhotos, max: MAX_PHOTOS })}
+							{t("photosCount", { current: totalPhotos, max: MAX_PHOTOS })}
 							{formState.existingPhotos &&
 								formState.existingPhotos.length > 0 && (
 									<span className="block mt-1">
@@ -296,7 +295,7 @@ export default function PhotosStep({
 					onClick={handlePublish}
 					disabled={isSubmitting}
 				>
-					{isSubmitting ? "Submitting..." : submitButtonText}
+					{isSubmitting ? t("submitting") : submitButtonText}
 				</Button>
 			</div>
 		</div>

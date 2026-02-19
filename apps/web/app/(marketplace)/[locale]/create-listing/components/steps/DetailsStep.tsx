@@ -138,17 +138,17 @@ export default function DetailsStep({
 		}
 
 		if (!formState.description) {
-			newErrors.description = "Description is required";
+			newErrors.description = t("descriptionRequired");
 		} else if (formState.description.length < 20) {
 			newErrors.description = t("descriptionMinLength");
 		}
 
 		if (!formState.address) {
-			newErrors.address = "City is required";
+			newErrors.address = t("cityRequired");
 		}
 
 		if (!formState.type) {
-			newErrors.type = "Listing type is required";
+			newErrors.type = t("typeRequired");
 		}
 
 		setErrors(newErrors);
@@ -200,7 +200,7 @@ export default function DetailsStep({
 			<div className="space-y-2">
 				<h2 className="text-2xl font-bold">{t("listingDetails")}</h2>
 				<p className="text-muted-foreground">
-					Provide basic information about your listing.
+					{t("detailsDescription")}
 				</p>
 			</div>
 
@@ -212,14 +212,6 @@ export default function DetailsStep({
 						formState.categories?.[1]?.slug || null
 					}
 					allowSelectAll={false}
-					labels={{
-						primary: "Main Category",
-						subcategory: "Subcategory",
-					}}
-					placeholders={{
-						primary: "Select a category",
-						subcategory: "Select a subcategory",
-					}}
 					onChange={handleCategoryChange}
 				/>
 				{errors.category && (
@@ -235,7 +227,7 @@ export default function DetailsStep({
 					{t("listingType")}
 					{isApartmentsCategory && (
 						<span className="text-sm text-muted-foreground ml-2">
-							(Apartments are always for rent)
+							{t("apartmentsAlwaysRent")}
 						</span>
 					)}
 				</Label>
@@ -247,12 +239,12 @@ export default function DetailsStep({
 					disabled={isApartmentsCategory}
 				>
 					<SelectTrigger disabled={isApartmentsCategory}>
-						<SelectValue placeholder="Select listing type" />
+						<SelectValue placeholder={t("selectListingType")} />
 					</SelectTrigger>
 					<SelectContent>
 						<SelectItem value="sale">{t("forSale")}</SelectItem>
 						<SelectItem value="rent">{t("forRent")}</SelectItem>
-						<SelectItem value="free">Free</SelectItem>
+						<SelectItem value="free">{t("forFree")}</SelectItem>
 					</SelectContent>
 				</Select>
 				{errors.type && (
@@ -262,7 +254,7 @@ export default function DetailsStep({
 
 			{/* Address */}
 			<div className="space-y-2">
-				<Label htmlFor="address">{t("location")}</Label>
+				<Label htmlFor="address">{t("whichCity")}</Label>
 				<Select
 					value={formState.address || ""}
 					onValueChange={handleCityChange}
@@ -275,7 +267,7 @@ export default function DetailsStep({
 						<div className="p-2 border-b">
 							<input
 								type="text"
-								placeholder="Search cities..."
+								placeholder={t("searchCities")}
 								value={citySearchTerm}
 								onChange={(e) =>
 									setCitySearchTerm(e.target.value)
@@ -293,7 +285,7 @@ export default function DetailsStep({
 							))
 						) : (
 							<div className="p-2 text-sm text-muted-foreground text-center">
-								No cities found
+								{t("noCitiesFound")}
 							</div>
 						)}
 					</SelectContent>
@@ -345,7 +337,7 @@ export default function DetailsStep({
 
 			<div className="flex justify-end">
 				<Button type="button" onClick={handleNext}>
-					{t("continueToPricing")}
+					{t("continuePricing")}
 				</Button>
 			</div>
 		</div>

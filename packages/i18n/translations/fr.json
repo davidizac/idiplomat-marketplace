@@ -438,7 +438,9 @@
 			"description": "Description",
 			"contactAuthor": "Contacter l'auteur de l'annonce",
 			"showContactInfo": "Afficher les informations de contact",
-			"contactDisclaimer": "Lorsque vous contactez le vendeur, veuillez mentionner que vous avez trouvé cette annonce sur i-Diplomat Marketplace."
+			"contactDisclaimer": "Lorsque vous contactez le vendeur, veuillez mentionner que vous avez trouvé cette annonce sur i-Diplomat Marketplace.",
+			"listingImage": "Image de l'annonce",
+			"imageCounter": "{current} sur {total}"
 		},
 		"createListing": {
 			"listingDetails": "Détails de l'annonce",
@@ -480,7 +482,11 @@
 			"typeRequired": "Le type d'annonce est obligatoire",
 			"stepDetails": "Détails de l'annonce",
 			"stepPricing": "Tarifs",
-			"stepPhotos": "Photos"
+			"stepPhotos": "Photos",
+			"forFree": "Gratuit",
+			"selectCity": "Sélectionner une ville",
+			"searchCities": "Rechercher des villes...",
+			"noCitiesFound": "Aucune ville trouvée"
 		},
 		"pricing": {
 			"setYourPrice": "Définissez votre prix",
@@ -507,7 +513,9 @@
 			"tip4": "Les membres de la communauté diplomatique recherchent souvent de bonnes affaires",
 			"invalidPrice": "Veuillez entrer un prix valide supérieur à zéro",
 			"invalidRentalPrice": "Veuillez entrer un prix de location valide supérieur à zéro",
-			"selectRentalPeriodError": "Veuillez sélectionner une période de location"
+			"selectRentalPeriodError": "Veuillez sélectionner une période de location",
+			"back": "Retour aux détails",
+			"continueToPhotos": "Continuer vers les photos"
 		},
 		"photos": {
 			"title": "Photos",
@@ -524,7 +532,9 @@
 			"existingAndNew": "({existing} existantes, {new} nouvelles)",
 			"onlyImageFiles": "Veuillez télécharger uniquement des fichiers image",
 			"maxPhotosError": "Vous pouvez télécharger un maximum de {max} photos au total. Vous pouvez ajouter {allowed} photos supplémentaires.",
-			"atLeastOnePhoto": "Veuillez télécharger au moins une photo"
+			"atLeastOnePhoto": "Veuillez télécharger au moins une photo",
+			"back": "Retour aux prix",
+			"submitting": "Envoi en cours..."
 		},
 		"attributes": {
 			"categorySpecifications": "Spécifications de la catégorie",

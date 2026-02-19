@@ -129,7 +129,7 @@ export default function AttributeInputs({
 					{t("categorySpecifications")}
 				</h3>
 				<p className="text-muted-foreground">
-					{t("specificationsDescription")}
+					{t("fillSpecifications")}
 				</p>
 			</div>
 
