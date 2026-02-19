@@ -3,16 +3,18 @@
 import { LocaleLink } from "@i18n/routing";
 import { Button } from "@ui/components/button";
 import { UndoIcon } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 export function NotFound() {
+	const t = useTranslations("marketing.notFound");
 	return (
 		<div className="flex h-screen flex-col items-center justify-center">
 			<h1 className="font-bold text-5xl">404</h1>
-			<p className="mt-2 text-2xl">Page not found</p>
+			<p className="mt-2 text-2xl">{t("title")}</p>
 
 			<Button asChild className="mt-4">
 				<LocaleLink href="/">
-					<UndoIcon className="mr-2 size-4" /> Go to homepage
+					<UndoIcon className="mr-2 size-4" /> {t("goHome")}
 				</LocaleLink>
 			</Button>
 		</div>

@@ -3,6 +3,7 @@
 import { Button } from "@ui/components/button";
 import { Label } from "@ui/components/label";
 import { Image as ImageIcon, Upload, X } from "lucide-react";
+import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
 
@@ -29,6 +30,7 @@ export default function PhotosStep({
 	isSubmitting = false,
 	submitButtonText = "Submit",
 }: PhotosStepProps) {
+	const t = useTranslations("marketplace.photos");
 	const [error, setError] = useState<string>("");
 	const [photoPreviewUrls, setPhotoPreviewUrls] = useState<string[]>([]);
 	const fileInputRef = useRef<HTMLInputElement>(null);
@@ -76,7 +78,7 @@ export default function PhotosStep({
 			(file) => !file.type.startsWith("image/"),
 		);
 		if (invalidFiles.length > 0) {
-			setError("Please upload only image files");
+			setError(t("uploadFailed"));
 			return;
 		}
 
@@ -90,7 +92,7 @@ export default function PhotosStep({
 			const allowedNewPhotos =
 				MAX_PHOTOS - (formState.existingPhotos?.length || 0);
 			setError(
-				`You can upload a maximum of ${MAX_PHOTOS} photos total. You can add ${allowedNewPhotos} more photos.`,
+				t("maxPhotos", { max: MAX_PHOTOS }),
 			);
 			combined = combined.slice(0, allowedNewPhotos);
 		} else {
@@ -123,7 +125,7 @@ export default function PhotosStep({
 	// Validate before publishing
 	const validateBeforeSubmit = () => {
 		if (totalPhotos === 0) {
-			setError("Please upload at least one photo");
+			setError(t("photoRequired"));
 			return false;
 		}
 
@@ -148,16 +150,16 @@ export default function PhotosStep({
 	return (
 		<div className="space-y-6">
 			<div className="space-y-2">
-				<h2 className="text-2xl font-bold">Photos</h2>
+				<h2 className="text-2xl font-bold">{t("photos")}</h2>
 				<p className="text-muted-foreground">
-					Add up to {MAX_PHOTOS} photos of your item.
+					{t("maxPhotos", { max: MAX_PHOTOS })}
 				</p>
 			</div>
 
 			<div className="bg-muted/30 p-6 rounded-lg space-y-4">
 				<div className="text-center">
 					<Label htmlFor="photos" className="text-lg font-medium">
-						Upload Photos
+						{t("uploadPhotos")}
 					</Label>
 					<p className="text-muted-foreground text-sm mt-1">
 						Clear photos from multiple angles will attract more
@@ -185,7 +187,7 @@ export default function PhotosStep({
 						<div className="flex flex-col items-center space-y-2">
 							<Upload className="h-10 w-10 text-muted-foreground" />
 							<p className="font-medium">
-								Click to upload photos
+								{t("clickToUpload")}
 							</p>
 							<p className="text-sm text-muted-foreground">
 								or drag and drop image files
@@ -217,7 +219,7 @@ export default function PhotosStep({
 										<X className="h-4 w-4" />
 									</button>
 									<div className="absolute bottom-1 left-1 bg-black/70 text-white px-2 py-1 rounded text-xs">
-										Existing
+										{t("existing")}
 									</div>
 								</div>
 							))}
@@ -242,7 +244,7 @@ export default function PhotosStep({
 										<X className="h-4 w-4" />
 									</button>
 									<div className="absolute bottom-1 left-1 bg-green-600 text-white px-2 py-1 rounded text-xs">
-										New
+										{t("new")}
 									</div>
 								</div>
 							))}
@@ -255,18 +257,18 @@ export default function PhotosStep({
 									className="flex flex-col items-center justify-center border-2 border-dashed border-primary/50 rounded-md aspect-square text-muted-foreground hover:bg-primary/5 transition-colors"
 								>
 									<ImageIcon className="h-6 w-6 mb-1" />
-									<span className="text-xs">Add More</span>
+									<span className="text-xs">{t("addMore")}</span>
 								</button>
 							)}
 						</div>
 
 						<p className="text-sm text-center text-muted-foreground">
-							{totalPhotos} of {MAX_PHOTOS} photos
+							{t("photosUploaded", { count: totalPhotos, max: MAX_PHOTOS })}
 							{formState.existingPhotos &&
 								formState.existingPhotos.length > 0 && (
 									<span className="block mt-1">
 										({formState.existingPhotos.length}{" "}
-										existing, {formState.photos.length} new)
+										{t("existing")}, {formState.photos.length} {t("new")})
 									</span>
 								)}
 						</p>
@@ -287,7 +289,7 @@ export default function PhotosStep({
 					onClick={onBack}
 					disabled={isSubmitting}
 				>
-					Back to Pricing
+					{t("back")}
 				</Button>
 				<Button
 					type="button"

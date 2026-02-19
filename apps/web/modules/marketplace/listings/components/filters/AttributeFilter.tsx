@@ -22,6 +22,7 @@ import { Switch } from "@ui/components/switch";
 import { cn } from "@ui/lib";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 // Types for the different attribute values
 export type AttributeValue = string | string[] | number | boolean | Date | null;
@@ -41,6 +42,7 @@ export function AttributeFilter({
 	value,
 	onChange,
 }: AttributeFilterProps) {
+	const t = useTranslations("marketplace.filters");
 	// Handle the different attribute types
 	switch (attribute.type) {
 		case "text": {
@@ -57,7 +59,7 @@ export function AttributeFilter({
 						onChange={(e) =>
 							onChange(attribute.documentId, e.target.value)
 						}
-						placeholder={`Enter ${attribute.name.toLowerCase()}`}
+						placeholder={t("enterAttribute", { name: attribute.name.toLowerCase() })}
 					/>
 				</div>
 			);
@@ -124,7 +126,7 @@ export function AttributeFilter({
 								<CalendarIcon className="mr-2 h-4 w-4" />
 								{dateValue
 									? format(dateValue, "PPP")
-									: `Select ${attribute.name.toLowerCase()}`}
+									: t("selectAttribute", { name: attribute.name.toLowerCase() })}
 							</Button>
 						</PopoverTrigger>
 						<PopoverContent className="w-auto p-0">
@@ -162,7 +164,7 @@ export function AttributeFilter({
 					>
 						<SelectTrigger id={attribute.documentId}>
 							<SelectValue
-								placeholder={`Select ${attribute.name.toLowerCase()}`}
+								placeholder={t("selectAttribute", { name: attribute.name.toLowerCase() })}
 							/>
 						</SelectTrigger>
 						<SelectContent>

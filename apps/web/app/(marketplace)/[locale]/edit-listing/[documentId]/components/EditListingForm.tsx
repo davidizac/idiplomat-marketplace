@@ -3,6 +3,7 @@ import { getStrapiImageUrl, listingService } from "@repo/cms";
 import type { Listing } from "@repo/cms";
 import { cn } from "@ui/lib";
 import { Check, ChevronRight } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -53,6 +54,7 @@ export default function EditListingForm({
 	listing,
 	userId,
 }: EditListingFormProps) {
+	const t = useTranslations("marketplace.createListing");
 	console.log(listing);
 	const [currentStep, setCurrentStep] = useState<Step>("details");
 	const [formState, setFormState] = useState<FormState>({
@@ -106,9 +108,9 @@ export default function EditListingForm({
 	}, [listing]);
 
 	const steps = [
-		{ id: "details", label: "Listing Details" },
-		{ id: "pricing", label: "Pricing" },
-		{ id: "photos", label: "Photos" },
+		{ id: "details", label: t("listingDetails") },
+		{ id: "pricing", label: t("pricing") },
+		{ id: "photos", label: t("photosStep") },
 	];
 
 	// Update form field
@@ -200,15 +202,14 @@ export default function EditListingForm({
 			await listingService.updateListing(listing.documentId, updateData);
 
 			// Success notification and redirect
-			toast.success("Listing updated successfully", {
-				description: "Your changes have been saved.",
+			toast.success(t("updateSuccess"), {
+				description: t("updateSuccessDescription"),
 			});
 			router.push("/app");
 		} catch (error) {
 			console.error("Error updating listing:", error);
-			toast.error("Failed to update listing", {
-				description:
-					"There was an error updating your listing. Please try again.",
+			toast.error(t("updateError"), {
+				description: t("updateErrorDescription"),
 			});
 		} finally {
 			setIsSubmitting(false);
@@ -232,7 +233,7 @@ export default function EditListingForm({
 			{/* Header */}
 			<header className="border-b py-4">
 				<div className="container">
-					<h1 className="text-2xl font-bold">Edit Listing</h1>
+					<h1 className="text-2xl font-bold">{t("editListing")}</h1>
 				</div>
 			</header>
 
@@ -313,7 +314,7 @@ export default function EditListingForm({
 								onSubmit={handleSubmit}
 								onBack={goToPrevStep}
 								isSubmitting={isSubmitting}
-								submitButtonText="Update Listing"
+								submitButtonText={t("updateListing")}
 							/>
 						)}
 					</main>

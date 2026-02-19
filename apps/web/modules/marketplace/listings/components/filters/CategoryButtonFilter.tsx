@@ -15,6 +15,7 @@ import {
 	ShoppingBag,
 	Sofa,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import Image from "next/image";
 
 interface CategoryButtonFilterProps {
@@ -41,6 +42,7 @@ export function CategoryButtonFilter({
 	selectedCategory,
 	onSelectCategory,
 }: CategoryButtonFilterProps) {
+	const t = useTranslations("marketplace.filters");
 	// Fetch root categories (parent-level categories only)
 	const { data, isLoading, isError } = useCategories({
 		pageSize: 100,
@@ -53,7 +55,7 @@ export function CategoryButtonFilter({
 	if (isLoading) {
 		return (
 			<div className="space-y-3">
-				<Label className="text-sm font-semibold">Categories</Label>
+				<Label className="text-sm font-semibold">{t("categories")}</Label>
 				<div className="space-y-2">
 					{Array.from({ length: 6 }).map((_, index) => (
 						<Skeleton
@@ -69,9 +71,9 @@ export function CategoryButtonFilter({
 	if (isError) {
 		return (
 			<div className="space-y-3">
-				<Label className="text-sm font-semibold">Categories</Label>
+				<Label className="text-sm font-semibold">{t("categories")}</Label>
 				<div className="text-sm text-destructive">
-					Failed to load categories
+					{t("categoriesLoadError")}
 				</div>
 			</div>
 		);
@@ -79,7 +81,7 @@ export function CategoryButtonFilter({
 
 	return (
 		<div className="space-y-3">
-			<Label className="text-sm font-semibold">Categories</Label>
+			<Label className="text-sm font-semibold">{t("categories")}</Label>
 			<div className="space-y-2">
 				{/* All Categories Button */}
 				<Button
@@ -92,7 +94,7 @@ export function CategoryButtonFilter({
 					onClick={() => onSelectCategory(null)}
 				>
 					<Boxes className="h-5 w-5 flex-shrink-0" />
-					<span className="text-left">All Categories</span>
+					<span className="text-left">{t("allCategories")}</span>
 				</Button>
 
 				{/* Individual Category Buttons */}

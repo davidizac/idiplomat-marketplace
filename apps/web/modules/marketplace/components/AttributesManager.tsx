@@ -2,6 +2,7 @@
 
 import { categoryService } from "@repo/cms";
 import type { Attribute } from "@repo/cms";
+import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 import {
 	AttributeFilter,
@@ -82,6 +83,7 @@ export function AttributesManager({
 	onUpdateAttributes,
 	getAttributeValue,
 }: AttributesManagerProps) {
+	const t = useTranslations("marketplace.filters");
 	// State to store grouped attributes from selected categories
 	const [attributeGroups, setAttributeGroups] = useState<AttributeGroup[]>(
 		[],
@@ -303,7 +305,7 @@ export function AttributesManager({
 				<div className="space-y-6">
 					{!isFilter && (
 						<h3 className="text-sm font-medium">
-							Additional Details
+							{t("additionalDetails")}
 						</h3>
 					)}
 

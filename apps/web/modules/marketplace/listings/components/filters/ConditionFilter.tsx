@@ -1,6 +1,7 @@
 "use client";
 
 import { Label } from "@ui/components/label";
+import { useTranslations } from "next-intl";
 
 interface ConditionFilterProps {
 	onChange: (conditions: string[]) => void;
@@ -19,10 +20,18 @@ export const conditions: Condition[] = [
 	{ id: "fair", name: "Fair" },
 ];
 
+const conditionTranslationKeys: Record<string, string> = {
+	new: "conditionNew",
+	"like-new": "conditionLikeNew",
+	good: "conditionGood",
+	fair: "conditionFair",
+};
+
 export function ConditionFilter({
 	onChange,
 	selectedConditions,
 }: ConditionFilterProps) {
+	const t = useTranslations("marketplace.filters");
 	const handleChange = (conditionId: string) => {
 		if (selectedConditions.includes(conditionId)) {
 			onChange(selectedConditions.filter((id) => id !== conditionId));
@@ -33,7 +42,7 @@ export function ConditionFilter({
 
 	return (
 		<div className="space-y-4">
-			<h3 className="font-semibold">Condition</h3>
+			<h3 className="font-semibold">{t("condition")}</h3>
 			<div className="space-y-2">
 				{conditions.map((condition) => (
 					<div
@@ -47,7 +56,7 @@ export function ConditionFilter({
 							checked={selectedConditions.includes(condition.id)}
 							onChange={() => handleChange(condition.id)}
 						/>
-						<Label htmlFor={condition.id}>{condition.name}</Label>
+						<Label htmlFor={condition.id}>{t(conditionTranslationKeys[condition.id] || condition.name)}</Label>
 					</div>
 				))}
 			</div>

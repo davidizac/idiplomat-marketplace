@@ -12,6 +12,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Combobox } from "@ui/components/combobox";
 import { Label } from "@ui/components/label";
 import { Skeleton } from "@ui/components/skeleton";
+import { useTranslations } from "next-intl";
 import { useEffect, useMemo, useState } from "react";
 
 export interface SimpleCategorySelection {
@@ -73,16 +74,19 @@ export function SimpleCategorySelector({
 	initialSubcategorySlug = null,
 	allowSelectAll = false,
 	onChange,
-	labels = {
-		primary: "Main Category",
-		subcategory: "Subcategory",
-	},
-	placeholders = {
-		primary: "Select a category",
-		subcategory: "Select a subcategory",
-	},
+	labels: labelsProp,
+	placeholders: placeholdersProp,
 	className = "",
 }: SimpleCategorySelectorProps) {
+	const t = useTranslations("marketplace.filters");
+	const labels = {
+		primary: labelsProp?.primary ?? t("mainCategory"),
+		subcategory: labelsProp?.subcategory ?? t("subcategory"),
+	};
+	const placeholders = {
+		primary: placeholdersProp?.primary ?? "Select a category",
+		subcategory: placeholdersProp?.subcategory ?? "Select a subcategory",
+	};
 	const [primarySlug, setPrimarySlug] = useState<string | null>(
 		initialPrimarySlug,
 	);
@@ -128,9 +132,9 @@ export function SimpleCategorySelector({
 			label: cat.name,
 		}));
 		return allowSelectAll
-			? [{ value: "all", label: "All Categories" }, ...options]
+			? [{ value: "all", label: t("allCategories") }, ...options]
 			: options;
-	}, [rootCategories, allowSelectAll]);
+	}, [rootCategories, allowSelectAll, t]);
 
 	const subcategoryOptions = useMemo(() => {
 		const options = subcategories.map((cat) => ({
@@ -138,9 +142,9 @@ export function SimpleCategorySelector({
 			label: cat.name,
 		}));
 		return allowSelectAll
-			? [{ value: "all", label: "All Subcategories" }, ...options]
+			? [{ value: "all", label: t("allSubcategories") }, ...options]
 			: options;
-	}, [subcategories, allowSelectAll]);
+	}, [subcategories, allowSelectAll, t]);
 
 	// Handle primary category change
 	const handlePrimaryChange = (value: string) => {
@@ -215,7 +219,7 @@ export function SimpleCategorySelector({
 			<div className={`space-y-4 ${className}`}>
 				{label && <h3 className="font-semibold">{label}</h3>}
 				<div className="text-sm text-destructive">
-					Failed to load categories
+					{t("categoriesLoadError")}
 				</div>
 			</div>
 		);
@@ -234,8 +238,8 @@ export function SimpleCategorySelector({
 						value={primarySlug || ""}
 						onValueChange={handlePrimaryChange}
 						placeholder={placeholders.primary}
-						searchPlaceholder="Search categories..."
-						emptyText="No categories found."
+						searchPlaceholder={t("searchCategories")}
+						emptyText={t("noCategoriesFound")}
 						allowClear={allowSelectAll}
 					/>
 				</div>
@@ -248,7 +252,7 @@ export function SimpleCategorySelector({
 							<Skeleton className="h-10 w-full" />
 						) : subcategories.length === 0 ? (
 							<div className="text-sm text-muted-foreground py-2">
-								No subcategories available
+								{t("noSubcategoriesAvailable")}
 							</div>
 						) : (
 							<Combobox
@@ -256,8 +260,8 @@ export function SimpleCategorySelector({
 								value={subcategorySlug || ""}
 								onValueChange={handleSubcategoryChange}
 								placeholder={placeholders.subcategory}
-								searchPlaceholder="Search subcategories..."
-								emptyText="No subcategories found."
+								searchPlaceholder={t("searchSubcategories")}
+								emptyText={t("noSubcategoriesFound")}
 								allowClear={allowSelectAll}
 							/>
 						)}
@@ -268,7 +272,7 @@ export function SimpleCategorySelector({
 			{/* Selection Path Display */}
 			{primarySlug && (
 				<div className="text-sm text-muted-foreground">
-					<span className="font-medium">Selected: </span>
+					<span className="font-medium">{t("selected")} </span>
 					{
 						rootCategories?.find((cat) => cat.slug === primarySlug)
 							?.name

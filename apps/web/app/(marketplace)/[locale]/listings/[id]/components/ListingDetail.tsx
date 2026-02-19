@@ -13,6 +13,7 @@ import { Card } from "@ui/components/card";
 import { Separator } from "@ui/components/separator";
 import { Check, ChevronLeft, ChevronRight, Tag, User, X } from "lucide-react";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 
 interface ListingDetailProps {
@@ -33,17 +34,18 @@ function ImageGallery({
 	setSelectedImage: (index: number) => void;
 	onOpenModal: (index: number) => void;
 }) {
+	const t = useTranslations("marketplace.listing");
 	return (
 		<div className="space-y-6">
 			<button
 				type="button"
 				className="relative aspect-square w-full overflow-hidden rounded-lg border cursor-pointer bg-transparent p-0 block"
 				onClick={() => onOpenModal(selectedImage)}
-				aria-label="View larger image"
+				aria-label={t("listingImage")}
 			>
 				<Image
 					src={getStrapiImageUrl(images[selectedImage].url)}
-					alt={title}
+					alt={t("listingImage")}
 					fill
 					className="object-cover hover:scale-105 transition-transform duration-300"
 					sizes="(max-width: 768px) 100vw, 50vw"
@@ -70,7 +72,7 @@ function ImageGallery({
 					>
 						<img
 							src={getStrapiImageUrl(image.url)}
-							alt={`Thumbnail ${index + 1}`}
+							alt={t("imageCounter", { current: index + 1, total: images.length })}
 							className="object-cover"
 							sizes="96px"
 						/>
@@ -97,6 +99,7 @@ function ImageModal({
 	currentImage: number;
 	onNavigate: (direction: number) => void;
 }) {
+	const t = useTranslations("marketplace.listing");
 	if (!isOpen) return null;
 
 	return (
@@ -117,7 +120,7 @@ function ImageModal({
 					type="button"
 					onClick={() => onNavigate(-1)}
 					className="absolute left-4 top-1/2 -translate-y-1/2 z-10 bg-black/50 text-white p-3 rounded-full hover:bg-black/70 transition-colors"
-					aria-label="Previous image"
+					aria-label={t("previousImage")}
 				>
 					<ChevronLeft className="h-6 w-6" />
 				</button>
@@ -125,7 +128,7 @@ function ImageModal({
 					type="button"
 					onClick={() => onNavigate(1)}
 					className="absolute right-4 top-1/2 -translate-y-1/2 z-10 bg-black/50 text-white p-3 rounded-full hover:bg-black/70 transition-colors"
-					aria-label="Next image"
+					aria-label={t("nextImage")}
 				>
 					<ChevronRight className="h-6 w-6" />
 				</button>
@@ -134,7 +137,7 @@ function ImageModal({
 				<div className="relative w-full h-full">
 					<img
 						src={getStrapiImageUrl(images[currentImage].url)}
-						alt={`${title}`}
+						alt={t("listingImage")}
 						className="object-contain"
 						sizes="100vw"
 					/>
@@ -142,7 +145,7 @@ function ImageModal({
 
 				{/* Image counter */}
 				<div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/50 text-white px-4 py-2 rounded-full text-sm">
-					{currentImage + 1} / {images.length}
+					{t("imageCounter", { current: currentImage + 1, total: images.length })}
 				</div>
 			</div>
 		</div>
@@ -172,20 +175,21 @@ function CategoriesAttributes({
 	categories: Category[];
 	attributes: AttributeValue[];
 }) {
+	const t = useTranslations("marketplace.listing");
 	if (categories.length === 0 && attributes.length === 0) {
 		return null;
 	}
 
 	return (
 		<div className="mb-8">
-			<h2 className="text-2xl font-semibold mb-4">Details</h2>
+			<h2 className="text-2xl font-semibold mb-4">{t("details")}</h2>
 			<div className="bg-muted/20 p-6 rounded-lg space-y-6">
 				{/* Categories */}
 				{categories.length > 0 && (
 					<div>
 						<h3 className="font-medium mb-3 flex items-center">
 							<Tag className="h-4 w-4 mr-2" />
-							Categories
+							{t("categories")}
 						</h3>
 						<div className="flex flex-wrap gap-2">
 							{categories.map((category) => (
@@ -200,7 +204,7 @@ function CategoriesAttributes({
 				{/* Attributes */}
 				{attributes.length > 0 && (
 					<div>
-						<h3 className="font-medium mb-3">Specifications</h3>
+						<h3 className="font-medium mb-3">{t("specifications")}</h3>
 						<div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-3">
 							{attributes.map((attr) => (
 								<div
@@ -253,24 +257,25 @@ function ListingInfo({
 	showContact: boolean;
 	setShowContact: (value: boolean) => void;
 }) {
+	const t = useTranslations("marketplace.listing");
 	// Helper function to format price display
 	const formatPrice = () => {
 		if (type === "free") {
-			return "Free";
+			return t("free");
 		}
 		if (type === "sale" && price) {
 			return `₪${price}`;
 		}
 		if (type === "rent" && rental_price && rental_period) {
 			const periodMap = {
-				hourly: "per hour",
-				daily: "per day",
-				weekly: "per week",
-				monthly: "per month",
+				hourly: t("perHour"),
+				daily: t("perDay"),
+				weekly: t("perWeek"),
+				monthly: t("perMonth"),
 			};
 			return `₪${rental_price} ${periodMap[rental_period]}`;
 		}
-		return "Price not set";
+		return t("priceNotSet");
 	};
 	// Provide fallbacks for optional fields
 	const displayAuthor = author || "Listing Owner";
@@ -307,21 +312,21 @@ function ListingInfo({
 				className="w-full"
 				size="lg"
 			>
-				CONTACT DETAILS
+				{t("contactDetails")}
 			</Button>
 
 			{showContact && (
 				<Card className="p-6 bg-muted/30 border">
 					<h3 className="font-semibold text-lg mb-2">
-						Contact Information
+						{t("contactInformation")}
 					</h3>
 					<div className="space-y-2">
 						<p className="flex items-center">
-							<span className="font-medium w-16">Email:</span>
+							<span className="font-medium w-16">{t("emailLabel")}</span>
 							<span>{displayEmail}</span>
 						</p>
 						<p className="flex items-center">
-							<span className="font-medium w-16">Phone:</span>
+							<span className="font-medium w-16">{t("phoneLabel")}</span>
 							<span>{displayPhone}</span>
 						</p>
 					</div>
@@ -330,7 +335,7 @@ function ListingInfo({
 
 			<div className="pt-2">
 				<p className="text-sm text-muted-foreground">
-					Listed on {formattedDate}
+					{t("listedOn", { date: formattedDate })}
 				</p>
 			</div>
 		</div>
@@ -339,9 +344,10 @@ function ListingInfo({
 
 // Description Section Component
 function DescriptionSection({ description }: { description: string }) {
+	const t = useTranslations("marketplace.listing");
 	return (
 		<div className="mb-12">
-			<h2 className="text-2xl font-semibold mb-6">Description</h2>
+			<h2 className="text-2xl font-semibold mb-6">{t("description")}</h2>
 			<div className="prose prose-stone max-w-none dark:prose-invert bg-muted/20 p-6 rounded-lg">
 				{description.split("\n\n").map((paragraph, i) => (
 					<p key={i} className="mb-4">
@@ -355,10 +361,11 @@ function DescriptionSection({ description }: { description: string }) {
 
 // Contact Action Component
 function ContactAction({ onShowContact }: { onShowContact: () => void }) {
+	const t = useTranslations("marketplace.listing");
 	return (
 		<div className="text-center py-12 max-w-2xl mx-auto">
 			<h2 className="text-2xl font-semibold mb-6">
-				Contact the listing author
+				{t("contactDetails")}
 			</h2>
 			<div className="bg-muted/20 p-8 rounded-lg">
 				<Button
@@ -366,12 +373,8 @@ function ContactAction({ onShowContact }: { onShowContact: () => void }) {
 					size="lg"
 					className="w-full mb-6"
 				>
-					Show Contact Information
+					{t("showContactInfo")}
 				</Button>
-				<p className="text-muted-foreground">
-					When contacting the seller, please mention that you found
-					this listing on i-Diplomat Marketplace.
-				</p>
 			</div>
 		</div>
 	);

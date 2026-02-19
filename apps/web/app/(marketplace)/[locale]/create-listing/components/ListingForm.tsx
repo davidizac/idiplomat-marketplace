@@ -1,6 +1,7 @@
 "use client";
 import { listingService } from "@repo/cms";
 import { Check, ChevronRight } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -51,6 +52,7 @@ interface FormState {
 }
 
 export default function ListingForm({ userId }: ListingFormProps) {
+	const t = useTranslations("marketplace.createListing");
 	const [currentStep, setCurrentStep] = useState<Step>("details");
 	const [formState, setFormState] = useState<FormState>({
 		categories: [],
@@ -67,9 +69,9 @@ export default function ListingForm({ userId }: ListingFormProps) {
 	const router = useRouter();
 
 	const steps = [
-		{ id: "details", label: "Listing Details" },
-		{ id: "pricing", label: "Pricing" },
-		{ id: "photos", label: "Photos" },
+		{ id: "details", label: t("listingDetails") },
+		{ id: "pricing", label: t("pricing") },
+		{ id: "photos", label: t("photosStep") },
 	];
 
 	// Update form field
@@ -149,16 +151,14 @@ export default function ListingForm({ userId }: ListingFormProps) {
 			});
 
 			// Success notification and redirect
-			toast.success("Listing published successfully", {
-				description:
-					"Your listing has been published to the marketplace.",
+			toast.success(t("publishSuccess"), {
+				description: t("publishSuccessDescription"),
 			});
 			router.push("/app");
 		} catch (error) {
 			console.error("Error creating listing:", error);
-			toast.error("Failed to publish listing", {
-				description:
-					"There was an error publishing your listing. Please try again.",
+			toast.error(t("publishError"), {
+				description: t("publishErrorDescription"),
 			});
 		} finally {
 			setIsSubmitting(false);
@@ -182,7 +182,7 @@ export default function ListingForm({ userId }: ListingFormProps) {
 			{/* Header */}
 			<header className="border-b py-4">
 				<div className="container">
-					<h1 className="text-2xl font-bold">Post a Listing</h1>
+					<h1 className="text-2xl font-bold">{t("postListing")}</h1>
 				</div>
 			</header>
 
@@ -263,7 +263,7 @@ export default function ListingForm({ userId }: ListingFormProps) {
 								onSubmit={handleSubmit}
 								onBack={goToPrevStep}
 								isSubmitting={isSubmitting}
-								submitButtonText="Publish Listing"
+								submitButtonText={t("publishListing")}
 							/>
 						)}
 					</main>

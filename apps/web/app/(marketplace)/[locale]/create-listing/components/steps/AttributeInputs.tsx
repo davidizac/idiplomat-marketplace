@@ -12,6 +12,7 @@ import {
 	SelectValue,
 } from "@ui/components/select";
 import { Textarea } from "@ui/components/textarea";
+import { useTranslations } from "next-intl";
 import { useEffect, useRef } from "react";
 
 interface AttributeInputsProps {
@@ -37,6 +38,7 @@ export default function AttributeInputs({
 	updateAttributes,
 	errors = {},
 }: AttributeInputsProps) {
+	const t = useTranslations("marketplace.attributes");
 	// Keep track of whether we need to initialize attributes
 	const initializedRef = useRef(false);
 
@@ -124,10 +126,10 @@ export default function AttributeInputs({
 		<div className="space-y-6">
 			<div className="space-y-2">
 				<h3 className="text-lg font-semibold">
-					Category Specifications
+					{t("categorySpecifications")}
 				</h3>
 				<p className="text-muted-foreground">
-					Fill in the specifications for the selected category.
+					{t("specificationsDescription")}
 				</p>
 			</div>
 
@@ -214,7 +216,7 @@ export default function AttributeInputs({
 										}
 									>
 										<SelectValue
-											placeholder={`Select ${attr.name}`}
+											placeholder={t("selectAttribute", { name: attr.name })}
 										/>
 									</SelectTrigger>
 									<SelectContent>
@@ -247,7 +249,7 @@ export default function AttributeInputs({
 										htmlFor={`attr-${attr.id}`}
 										className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
 									>
-										Yes
+										{t("yes")}
 									</label>
 								</div>
 							)}

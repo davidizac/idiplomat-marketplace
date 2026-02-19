@@ -11,6 +11,7 @@ import {
 	SelectValue,
 } from "@ui/components/select";
 import { Textarea } from "@ui/components/textarea";
+import { useTranslations } from "next-intl";
 import { useCallback, useState } from "react";
 import {
 	type AttributeData,
@@ -52,6 +53,7 @@ export default function DetailsStep({
 	updateField,
 	onNext,
 }: DetailsStepProps) {
+	const t = useTranslations("marketplace.createListing");
 	const [errors, setErrors] = useState<Record<string, string>>({});
 	const [citySearchTerm, setCitySearchTerm] = useState("");
 
@@ -126,20 +128,19 @@ export default function DetailsStep({
 
 		// Require at least one category
 		if (!formState.categories || formState.categories.length === 0) {
-			newErrors.category = "Category is required";
+			newErrors.category = t("categoryRequired");
 		}
 
 		if (!formState.title) {
-			newErrors.title = "Title is required";
+			newErrors.title = t("titleRequired");
 		} else if (formState.title.length < 5) {
-			newErrors.title = "Title must be at least 5 characters";
+			newErrors.title = t("titleMinLength");
 		}
 
 		if (!formState.description) {
 			newErrors.description = "Description is required";
 		} else if (formState.description.length < 20) {
-			newErrors.description =
-				"Description must be at least 20 characters";
+			newErrors.description = t("descriptionMinLength");
 		}
 
 		if (!formState.address) {
@@ -197,7 +198,7 @@ export default function DetailsStep({
 	return (
 		<div className="space-y-6">
 			<div className="space-y-2">
-				<h2 className="text-2xl font-bold">Listing Details</h2>
+				<h2 className="text-2xl font-bold">{t("listingDetails")}</h2>
 				<p className="text-muted-foreground">
 					Provide basic information about your listing.
 				</p>
@@ -231,7 +232,7 @@ export default function DetailsStep({
 			{/* Listing Type */}
 			<div className="space-y-2">
 				<Label htmlFor="type">
-					Listing Type
+					{t("listingType")}
 					{isApartmentsCategory && (
 						<span className="text-sm text-muted-foreground ml-2">
 							(Apartments are always for rent)
@@ -249,8 +250,8 @@ export default function DetailsStep({
 						<SelectValue placeholder="Select listing type" />
 					</SelectTrigger>
 					<SelectContent>
-						<SelectItem value="sale">For Sale</SelectItem>
-						<SelectItem value="rent">For Rent</SelectItem>
+						<SelectItem value="sale">{t("forSale")}</SelectItem>
+						<SelectItem value="rent">{t("forRent")}</SelectItem>
 						<SelectItem value="free">Free</SelectItem>
 					</SelectContent>
 				</Select>
@@ -261,13 +262,13 @@ export default function DetailsStep({
 
 			{/* Address */}
 			<div className="space-y-2">
-				<Label htmlFor="address">Which city is the listing in?</Label>
+				<Label htmlFor="address">{t("location")}</Label>
 				<Select
 					value={formState.address || ""}
 					onValueChange={handleCityChange}
 				>
 					<SelectTrigger>
-						<SelectValue placeholder="Select a city" />
+						<SelectValue placeholder={t("selectCity")} />
 					</SelectTrigger>
 					<SelectContent className="max-h-[200px] overflow-y-auto">
 						{/* Search input */}
@@ -303,10 +304,10 @@ export default function DetailsStep({
 			</div>
 
 			<div className="space-y-2">
-				<Label htmlFor="title">Title</Label>
+				<Label htmlFor="title">{t("title")}</Label>
 				<Input
 					id="title"
-					placeholder="Enter a descriptive title"
+					placeholder={t("titlePlaceholder")}
 					value={formState.title || ""}
 					onChange={(e) => updateField("title", e.target.value)}
 				/>
@@ -316,10 +317,10 @@ export default function DetailsStep({
 			</div>
 
 			<div className="space-y-2">
-				<Label htmlFor="description">Description</Label>
+				<Label htmlFor="description">{t("description")}</Label>
 				<Textarea
 					id="description"
-					placeholder="Describe your item in detail (condition, features, etc.)"
+					placeholder={t("descriptionPlaceholder")}
 					className="min-h-[150px]"
 					value={formState.description || ""}
 					onChange={(e) => updateField("description", e.target.value)}
@@ -344,7 +345,7 @@ export default function DetailsStep({
 
 			<div className="flex justify-end">
 				<Button type="button" onClick={handleNext}>
-					Continue to Pricing
+					{t("continueToPricing")}
 				</Button>
 			</div>
 		</div>

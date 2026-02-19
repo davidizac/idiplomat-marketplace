@@ -17,7 +17,7 @@ export function Hero() {
 				<div className="absolute inset-0 overflow-hidden">
 					<Image
 						src="/images/cities/telaviv-jaffa.jpg"
-						alt="Tel Aviv Jaffa"
+						alt={t("heroImageAlt")}
 						fill
 						className="object-cover object-center"
 						priority

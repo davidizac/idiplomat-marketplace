@@ -12,6 +12,7 @@ import {
 } from "@ui/components/dialog";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { type Category, useCategories } from "../../api";
 
 interface CategorySelectionModalProps {
@@ -25,6 +26,7 @@ export function CategorySelectionModal({
 	onOpenChange,
 	searchQuery,
 }: CategorySelectionModalProps) {
+	const t = useTranslations("marketplace.filters");
 	const router = useLocaleRouter();
 	const searchParams = useSearchParams();
 	const { data: categoriesResponse, isLoading } = useCategories({
@@ -58,12 +60,12 @@ export function CategorySelectionModal({
 			<DialogContent className="sm:max-w-3xl">
 				<DialogHeader>
 					<DialogTitle className="text-2xl">
-						Choose a Category
+						{t("chooseCategory")}
 					</DialogTitle>
 					<DialogDescription>
 						{searchQuery
-							? `Please select a category to search for "${searchQuery}"`
-							: "Select a category to browse listings"}
+							? t("selectCategorySearch", { query: searchQuery })
+							: t("selectCategoryBrowse")}
 					</DialogDescription>
 				</DialogHeader>
 
@@ -122,7 +124,7 @@ export function CategorySelectionModal({
 								variant="outline"
 								onClick={handleViewAllCategories}
 							>
-								View All Categories
+								{t("viewAllCategories")}
 							</Button>
 						</div>
 					</>

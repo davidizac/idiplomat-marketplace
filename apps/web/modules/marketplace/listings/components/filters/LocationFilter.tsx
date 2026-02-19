@@ -7,6 +7,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@ui/components/select";
+import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 
 interface LocationFilterProps {
@@ -32,6 +33,7 @@ export function LocationFilter({
 	onChange,
 	selectedLocation,
 }: LocationFilterProps) {
+	const t = useTranslations("marketplace.filters");
 	// Add local state to control the select
 	const [value, setValue] = useState(selectedLocation);
 
@@ -48,16 +50,16 @@ export function LocationFilter({
 
 	return (
 		<div className="space-y-4">
-			<h3 className="font-semibold">Location</h3>
+			<h3 className="font-semibold">{t("location")}</h3>
 			{/* Use local state for value */}
 			<Select value={value} onValueChange={handleValueChange}>
 				<SelectTrigger>
-					<SelectValue placeholder="Select city" />
+					<SelectValue placeholder={t("selectCityPlaceholder")} />
 				</SelectTrigger>
 				<SelectContent>
 					{cities.map((city) => (
 						<SelectItem key={city.id} value={city.id}>
-							{city.name}
+							{city.id === "all" ? t("allLocations") : city.name}
 						</SelectItem>
 					))}
 				</SelectContent>

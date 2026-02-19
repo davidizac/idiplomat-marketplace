@@ -9,11 +9,13 @@ import {
 	DropdownMenuTrigger,
 } from "@ui/components/dropdown-menu";
 import { HardDriveIcon, MoonIcon, SunIcon } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useTheme } from "next-themes";
 import { useState } from "react";
 import { useIsClient } from "usehooks-ts";
 
 export function ColorModeToggle() {
+	const t = useTranslations("common.theme");
 	const { resolvedTheme, setTheme, theme } = useTheme();
 	const [value, setValue] = useState<string>(theme ?? "system");
 	const isClient = useIsClient();
@@ -21,17 +23,17 @@ export function ColorModeToggle() {
 	const colorModeOptions = [
 		{
 			value: "system",
-			label: "System",
+			label: t("system"),
 			icon: HardDriveIcon,
 		},
 		{
 			value: "light",
-			label: "Light",
+			label: t("light"),
 			icon: SunIcon,
 		},
 		{
 			value: "dark",
-			label: "Dark",
+			label: t("dark"),
 			icon: MoonIcon,
 		},
 	];
@@ -47,7 +49,7 @@ export function ColorModeToggle() {
 					variant="ghost"
 					size="icon"
 					data-test="color-mode-toggle"
-					aria-label="Color mode"
+					aria-label={t("colorMode")}
 				>
 					{resolvedTheme === "light" ? (
 						<SunIcon className="size-4" />

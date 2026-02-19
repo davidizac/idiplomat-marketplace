@@ -159,7 +159,7 @@ export function PriceRangeFilter({
 							onBlur={handleMinBlur}
 							min={minPrice}
 							max={maxPrice}
-							aria-label="Minimum price"
+							aria-label={t("minPriceAria")}
 						/>
 					</div>
 				</div>
@@ -179,7 +179,7 @@ export function PriceRangeFilter({
 							onBlur={handleMaxBlur}
 							min={minPrice}
 							max={maxPrice}
-							aria-label="Maximum price"
+							aria-label={t("maxPriceAria")}
 						/>
 					</div>
 				</div>

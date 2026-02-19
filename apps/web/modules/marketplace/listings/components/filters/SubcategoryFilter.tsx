@@ -9,6 +9,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@ui/components/select";
+import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 
 interface SubcategoryFilterProps {
@@ -22,6 +23,7 @@ export function SubcategoryFilter({
 	selectedSubcategory,
 	onChange,
 }: SubcategoryFilterProps) {
+	const t = useTranslations("marketplace.filters");
 	const [subcategories, setSubcategories] = useState<Category[]>([]);
 
 	// Load subcategories when the parent category changes
@@ -43,7 +45,7 @@ export function SubcategoryFilter({
 
 	return (
 		<div className="space-y-2">
-			<Label htmlFor="subcategory">Subcategory</Label>
+			<Label htmlFor="subcategory">{t("subcategory")}</Label>
 			<Select
 				value={selectedSubcategory || ""}
 				onValueChange={(value: string) =>
@@ -51,10 +53,10 @@ export function SubcategoryFilter({
 				}
 			>
 				<SelectTrigger id="subcategory">
-					<SelectValue placeholder="Select a subcategory" />
+					<SelectValue placeholder={t("selectSubcategory")} />
 				</SelectTrigger>
 				<SelectContent>
-					<SelectItem value="all">All Subcategories</SelectItem>
+					<SelectItem value="all">{t("allSubcategories")}</SelectItem>
 					{subcategories.map((subcategory) => (
 						<SelectItem
 							key={subcategory.id}

@@ -9,6 +9,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@ui/components/select";
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 
 interface FormState {
@@ -32,6 +33,7 @@ export default function PricingStep({
 	onNext,
 	onBack,
 }: PricingStepProps) {
+	const t = useTranslations("marketplace.pricing");
 	const [errors, setErrors] = useState<Record<string, string>>({});
 
 	// Handle price change for sale items
@@ -64,16 +66,14 @@ export default function PricingStep({
 
 		if (formState.type === "sale") {
 			if (!formState.price || formState.price <= 0) {
-				newErrors.price =
-					"Please enter a valid price greater than zero";
+				newErrors.price = t("priceRequired");
 			}
 		} else if (formState.type === "rent") {
 			if (!formState.rental_price || formState.rental_price <= 0) {
-				newErrors.rental_price =
-					"Please enter a valid rental price greater than zero";
+				newErrors.rental_price = t("priceRequired");
 			}
 			if (!formState.rental_period) {
-				newErrors.rental_period = "Please select a rental period";
+				newErrors.rental_period = t("rentalPeriodRequired");
 			}
 		}
 		// No validation needed for "free" type
@@ -100,25 +100,23 @@ export default function PricingStep({
 		switch (formState.type) {
 			case "sale":
 				return {
-					title: "Set Your Price",
-					description: "Set a competitive price for your listing.",
+					title: t("setYourPrice"),
+					description: t("setYourPriceDescription"),
 				};
 			case "rent":
 				return {
-					title: "Set Your Rental Price",
-					description:
-						"Set a competitive rental price and period for your listing.",
+					title: t("setYourRentalPrice"),
+					description: t("setYourRentalPriceDescription"),
 				};
 			case "free":
 				return {
-					title: "Free Listing",
-					description:
-						"This item will be listed as free. No pricing required.",
+					title: t("freeListing"),
+					description: t("freeListingDescription"),
 				};
 			default:
 				return {
-					title: "Pricing",
-					description: "Set pricing information for your listing.",
+					title: t("pricing"),
+					description: t("pricingDescription"),
 				};
 		}
 	};
@@ -136,7 +134,7 @@ export default function PricingStep({
 				{/* Sale Price Input */}
 				{formState.type === "sale" && (
 					<div className="space-y-2">
-						<Label htmlFor="price">Price (₪)</Label>
+						<Label htmlFor="price">{t("priceLabel")}</Label>
 						<div className="relative">
 							<span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
 								₪
@@ -170,7 +168,7 @@ export default function PricingStep({
 					<>
 						<div className="space-y-2">
 							<Label htmlFor="rental_price">
-								Rental Price (₪)
+								{t("rentalPriceLabel")}
 							</Label>
 							<div className="relative">
 								<span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
@@ -200,7 +198,7 @@ export default function PricingStep({
 						</div>
 
 						<div className="space-y-2">
-							<Label htmlFor="rental_period">Rental Period</Label>
+							<Label htmlFor="rental_period">{t("rentalPeriod")}</Label>
 							<Select
 								value={formState.rental_period || ""}
 								onValueChange={(value) =>
@@ -212,16 +210,16 @@ export default function PricingStep({
 								</SelectTrigger>
 								<SelectContent>
 									<SelectItem value="hourly">
-										Per Hour
+										{t("perHour")}
 									</SelectItem>
 									<SelectItem value="daily">
-										Per Day
+										{t("perDay")}
 									</SelectItem>
 									<SelectItem value="weekly">
-										Per Week
+										{t("perWeek")}
 									</SelectItem>
 									<SelectItem value="monthly">
-										Per Month
+										{t("perMonth")}
 									</SelectItem>
 								</SelectContent>
 							</Select>
@@ -237,10 +235,9 @@ export default function PricingStep({
 				{/* Free Listing Message */}
 				{formState.type === "free" && (
 					<div className="bg-card p-4 border rounded-md text-center">
-						<h3 className="font-medium mb-2">Free Listing</h3>
+						<h3 className="font-medium mb-2">{t("freeListing")}</h3>
 						<p className="text-sm text-muted-foreground">
-							This item will be listed as free for other community
-							members.
+							{t("freeListingToggle")}
 						</p>
 					</div>
 				)}
@@ -248,17 +245,12 @@ export default function PricingStep({
 				{/* Pricing Tips */}
 				{formState.type !== "free" && (
 					<div className="bg-card p-4 border rounded-md">
-						<h3 className="font-medium mb-2">Pricing tips</h3>
+						<h3 className="font-medium mb-2">{t("pricingTips")}</h3>
 						<ul className="text-sm space-y-2 text-muted-foreground">
-							<li>
-								• Check similar listings for competitive pricing
-							</li>
-							<li>• Consider the condition of your item</li>
-							<li>• Factor in any extras you're including</li>
-							<li>
-								• Diplomatic community members often look for
-								good deals
-							</li>
+							<li>• {t("tipResearch")}</li>
+							<li>• {t("tipCondition")}</li>
+							<li>• {t("tipExtras")}</li>
+							<li>• {t("tipOffers")}</li>
 						</ul>
 					</div>
 				)}
@@ -266,10 +258,10 @@ export default function PricingStep({
 
 			<div className="flex justify-between">
 				<Button type="button" variant="outline" onClick={onBack}>
-					Back to Details
+					{t("back")}
 				</Button>
 				<Button type="button" onClick={handleNext}>
-					Continue to Photos
+					{t("continueToPhotos")}
 				</Button>
 			</div>
 		</div>
