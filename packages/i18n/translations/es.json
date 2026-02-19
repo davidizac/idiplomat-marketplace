@@ -116,7 +116,7 @@
 		},
 		"forgotPassword": {
 			"backToSignin": "Volver a iniciar sesión",
-			"email": "Email",
+			"email": "Correo electrónico",
 			"hints": {
 				"linkNotSent": {
 					"message": "Lo sentimos, pero no pudimos enviarte un enlace para restablecer tu contraseña. Por favor, inténtalo más tarde.",
@@ -166,7 +166,7 @@
 		},
 		"signup": {
 			"alreadyHaveAccount": "¿Ya tienes una cuenta?",
-			"email": "Email",
+			"email": "Correo electrónico",
 			"hints": {
 				"signupFailed": "Lo sentimos, pero no pudimos crear tu cuenta. Por favor, inténtalo más tarde.",
 				"verifyEmail": "Te hemos enviado un enlace para verificar tu email. Por favor, revisa tu bandeja de entrada."
