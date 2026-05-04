@@ -1,7 +1,7 @@
 "use client";
 
-import { useCategories } from "@marketplace/api";
-import type { Category } from "@repo/cms";
+import { type Category, useCategories } from "@marketplace/api";
+import { getMarketplaceImageUrl } from "@marketplace/lib/strapi-images";
 import { Button } from "@ui/components/button";
 import { Label } from "@ui/components/label";
 import { Skeleton } from "@ui/components/skeleton";
@@ -118,7 +118,9 @@ export function CategoryButtonFilter({
 							{category.icon?.url ? (
 								<div className="relative h-5 w-5 flex-shrink-0">
 									<Image
-										src={category.icon.url}
+										src={getMarketplaceImageUrl(
+											category.icon.url,
+										)}
 										alt={category.name}
 										fill
 										className="object-contain"

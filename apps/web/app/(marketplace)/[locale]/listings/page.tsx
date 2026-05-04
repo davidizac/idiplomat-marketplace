@@ -4,8 +4,7 @@ import { useLocaleRouter } from "@i18n/routing";
 import { FaqSection } from "@marketing/home/components/FaqSection";
 import { Features } from "@marketing/home/components/Features";
 import { Newsletter } from "@marketing/home/components/Newsletter";
-import { useCategoryBySlug } from "@marketplace/api";
-import type { Category } from "@repo/cms";
+import { type Category, useCategoryBySlug } from "@marketplace/api";
 import { Button } from "@ui/components/button";
 import { SlidersHorizontal } from "lucide-react";
 import { useTranslations } from "next-intl";
@@ -21,16 +20,6 @@ import { useFilterManager } from "../../../../modules/marketplace/listings/hooks
 
 export default function ListingsPage() {
 	const t = useTranslations("marketplace.listings");
-	console.log(
-		"[ListingsPage] Component rendering:",
-		JSON.stringify(
-			{
-				timestamp: new Date().toISOString(),
-			},
-			null,
-			2,
-		),
-	);
 
 	const router = useLocaleRouter();
 	const searchParams = useSearchParams();
@@ -40,22 +29,6 @@ export default function ListingsPage() {
 	const cityQuery = searchParams.get("city");
 	const minPriceQuery = searchParams.get("minPrice");
 	const maxPriceQuery = searchParams.get("maxPrice");
-
-	console.log(
-		"[ListingsPage] URL params:",
-		JSON.stringify(
-			{
-				searchQuery,
-				categorySlug,
-				subcategorySlug,
-				cityQuery,
-				minPriceQuery,
-				maxPriceQuery,
-			},
-			null,
-			2,
-		),
-	);
 
 	// Fetch category data if a category slug is present
 	const { data: categoryData } = useCategoryBySlug(categorySlug || undefined);

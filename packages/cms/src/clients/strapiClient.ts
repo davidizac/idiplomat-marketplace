@@ -9,16 +9,38 @@ import { strapi } from "@strapi/client";
 const STRAPI_URL =
 	process.env.NEXT_PUBLIC_STRAPI_URL ?? "http://localhost:1337";
 const STRAPI_API_URL = `${STRAPI_URL}/api`;
-const STRAPI_TOKEN =
-	process.env.STRAPI_TOKEN ??
-	"57e6cc69828d7b4fdbf87fe5c982edf380eee0269b3136217250745b867c9c1661ef9ec52d190d48e14f2e888cbfcb16d6501aa5c1a5a50f635b6248fe111035f0a3dab2cdb5ded6438bfcf9d987299e7d4101792a21f848bb64325b46b995f6015aed976b7f4b4be7d64fb30cc00aa0b838155012fcdab34f96c5dd15cc3b0f";
+const STRAPI_TOKEN = process.env.STRAPI_TOKEN ?? "";
+
+type StrapiClient = ReturnType<typeof strapi>;
+
+let strapiClientInstance: StrapiClient | null = null;
+
+function getStrapiToken(): string {
+	if (!STRAPI_TOKEN) {
+		throw new Error("STRAPI_TOKEN is required for Strapi API requests");
+	}
+
+	return STRAPI_TOKEN;
+}
+
+function getStrapiClient(): StrapiClient {
+	if (!strapiClientInstance) {
+		strapiClientInstance = strapi({
+			baseURL: STRAPI_API_URL,
+			auth: getStrapiToken(),
+		});
+	}
+
+	return strapiClientInstance;
+}
 
 /**
- * Initialize the Strapi client with authentication
+ * Lazily initialize the Strapi client with authentication.
  */
-export const strapiClient = strapi({
-	baseURL: STRAPI_API_URL,
-	auth: STRAPI_TOKEN,
+export const strapiClient = new Proxy({} as StrapiClient, {
+	get(_target, property, receiver) {
+		return Reflect.get(getStrapiClient(), property, receiver);
+	},
 });
 
 /**
@@ -37,24 +59,28 @@ export function getStrapiImageUrl(url: string | null | undefined): string {
  * Type-safe helpers for collections and singles
  */
 export const strapiCollections = {
-	listings: () => strapiClient.collection("listings"),
-	categories: () => strapiClient.collection("categories"),
-	tags: () => strapiClient.collection("tags"),
+	listings: () => getStrapiClient().collection("listings"),
+	categories: () => getStrapiClient().collection("categories"),
+	tags: () => getStrapiClient().collection("tags"),
 	productAttributeValues: () =>
-		strapiClient.collection("product-attribute-values"),
+		getStrapiClient().collection("product-attribute-values"),
 	// Helper method to get any collection by name
-	collection: (name: string) => strapiClient.collection(name),
+	collection: (name: string) => getStrapiClient().collection(name),
 };
 
 export const strapiSingles = {
-	homepage: () => strapiClient.single("homepage"),
-	globalSettings: () => strapiClient.single("global-setting"),
+	homepage: () => getStrapiClient().single("homepage"),
+	globalSettings: () => getStrapiClient().single("global-setting"),
 };
 
 /**
  * Export the files manager
  */
-export const strapiFiles = strapiClient.files;
+export const strapiFiles = new Proxy({} as StrapiClient["files"], {
+	get(_target, property, receiver) {
+		return Reflect.get(getStrapiClient().files, property, receiver);
+	},
+});
 
 /**
  * Upload one or more files to Strapi Media Library (Upload plugin)
@@ -78,7 +104,7 @@ export async function uploadFiles(
 	const response = await fetch(`${STRAPI_URL}/api/upload`, {
 		method: "POST",
 		headers: {
-			Authorization: `Bearer ${STRAPI_TOKEN}`,
+			Authorization: `Bearer ${getStrapiToken()}`,
 			// Content-Type will be set automatically by fetch when using FormData
 		},
 		body: formData,
