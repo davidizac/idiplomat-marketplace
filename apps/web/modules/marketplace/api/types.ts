@@ -45,11 +45,13 @@ export interface ListingResponse {
 // Listings response format
 export interface ListingsResponse {
 	data: Listing[];
-	pagination: {
-		page: number;
-		pageSize: number;
-		pageCount: number;
-		total: number;
+	meta: {
+		pagination: {
+			page: number;
+			pageSize: number;
+			pageCount: number;
+			total: number;
+		};
 	};
 }
 
@@ -61,11 +63,13 @@ export interface CategoryResponse {
 // Categories response format
 export interface CategoriesResponse {
 	data: Category[];
-	pagination: {
-		page: number;
-		pageSize: number;
-		pageCount: number;
-		total: number;
+	meta: {
+		pagination: {
+			page: number;
+			pageSize: number;
+			pageCount: number;
+			total: number;
+		};
 	};
 }
 

@@ -1,10 +1,10 @@
 /**
  * API Hooks
- * React hooks for marketplace API data fetching
+ * React hooks for API data fetching using the CMS package
  */
 
+import { categoryService, listingService } from "@repo/cms";
 import { useQuery } from "@tanstack/react-query";
-import type { CategoriesResponse, Category, ListingsResponse } from "./types";
 
 // Query keys
 const CATEGORIES_KEY = "marketplace-categories";
@@ -25,47 +25,6 @@ function createStableQueryKey(
 	);
 
 	return stableParams;
-}
-
-async function fetchJson<T>(url: string): Promise<T> {
-	const response = await fetch(url);
-
-	if (!response.ok) {
-		throw new Error(`Request failed with status ${response.status}`);
-	}
-
-	return response.json() as Promise<T>;
-}
-
-function toQueryString(params: Record<string, any>): string {
-	const searchParams = new URLSearchParams();
-
-	for (const [key, value] of Object.entries(params)) {
-		if (value === undefined || value === null || value === "") {
-			continue;
-		}
-
-		if (Array.isArray(value)) {
-			if (key === "attributeFilters") {
-				searchParams.set(key, JSON.stringify(value));
-				continue;
-			}
-
-			for (const item of value) {
-				searchParams.append(key, String(item));
-			}
-			continue;
-		}
-
-		if (typeof value === "object") {
-			searchParams.set(key, JSON.stringify(value));
-			continue;
-		}
-
-		searchParams.set(key, String(value));
-	}
-
-	return searchParams.toString();
 }
 
 /**
@@ -90,10 +49,7 @@ export function useCategories(
 
 	return useQuery({
 		queryKey: [CATEGORIES_KEY, createStableQueryKey(enhancedParams)],
-		queryFn: () =>
-			fetchJson<CategoriesResponse>(
-				`/api/marketplace/categories?${toQueryString(enhancedParams)}`,
-			),
+		queryFn: () => categoryService.getCategories(enhancedParams),
 		enabled,
 		// Prevent refetching on window focus to reduce unnecessary API calls
 		refetchOnWindowFocus: false,
@@ -114,10 +70,20 @@ export function useCategories(
 export function useCategoryBySlug(slug: string | undefined, enabled = true) {
 	return useQuery({
 		queryKey: [CATEGORIES_KEY, "slug", slug],
-		queryFn: () =>
-			fetchJson<Category>(
-				`/api/marketplace/categories?${toQueryString({ slug })}`,
-			),
+		queryFn: async () => {
+			// Log that we're fetching a category
+			console.log(`API: Fetching category with slug: ${slug}`);
+
+			// Get the category with deep population of subcategories
+			const result = await categoryService.getCategoryBySlug(
+				slug as string,
+			);
+
+			// Log the result for debugging
+			console.log("API: Category result:", result);
+
+			return result;
+		},
 		enabled: Boolean(slug) && enabled,
 		// Prevent refetching on window focus to reduce unnecessary API calls
 		refetchOnWindowFocus: false,
@@ -158,12 +124,36 @@ export function useListings(
 	// Create a stable query key by filtering out Next.js internal parameters
 	const stableParams = createStableQueryKey(restParams);
 
+	console.log(
+		"[useListings] Hook called:",
+		JSON.stringify(
+			{
+				timestamp: new Date().toISOString(),
+				params: restParams,
+				stableParams,
+				queryKey: [LISTINGS_KEY, stableParams],
+			},
+			null,
+			2,
+		),
+	);
+
 	return useQuery({
 		queryKey: [LISTINGS_KEY, stableParams],
-		queryFn: () =>
-			fetchJson<ListingsResponse>(
-				`/api/marketplace/listings?${toQueryString(restParams)}`,
-			),
+		queryFn: () => {
+			console.log(
+				"[useListings] queryFn executing - FETCHING DATA FROM API",
+				JSON.stringify(
+					{
+						timestamp: new Date().toISOString(),
+						params: restParams,
+					},
+					null,
+					2,
+				),
+			);
+			return listingService.getListings(restParams);
+		},
 		enabled,
 		// Prevent refetching on window focus to reduce unnecessary API calls
 		refetchOnWindowFocus: false,

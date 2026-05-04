@@ -1,5 +1,6 @@
 "use client";
 
+import { categoryService } from "@repo/cms";
 import type { Attribute } from "@repo/cms";
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
@@ -7,20 +8,6 @@ import {
 	AttributeFilter,
 	type AttributeValue,
 } from "../listings/components/filters/AttributeFilter";
-
-async function fetchCategoryBySlug(
-	slug: string,
-): Promise<{ attributes?: Attribute[] }> {
-	const response = await fetch(
-		`/api/marketplace/categories?${new URLSearchParams({ slug })}`,
-	);
-
-	if (!response.ok) {
-		throw new Error(`Request failed with status ${response.status}`);
-	}
-
-	return response.json() as Promise<{ attributes?: Attribute[] }>;
-}
 
 export interface AttributeData {
 	attributeDocumentId: string;
@@ -122,9 +109,8 @@ export function AttributesManager({
 
 				// Fetch each category's attributes and group them
 				for (const category of selectedCategories) {
-					const categoryDetails = await fetchCategoryBySlug(
-						category.slug,
-					);
+					const categoryDetails =
+						await categoryService.getCategoryBySlug(category.slug);
 
 					if (
 						categoryDetails.attributes &&

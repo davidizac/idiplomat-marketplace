@@ -1,7 +1,7 @@
 "use client";
 
 import { useLocaleRouter } from "@i18n/routing";
-import { getMarketplaceImageUrl } from "@marketplace/lib/strapi-images";
+import { getStrapiImageUrl } from "@repo/cms";
 import { Button } from "@ui/components/button";
 import {
 	Dialog,
@@ -94,7 +94,7 @@ export function CategorySelectionModal({
 									<div className="aspect-square relative flex items-center justify-center">
 										{category.icon ? (
 											<Image
-												src={getMarketplaceImageUrl(
+												src={getStrapiImageUrl(
 													category.icon.url,
 												)}
 												alt={category.name}

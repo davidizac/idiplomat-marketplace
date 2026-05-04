@@ -1,7 +1,7 @@
 "use client";
 
-import { type Category, useCategories } from "@marketplace/api";
-import { getMarketplaceImageUrl } from "@marketplace/lib/strapi-images";
+import { useCategories } from "@marketplace/api";
+import type { Category } from "@repo/cms";
 import { Button } from "@ui/components/button";
 import {
 	Dialog,
@@ -153,9 +153,7 @@ export function MobileCategoryModal({
 											{category.icon?.url ? (
 												<div className="relative h-5 w-5 flex-shrink-0">
 													<Image
-														src={getMarketplaceImageUrl(
-															category.icon.url,
-														)}
+														src={category.icon.url}
 														alt={category.name}
 														fill
 														className="object-contain"

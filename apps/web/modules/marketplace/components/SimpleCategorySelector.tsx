@@ -6,6 +6,7 @@
 
 "use client";
 
+import { categoryService } from "@repo/cms";
 import type { Category } from "@repo/cms";
 import { useQuery } from "@tanstack/react-query";
 import { Combobox } from "@ui/components/combobox";
@@ -13,16 +14,6 @@ import { Label } from "@ui/components/label";
 import { Skeleton } from "@ui/components/skeleton";
 import { useTranslations } from "next-intl";
 import { useEffect, useMemo, useState } from "react";
-
-async function fetchMarketplaceApi<T>(path: string): Promise<T> {
-	const response = await fetch(path);
-
-	if (!response.ok) {
-		throw new Error(`Request failed with status ${response.status}`);
-	}
-
-	return response.json() as Promise<T>;
-}
 
 export interface SimpleCategorySelection {
 	primary: Category | null;
@@ -111,9 +102,7 @@ export function SimpleCategorySelector({
 	} = useQuery({
 		queryKey: ["root-categories"],
 		queryFn: async () => {
-			const result = await fetchMarketplaceApi<{ data: Category[] }>(
-				"/api/marketplace/categories?pageSize=100&populate=categories&populate=icon",
-			);
+			const result = await categoryService.getRootCategories();
 			return result.data;
 		},
 	});
@@ -125,9 +114,7 @@ export function SimpleCategorySelector({
 			if (!primarySlug) {
 				return null;
 			}
-			return fetchMarketplaceApi<Category>(
-				`/api/marketplace/categories?${new URLSearchParams({ slug: primarySlug })}`,
-			);
+			return categoryService.getCategoryBySlug(primarySlug);
 		},
 		enabled: Boolean(primarySlug),
 	});

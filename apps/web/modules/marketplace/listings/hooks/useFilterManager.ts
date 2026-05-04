@@ -3,7 +3,7 @@
  * A React hook for managing filters with the FilterManager
  */
 
-import { FilterManager, toStrapiQuery } from "@repo/cms/query";
+import { FilterManager, toStrapiQuery } from "@repo/cms";
 import { useCallback, useMemo, useState } from "react";
 import type { AttributeValue } from "../components/filters/AttributeFilter";
 import type { SortOption } from "../components/filters/SortFilter";

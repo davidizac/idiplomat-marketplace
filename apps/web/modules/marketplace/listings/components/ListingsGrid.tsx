@@ -2,12 +2,11 @@
 
 import { LocaleLink } from "@i18n/routing";
 import {
-	type Category,
 	type ListingData,
 	type ListingFilterParams,
 	useListings,
 } from "@marketplace/api";
-import { getMarketplaceImageUrl } from "@marketplace/lib/strapi-images";
+import { type Category, getStrapiImageUrl } from "@repo/cms";
 import { Card } from "@ui/components/card";
 import { Skeleton } from "@ui/components/skeleton";
 import Image from "next/image";
@@ -131,7 +130,7 @@ function processListings(data: any): ListingCardProps[] {
 				title: listing.title,
 				imageUrl:
 					listing.images?.length > 0
-						? getMarketplaceImageUrl(listing.images[0].url)
+						? getStrapiImageUrl(listing.images[0].url)
 						: "/images/hero-image.png",
 				createdAt: new Date(listing.createdAt),
 				type: listing.type || "sale",
