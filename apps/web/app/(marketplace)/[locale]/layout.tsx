@@ -13,7 +13,7 @@ export function generateStaticParams() {
 }
 
 export default async function MarketplaceLayout({ children, params }: any) {
-	const { locale } = params;
+	const { locale } = await params;
 
 	setRequestLocale(locale);
 

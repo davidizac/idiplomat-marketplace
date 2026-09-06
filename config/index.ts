@@ -85,7 +85,7 @@ export const config = {
 	// Mails
 	mails: {
 		// the from address for mails
-		from: "noreply@supastarter.dev",
+		from: "i-Diplomat <info@i-diplomat.com>",
 	},
 	// Frontend
 	ui: {
@@ -117,7 +117,7 @@ export const config = {
 		// whether the contact form should be enabled
 		enabled: true,
 		// the email to which the contact form messages should be sent
-		to: "hello@your-domain.com",
+		to: "info@i-diplomat.com",
 		// the subject of the email
 		subject: "Contact form message",
 	},

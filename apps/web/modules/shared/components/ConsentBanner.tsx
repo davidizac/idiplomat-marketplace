@@ -22,31 +22,27 @@ export function ConsentBanner() {
 	}
 
 	return (
-		<div className="fixed left-4 bottom-4 max-w-md z-50">
-			<div className="flex gap-4 rounded-2xl border bg-card p-4 text-card-foreground shadow-xl">
-				<CookieIcon className="block size-6 shrink-0 text-5xl text-primary/60 mt-1" />
-				<div>
-					<p className="text-sm leading-normal">
-						We use cookies to enhance your browsing experience,
-						serve personalized content, and analyze our traffic. By
-						clicking &quot;Allow&quot;, you consent to our use of
-						cookies.
-					</p>
-					<div className="mt-4 flex gap-2">
-						<Button
-							variant="default"
-							className="flex-1"
-							onClick={() => declineCookies()}
-						>
-							Decline
-						</Button>
-						<Button
-							className="flex-1"
-							onClick={() => allowCookies()}
-						>
-							Allow
-						</Button>
-					</div>
+		<div className="fixed inset-x-0 bottom-0 z-50 border-t bg-card/95 backdrop-blur-sm">
+			<div className="container flex flex-col gap-3 py-3 sm:flex-row sm:items-center sm:justify-between">
+				<p className="flex items-start gap-2 text-sm leading-normal text-card-foreground">
+					<CookieIcon className="mt-0.5 size-4 shrink-0 text-primary/60" />
+					<span>
+						We use cookies to run the marketplace and understand
+						how it is used. By clicking Allow, you consent to our
+						use of cookies.
+					</span>
+				</p>
+				<div className="flex shrink-0 gap-2">
+					<Button
+						variant="outline"
+						size="sm"
+						onClick={() => declineCookies()}
+					>
+						Decline
+					</Button>
+					<Button size="sm" onClick={() => allowCookies()}>
+						Allow
+					</Button>
 				</div>
 			</div>
 		</div>

@@ -20,7 +20,6 @@ import {
 	DropdownMenuTrigger,
 } from "@ui/components/dropdown-menu";
 import {
-	BookIcon,
 	HardDriveIcon,
 	HomeIcon,
 	LogOutIcon,
@@ -153,17 +152,10 @@ export function UserMenu({ showUserName }: { showUserName?: boolean }) {
 				</DropdownMenuItem>
 
 				<DropdownMenuItem asChild>
-					<a href="https://supastarter.dev/docs/nextjs">
-						<BookIcon className="mr-2 size-4" />
-						{t("app.userMenu.documentation")}
-					</a>
-				</DropdownMenuItem>
-
-				<DropdownMenuItem asChild>
-					<Link href="/">
+					<a href="https://www.i-diplomat.com">
 						<HomeIcon className="mr-2 size-4" />
 						{t("app.userMenu.home")}
-					</Link>
+					</a>
 				</DropdownMenuItem>
 
 				<DropdownMenuItem onClick={onLogout}>

@@ -273,12 +273,12 @@
 			"title": "Comment ça marche",
 			"description": "Une plateforme simple connectant les diplomates en Israël qui souhaitent acheter et vendre des articles",
 			"forDiplomatsOnly": "Réservé aux diplomates",
-			"forDiplomatsOnlyDesc": "i-Diplomat Marketplace est exclusivement réservé à la communauté diplomatique en Israël. Tous les membres sont vérifiés pour garantir un environnement de confiance.",
+			"forDiplomatsOnlyDesc": "i-Diplomat Marketplace est conçu pour la communauté diplomatique en Israël — personnel d'ambassade, diplomates et leurs familles.",
 			"directConnections": "Connexions directes",
 			"directConnectionsDesc": "Contrairement aux marchés classiques, nous vous aidons simplement à trouver et à vous connecter avec d'autres diplomates. Toutes les communications et arrangements se font directement entre les membres.",
 			"steps": {
 				"signUp": "S'inscrire",
-				"signUpDesc": "Créez votre compte avec vos accréditations diplomatiques",
+				"signUpDesc": "Créez un compte avec votre e-mail",
 				"postItems": "Publier des articles",
 				"postItemsDesc": "Publiez ce que vous souhaitez vendre avec photos et détails",
 				"browseListings": "Parcourir les annonces",
@@ -294,11 +294,11 @@
 			"contactSupport": "Contacter le support",
 			"items": {
 				"q1": "Qui peut utiliser i-Diplomat Marketplace ?",
-				"a1": "i-Diplomat Marketplace est exclusivement disponible pour les membres vérifiés de la communauté diplomatique en Israël, y compris les diplomates, le personnel des ambassades et leurs familles.",
+				"a1": "i-Diplomat Marketplace s'adresse aux diplomates, au personnel des ambassades et à leurs familles en Israël.",
 				"q2": "Y a-t-il des frais pour publier des articles sur le marché ?",
-				"a2": "Non, la publication d'articles sur i-Diplomat Marketplace est entièrement gratuite pour tout le personnel diplomatique vérifié.",
-				"q3": "Comment vérifier mon statut diplomatique ?",
-				"a3": "Lors de l'inscription, il vous sera demandé de fournir vos accréditations diplomatiques que notre équipe vérifiera. Cela inclut votre carte diplomatique, les informations de l'ambassade et vos coordonnées.",
+				"a2": "Non. La publication d'annonces est gratuite.",
+				"q3": "Faut-il des documents diplomatiques pour s'inscrire ?",
+				"a3": "Créez un compte avec votre e-mail et un mot de passe. La marketplace est destinée aux diplomates, au personnel d'ambassade et à leurs familles en Israël. Pour toute question d'accès, contactez le support.",
 				"q4": "Puis-je vendre des articles hors taxes ?",
 				"a4": "Oui, en tant que diplomate, vous pouvez vendre des articles hors taxes à d'autres diplomates conformément aux réglementations du ministère israélien des Affaires étrangères concernant les privilèges diplomatiques.",
 				"q5": "Comment les paiements sont-ils gérés ?",
@@ -332,7 +332,10 @@
 			"iframeTitle": "Inscription à la newsletter"
 		},
 		"footer": {
-			"blog": "Blog"
+			"blog": "Newsletter",
+			"privacyPolicy": "Politique de confidentialité",
+			"terms": "Conditions",
+			"contact": "Contact"
 		},
 		"notFound": {
 			"title": "Page non trouvée",
@@ -437,7 +440,11 @@
 			"listedOn": "Publié le {date}",
 			"description": "Description",
 			"contactAuthor": "Contacter l'auteur de l'annonce",
-			"showContactInfo": "Afficher les informations de contact",
+			"showContactInfo": "Demander à i-Diplomat de vous mettre en relation",
+			"requestIntroHint": "Le contact du vendeur se fait via i-Diplomat. Nous vous présenterons à l'annonceur.",
+			"call": "Appeler",
+			"whatsapp": "WhatsApp",
+			"emailUs": "E-mail",
 			"contactDisclaimer": "Lorsque vous contactez le vendeur, veuillez mentionner que vous avez trouvé cette annonce sur i-Diplomat Marketplace.",
 			"listingImage": "Image de l'annonce",
 			"imageCounter": "{current} sur {total}"

@@ -196,16 +196,22 @@ export class FilterManager {
 	 * Set price range filter
 	 */
 	setPriceRangeFilter(min: number | null, max: number | null): FilterManager {
-		if (min !== null || max !== null) {
-			return this.addFilter("price_range", {
-				field: "price",
-				operator: "between",
-				value: [min ?? 0, max ?? Number.MAX_SAFE_INTEGER],
-				valueType: "number",
-			});
+		const boundedMin = min && min > 0 ? min : 0;
+		const boundedMax = max && max > 0 ? max : 0;
+
+		if (boundedMin <= 0 && boundedMax <= 0) {
+			return this.removeFilter("price_range");
 		}
 
-		return this.removeFilter("price_range");
+		return this.addFilter("price_range", {
+			field: "price",
+			operator: "between",
+			value: [
+				boundedMin,
+				boundedMax > 0 ? boundedMax : Number.MAX_SAFE_INTEGER,
+			],
+			valueType: "number",
+		});
 	}
 
 	/**

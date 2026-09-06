@@ -1,67 +1,52 @@
-// "use client";
 import Link from "next/link";
+import { listingService } from "@repo/cms";
 import type { Category } from "../../../../modules/marketplace/api";
+import {
+	categoriesWithListings,
+	occupiedCategorySlugs,
+} from "../../../../modules/marketplace/listings/lib/categories";
 import { loadRootCategories } from "./loader";
 
-export default async function CategoriesPage({ params, searchParams }: any) {
-	// Parse pagination params
-	const page = Number.parseInt(searchParams.page || "1", 10);
-	const pageSize = Number.parseInt(searchParams.pageSize || "20", 10);
+export default async function CategoriesPage({ params }: any) {
+	const { locale } = await params;
 
-	// Load root categories
-	const { data: rootCategories, pagination } = await loadRootCategories({
-		page,
-		pageSize,
-		sort: "name:asc",
-	});
+	const [{ data: rootCategories }, listingsResult] = await Promise.all([
+		loadRootCategories({
+			page: 1,
+			pageSize: 100,
+			sort: "name:asc",
+		}),
+		listingService.getListings({ pageSize: 100 }),
+	]);
+
+	const visibleCategories = categoriesWithListings(
+		rootCategories,
+		occupiedCategorySlugs(listingsResult.data),
+	);
 
 	return (
 		<div className="container py-12">
 			<h1 className="text-3xl font-bold mb-6">Categories</h1>
 
-			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-				{rootCategories.map((category) => (
-					<CategoryCard
-						key={category.id}
-						category={category}
-						locale={params.locale}
-					/>
-				))}
-			</div>
-
-			{/* Pagination */}
-			{pagination.pageCount > 1 && (
-				<div className="mt-12 flex justify-center">
-					<nav className="flex items-center space-x-2">
-						{page > 1 && (
-							<Link
-								href={`/${params.locale}/categories?page=${page - 1}&pageSize=${pageSize}`}
-								className="px-4 py-2 border rounded hover:bg-muted transition-colors"
-							>
-								Previous
-							</Link>
-						)}
-
-						<span className="px-4 py-2">
-							Page {page} of {pagination.pageCount}
-						</span>
-
-						{page < pagination.pageCount && (
-							<Link
-								href={`/${params.locale}/categories?page=${page + 1}&pageSize=${pageSize}`}
-								className="px-4 py-2 border rounded hover:bg-muted transition-colors"
-							>
-								Next
-							</Link>
-						)}
-					</nav>
+			{visibleCategories.length === 0 ? (
+				<p className="text-muted-foreground">
+					No categories have listings yet.
+				</p>
+			) : (
+				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+					{visibleCategories.map((category) => (
+						<CategoryCard
+							key={category.id}
+							category={category}
+							locale={locale}
+						/>
+					))}
 				</div>
 			)}
 		</div>
 	);
 }
 
-// Individual category card component
 function CategoryCard({
 	category,
 	locale,

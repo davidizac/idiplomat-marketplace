@@ -34,6 +34,51 @@ const nextConfig: NextConfig = {
 	async redirects() {
 		return [
 			{
+				source: "/docs",
+				destination: "/listings",
+				permanent: true,
+			},
+			{
+				source: "/docs/:path*",
+				destination: "/listings",
+				permanent: true,
+			},
+			{
+				source: "/:locale/docs",
+				destination: "/:locale/listings",
+				permanent: true,
+			},
+			{
+				source: "/:locale/docs/:path*",
+				destination: "/:locale/listings",
+				permanent: true,
+			},
+			{
+				source: "/blog",
+				destination: "/listings",
+				permanent: true,
+			},
+			{
+				source: "/:locale/blog",
+				destination: "/:locale/listings",
+				permanent: true,
+			},
+			{
+				source: "/:locale/blog/:path*",
+				destination: "/:locale/listings",
+				permanent: true,
+			},
+			{
+				source: "/changelog",
+				destination: "/listings",
+				permanent: true,
+			},
+			{
+				source: "/:locale/changelog",
+				destination: "/:locale/listings",
+				permanent: true,
+			},
+			{
 				source: "/app/settings",
 				destination: "/app/settings/general",
 				permanent: true,

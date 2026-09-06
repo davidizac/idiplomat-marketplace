@@ -16,6 +16,12 @@ import type { AttributeValue } from "./filters/AttributeFilter";
 import { CityFilter } from "./filters/CityFilter";
 import { PriceRangeFilter } from "./filters/PriceRangeFilter";
 import { SearchFilter } from "./filters/SearchFilter";
+import {
+	PRICE_FILTER_CEILING,
+	PRICE_RANGE_FILTER_ID,
+	UNSET_PRICE_RANGE,
+	readStoredPriceRange,
+} from "../lib/format";
 
 interface MobileFiltersModalProps {
 	isOpen: boolean;
@@ -95,20 +101,11 @@ export function MobileFiltersModal({
 
 	// Get current price range
 	const currentPriceRange = useMemo((): [number, number] => {
-		const priceFilter = filterManager.getFilter("priceRange");
-		if (
-			priceFilter?.value &&
-			typeof priceFilter.value === "object" &&
-			"min" in priceFilter.value &&
-			"max" in priceFilter.value
-		) {
-			const { min, max } = priceFilter.value as {
-				min: number;
-				max: number;
-			};
-			return [min, max];
+		const priceFilter = filterManager.getFilter(PRICE_RANGE_FILTER_ID);
+		if (!priceFilter) {
+			return UNSET_PRICE_RANGE;
 		}
-		return [0, 10000]; // Default range
+		return readStoredPriceRange(priceFilter.value);
 	}, [filterManager]);
 
 	const handleApply = useCallback(() => {
@@ -149,7 +146,7 @@ export function MobileFiltersModal({
 						<PriceRangeFilter
 							initialRange={currentPriceRange}
 							onChange={onUpdatePriceRange}
-							maxPrice={10000}
+							maxPrice={PRICE_FILTER_CEILING}
 						/>
 
 						{/* Attribute Filters - Only show if category is selected */}

@@ -29,6 +29,10 @@ export async function generateMetadata(props: {
 
 	return {
 		title: page?.title,
+		robots: {
+			index: false,
+			follow: false,
+		},
 		openGraph: {
 			title: page?.title,
 		},

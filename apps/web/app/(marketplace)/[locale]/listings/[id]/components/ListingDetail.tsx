@@ -10,11 +10,20 @@ import {
 import { Badge } from "@ui/components/badge";
 import { Button } from "@ui/components/button";
 import { Card } from "@ui/components/card";
-import { Separator } from "@ui/components/separator";
-import { Check, ChevronLeft, ChevronRight, Tag, User, X } from "lucide-react";
+import { Check, ChevronLeft, ChevronRight, Mail, MessageCircle, Phone, Tag, User, X } from "lucide-react";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
+import {
+	formatListingDate,
+	formatShekels,
+	isDateLikeAttribute,
+} from "@marketplace/listings/lib/format";
+
+const IDIPLOMAT_EMAIL = "info@i-diplomat.com";
+const IDIPLOMAT_PHONE_DISPLAY = "+972-3-562-2061";
+const IDIPLOMAT_PHONE_TEL = "+97235622061";
+const IDIPLOMAT_WHATSAPP = "https://wa.me/97235622061";
 
 interface ListingDetailProps {
 	listing: Listing;
@@ -164,6 +173,10 @@ function AttributeValueDisplay({ value }: { value: string }) {
 		return <X className="h-4 w-4 text-red-600" />;
 	}
 
+	if (isDateLikeAttribute(value)) {
+		return <span>{formatListingDate(value)}</span>;
+	}
+
 	return <span>{value}</span>;
 }
 
@@ -229,7 +242,6 @@ function CategoriesAttributes({
 	);
 }
 
-// Listing Info Section Component
 function ListingInfo({
 	title,
 	type,
@@ -239,10 +251,6 @@ function ListingInfo({
 	author,
 	address,
 	createdAt,
-	authorEmail,
-	authorPhone,
-	showContact,
-	setShowContact,
 }: {
 	title: string;
 	type: "rent" | "sale" | "free";
@@ -250,21 +258,16 @@ function ListingInfo({
 	rental_price?: number;
 	rental_period?: "hourly" | "daily" | "weekly" | "monthly";
 	author: string | undefined;
-	address: string; // City name
+	address: string;
 	createdAt: string | Date;
-	authorEmail: string | undefined;
-	authorPhone: string | undefined;
-	showContact: boolean;
-	setShowContact: (value: boolean) => void;
 }) {
 	const t = useTranslations("marketplace.listing");
-	// Helper function to format price display
 	const formatPrice = () => {
 		if (type === "free") {
 			return t("free");
 		}
 		if (type === "sale" && price) {
-			return `₪${price}`;
+			return formatShekels(price);
 		}
 		if (type === "rent" && rental_price && rental_period) {
 			const periodMap = {
@@ -273,20 +276,14 @@ function ListingInfo({
 				weekly: t("perWeek"),
 				monthly: t("perMonth"),
 			};
-			return `₪${rental_price} ${periodMap[rental_period]}`;
+			return `${formatShekels(rental_price)} ${periodMap[rental_period]}`;
 		}
 		return t("priceNotSet");
 	};
-	// Provide fallbacks for optional fields
-	const displayAuthor = author || t("listingOwner");
-	const displayEmail = authorEmail || t("notAvailable");
-	const displayPhone = authorPhone || t("notAvailable");
-
-	// Format date
-	const formattedDate =
-		typeof createdAt === "string"
-			? new Date(createdAt).toLocaleDateString()
-			: (createdAt as Date).toLocaleDateString();
+	const displayAuthor =
+		author && !/^[a-zA-Z0-9]{20,}$/.test(author)
+			? author
+			: t("listingOwner");
 
 	return (
 		<div className="space-y-8">
@@ -307,35 +304,49 @@ function ListingInfo({
 				</div>
 			</div>
 
-			<Button
-				onClick={() => setShowContact(!showContact)}
-				className="w-full"
-				size="lg"
-			>
-				{t("contactDetails")}
+			<Button asChild className="w-full" size="lg">
+				<a href={IDIPLOMAT_WHATSAPP} target="_blank" rel="noreferrer">
+					<MessageCircle className="mr-2 h-4 w-4" />
+					{t("whatsapp")}
+				</a>
 			</Button>
 
-			{showContact && (
-				<Card className="p-6 bg-muted/30 border">
-					<h3 className="font-semibold text-lg mb-2">
-						{t("contactInformation")}
-					</h3>
-					<div className="space-y-2">
-						<p className="flex items-center">
-							<span className="font-medium w-16">{t("email")}</span>
-							<span>{displayEmail}</span>
-						</p>
-						<p className="flex items-center">
-							<span className="font-medium w-16">{t("phone")}</span>
-							<span>{displayPhone}</span>
-						</p>
-					</div>
-				</Card>
-			)}
+			<div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+				<Button asChild variant="outline" size="lg">
+					<a href={`tel:${IDIPLOMAT_PHONE_TEL}`}>
+						<Phone className="mr-2 h-4 w-4" />
+						{t("call")}
+					</a>
+				</Button>
+				<Button asChild variant="outline" size="lg">
+					<a href={`mailto:${IDIPLOMAT_EMAIL}?subject=${encodeURIComponent(`Listing: ${title}`)}`}>
+						<Mail className="mr-2 h-4 w-4" />
+						{t("emailUs")}
+					</a>
+				</Button>
+			</div>
+
+			<Card className="p-6 bg-muted/30 border">
+				<h3 className="font-semibold text-lg mb-2">
+					{t("contactInformation")}
+				</h3>
+				<p className="text-sm text-muted-foreground mb-3">
+					{t("requestIntroHint")}
+				</p>
+				<p className="text-sm">
+					<a className="underline" href={`tel:${IDIPLOMAT_PHONE_TEL}`}>
+						{IDIPLOMAT_PHONE_DISPLAY}
+					</a>
+					{" · "}
+					<a className="underline" href={`mailto:${IDIPLOMAT_EMAIL}`}>
+						{IDIPLOMAT_EMAIL}
+					</a>
+				</p>
+			</Card>
 
 			<div className="pt-2">
 				<p className="text-sm text-muted-foreground">
-					{t("listedOn", { date: formattedDate })}
+					{t("listedOn", { date: formatListingDate(createdAt) })}
 				</p>
 			</div>
 		</div>
@@ -359,30 +370,8 @@ function DescriptionSection({ description }: { description: string }) {
 	);
 }
 
-// Contact Action Component
-function ContactAction({ onShowContact }: { onShowContact: () => void }) {
-	const t = useTranslations("marketplace.listing");
-	return (
-		<div className="text-center py-12 max-w-2xl mx-auto">
-			<h2 className="text-2xl font-semibold mb-6">
-				{t("contactDetails")}
-			</h2>
-			<div className="bg-muted/20 p-8 rounded-lg">
-				<Button
-					onClick={onShowContact}
-					size="lg"
-					className="w-full mb-6"
-				>
-					{t("showContactInfo")}
-				</Button>
-			</div>
-		</div>
-	);
-}
-
 export default function ListingDetail({ listing }: ListingDetailProps) {
 	const [selectedImage, setSelectedImage] = useState(0);
-	const [showContact, setShowContact] = useState(false);
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [modalImage, setModalImage] = useState(0);
 
@@ -437,13 +426,9 @@ export default function ListingDetail({ listing }: ListingDetailProps) {
 					price={listing.price}
 					rental_price={listing.rental_price}
 					rental_period={listing.rental_period}
-					author={"David"}
+					author={listing.author}
 					address={listing.address}
 					createdAt={listing.createdAt}
-					authorEmail={"davidgahnassia@gmail.com"}
-					authorPhone={"0586275174"}
-					showContact={showContact}
-					setShowContact={setShowContact}
 				/>
 			</div>
 
@@ -455,11 +440,6 @@ export default function ListingDetail({ listing }: ListingDetailProps) {
 
 			{/* Description Section */}
 			<DescriptionSection description={listing.description} />
-
-			<Separator className="my-12" />
-
-			{/* Contact Action */}
-			<ContactAction onShowContact={() => setShowContact(true)} />
 
 			{/* Image Modal */}
 			<ImageModal

@@ -29,10 +29,7 @@ export default async function MarketingLayout({ children, params }: any) {
 		<FumadocsI18nProvider locale={locale}>
 			<FumadocsRootProvider
 				search={{
-					enabled: true,
-					options: {
-						api: "/api/docs-search",
-					},
+					enabled: false,
 				}}
 			>
 				<NextIntlClientProvider locale={locale} messages={messages}>

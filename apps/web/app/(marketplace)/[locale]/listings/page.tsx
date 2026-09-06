@@ -21,17 +21,6 @@ import { useFilterManager } from "../../../../modules/marketplace/listings/hooks
 
 export default function ListingsPage() {
 	const t = useTranslations("marketplace.listings");
-	console.log(
-		"[ListingsPage] Component rendering:",
-		JSON.stringify(
-			{
-				timestamp: new Date().toISOString(),
-			},
-			null,
-			2,
-		),
-	);
-
 	const router = useLocaleRouter();
 	const searchParams = useSearchParams();
 	const searchQuery = searchParams.get("search");
@@ -40,22 +29,6 @@ export default function ListingsPage() {
 	const cityQuery = searchParams.get("city");
 	const minPriceQuery = searchParams.get("minPrice");
 	const maxPriceQuery = searchParams.get("maxPrice");
-
-	console.log(
-		"[ListingsPage] URL params:",
-		JSON.stringify(
-			{
-				searchQuery,
-				categorySlug,
-				subcategorySlug,
-				cityQuery,
-				minPriceQuery,
-				maxPriceQuery,
-			},
-			null,
-			2,
-		),
-	);
 
 	// Fetch category data if a category slug is present
 	const { data: categoryData } = useCategoryBySlug(categorySlug || undefined);
@@ -102,7 +75,7 @@ export default function ListingsPage() {
 						min: minPriceQuery ? Number.parseInt(minPriceQuery) : 0,
 						max: maxPriceQuery
 							? Number.parseInt(maxPriceQuery)
-							: 10000,
+							: 0,
 					}
 				: null,
 		sortOption: "newest",
@@ -200,9 +173,17 @@ export default function ListingsPage() {
 
 		// Update URL to reflect the price range change
 		const params = new URLSearchParams(searchParams.toString());
-		if (range[0] > 0 || range[1] < 10000) {
-			params.set("minPrice", range[0].toString());
-			params.set("maxPrice", range[1].toString());
+		if (range[0] > 0 || range[1] > 0) {
+			if (range[0] > 0) {
+				params.set("minPrice", range[0].toString());
+			} else {
+				params.delete("minPrice");
+			}
+			if (range[1] > 0) {
+				params.set("maxPrice", range[1].toString());
+			} else {
+				params.delete("maxPrice");
+			}
 		} else {
 			params.delete("minPrice");
 			params.delete("maxPrice");
@@ -264,7 +245,6 @@ export default function ListingsPage() {
 								onUpdateAttributeFilter={updateAttributeFilter}
 								onUpdateCategory={handleCategorySelect}
 								onUpdateSubcategory={handleSubcategorySelect}
-								onUpdateSearch={handleSearchUpdate}
 								onUpdateAddress={handleCityUpdate}
 								onUpdatePriceRange={handlePriceRangeUpdate}
 								onClearFilters={clearAllFilters}

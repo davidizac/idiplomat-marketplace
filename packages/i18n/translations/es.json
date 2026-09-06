@@ -273,12 +273,12 @@
 			"title": "Cómo funciona",
 			"description": "Una plataforma sencilla que conecta diplomáticos en Israel que quieren comprar y vender artículos",
 			"forDiplomatsOnly": "Solo para diplomáticos",
-			"forDiplomatsOnlyDesc": "i-Diplomat Marketplace es exclusivamente para la comunidad diplomática en Israel. Todos los miembros son verificados para garantizar un entorno de confianza.",
+			"forDiplomatsOnlyDesc": "i-Diplomat Marketplace está pensado para la comunidad diplomática en Israel: personal de embajadas, diplomáticos y sus familias.",
 			"directConnections": "Conexiones directas",
 			"directConnectionsDesc": "A diferencia de los mercados regulares, simplemente te ayudamos a encontrar y conectar con otros diplomáticos. Todas las comunicaciones y acuerdos se realizan directamente entre los miembros.",
 			"steps": {
 				"signUp": "Registrarse",
-				"signUpDesc": "Crea tu cuenta con tus credenciales diplomáticas",
+				"signUpDesc": "Crea una cuenta con tu correo electrónico",
 				"postItems": "Publicar artículos",
 				"postItemsDesc": "Publica lo que quieras vender con fotos y detalles",
 				"browseListings": "Explorar anuncios",
@@ -294,11 +294,11 @@
 			"contactSupport": "Contactar soporte",
 			"items": {
 				"q1": "¿Quién puede usar i-Diplomat Marketplace?",
-				"a1": "i-Diplomat Marketplace está disponible exclusivamente para miembros verificados de la comunidad diplomática en Israel, incluyendo diplomáticos, personal de embajadas y sus familias.",
+				"a1": "i-Diplomat Marketplace está pensado para diplomáticos, personal de embajadas y sus familias en Israel.",
 				"q2": "¿Hay algún costo para publicar artículos en el mercado?",
-				"a2": "No, publicar artículos en i-Diplomat Marketplace es completamente gratuito para todo el personal diplomático verificado.",
-				"q3": "¿Cómo verifico mi estatus diplomático?",
-				"a3": "Durante el registro, se te pedirá que proporciones tus credenciales diplomáticas que nuestro equipo verificará. Esto incluye tu identificación diplomática, información de la embajada y datos de contacto.",
+				"a2": "No. Publicar anuncios es gratis.",
+				"q3": "¿Necesito credenciales diplomáticas para unirme?",
+				"a3": "Crea una cuenta con tu correo y una contraseña. El marketplace está pensado para diplomáticos, personal de embajadas y sus familias en Israel. Si necesitas ayuda para acceder, contacta con soporte.",
 				"q4": "¿Puedo vender artículos libres de impuestos?",
 				"a4": "Sí, como diplomático, puedes vender artículos libres de impuestos a otros diplomáticos siguiendo las regulaciones establecidas por el Ministerio de Asuntos Exteriores de Israel sobre privilegios diplomáticos.",
 				"q5": "¿Cómo se manejan los pagos?",
@@ -332,7 +332,10 @@
 			"iframeTitle": "Suscripción al boletín"
 		},
 		"footer": {
-			"blog": "Blog"
+			"blog": "Boletín",
+			"privacyPolicy": "Política de privacidad",
+			"terms": "Términos",
+			"contact": "Contacto"
 		},
 		"notFound": {
 			"title": "Página no encontrada",
@@ -437,7 +440,11 @@
 			"listedOn": "Publicado el {date}",
 			"description": "Descripción",
 			"contactAuthor": "Contactar al autor del anuncio",
-			"showContactInfo": "Mostrar información de contacto",
+			"showContactInfo": "Pedir a i-Diplomat que te ponga en contacto",
+			"requestIntroHint": "El contacto con el vendedor se gestiona a través de i-Diplomat. Te presentaremos al anunciante.",
+			"call": "Llamar",
+			"whatsapp": "WhatsApp",
+			"emailUs": "Correo",
 			"contactDisclaimer": "Al contactar al vendedor, por favor mencione que encontró este anuncio en i-Diplomat Marketplace.",
 			"listingImage": "Imagen del anuncio",
 			"imageCounter": "{current} de {total}"

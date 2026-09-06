@@ -1,5 +1,5 @@
 "use client";
-import { getStrapiImageUrl, listingService } from "@repo/cms";
+import { getStrapiImageUrl } from "@repo/cms";
 import type { Listing } from "@repo/cms";
 import { Badge } from "@ui/components/badge";
 import { Button } from "@ui/components/button";
@@ -35,39 +35,12 @@ export default function OrganizationStart({
 	const [deletingId, setDeletingId] = useState<string | null>(null);
 
 	useEffect(() => {
-		fetchListings();
-	}, []);
+		setListings([]);
+		setLoading(false);
+	}, [organizationId]);
 
-	const fetchListings = async () => {
-		try {
-			setLoading(true);
-			// TODO: Filter by organizationId when backend supports it
-			const response = await listingService.getListings({
-				pageSize: 100, // Get all organization listings
-			});
-			setListings(response.data);
-		} catch (error) {
-			console.error("Failed to fetch listings:", error);
-		} finally {
-			setLoading(false);
-		}
-	};
-
-	const handleDelete = async (documentId: string) => {
-		if (!confirm(t("listings.confirmDelete"))) {
-			return;
-		}
-
-		try {
-			setDeletingId(documentId);
-			await listingService.deleteListing(documentId);
-			await fetchListings();
-		} catch (error) {
-			console.error("Failed to delete listing:", error);
-			alert(t("listings.deleteFailed"));
-		} finally {
-			setDeletingId(null);
-		}
+	const handleDelete = async (_documentId: string) => {
+		return;
 	};
 
 	const getStatusBadge = (status: string) => {

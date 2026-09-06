@@ -1,6 +1,6 @@
 "use client";
 
-import { useCategories } from "@marketplace/api";
+import { useCategories, useListings } from "@marketplace/api";
 import type { Category } from "@repo/cms";
 import { Button } from "@ui/components/button";
 import {
@@ -23,6 +23,11 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
+import { useMemo } from "react";
+import {
+	categoriesWithListings,
+	occupiedCategorySlugs,
+} from "../lib/categories";
 
 interface MobileCategoryModalProps {
 	isOpen: boolean;
@@ -60,10 +65,32 @@ export function MobileCategoryModal({
 	const { data, isLoading } = useCategories({
 		pageSize: 100,
 	});
+	const {
+		data: listingsData,
+		isLoading: listingsLoading,
+		isError: listingsError,
+	} = useListings({ pageSize: 100 });
 
-	// Filter root categories (those without a parent)
-	const rootCategories =
-		data?.data?.filter((category: Category) => !category.parent) || [];
+	const rootCategories = useMemo(() => {
+		const roots =
+			data?.data?.filter((category: Category) => !category.parent) || [];
+
+		if (listingsLoading || listingsError) {
+			return roots;
+		}
+
+		return categoriesWithListings(
+			roots,
+			occupiedCategorySlugs(listingsData?.data ?? []),
+			selectedCategory?.slug,
+		);
+	}, [
+		data?.data,
+		listingsData?.data,
+		listingsError,
+		listingsLoading,
+		selectedCategory?.slug,
+	]);
 
 	const handleCategorySelect = (category: Category | null) => {
 		onSelectCategory(category);

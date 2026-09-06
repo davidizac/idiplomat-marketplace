@@ -19,6 +19,7 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { isListingOwner } from "@marketplace/listings/lib/ownership";
 
 interface UserStartProps {
 	userId?: string;
@@ -32,18 +33,26 @@ export default function UserStart({ userId }: UserStartProps) {
 
 	useEffect(() => {
 		fetchListings();
-	}, []);
+	}, [userId]);
 
 	const fetchListings = async () => {
+		if (!userId) {
+			setListings([]);
+			setLoading(false);
+			return;
+		}
+
 		try {
 			setLoading(true);
-			console.log("userId", userId);
-			// TODO: Filter by userId when backend supports it
 			const response = await listingService.getListings({
 				author: userId,
-				pageSize: 100, // Get all user listings
+				pageSize: 100,
 			});
-			setListings(response.data);
+			setListings(
+				response.data.filter((listing) =>
+					isListingOwner(listing, userId),
+				),
+			);
 		} catch (error) {
 			console.error("Failed to fetch listings:", error);
 		} finally {
@@ -52,6 +61,12 @@ export default function UserStart({ userId }: UserStartProps) {
 	};
 
 	const handleDelete = async (documentId: string) => {
+		const listing = listings.find((item) => item.documentId === documentId);
+
+		if (!isListingOwner(listing ?? {}, userId)) {
+			return;
+		}
+
 		if (!confirm("Are you sure you want to delete this listing?")) {
 			return;
 		}

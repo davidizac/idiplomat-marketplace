@@ -94,7 +94,7 @@ export function NavBar() {
 							className="shrink-0"
 							asChild
 						>
-							<NextLink href="https://i-diplomat.com">
+							<NextLink href="https://www.i-diplomat.com">
 								<Home className="h-5 w-5" />
 							</NextLink>
 						</Button>

@@ -11,28 +11,27 @@ export function Footer() {
 				<div>
 					<Logo className="opacity-70 grayscale" />
 					<p className="mt-3 text-sm opacity-70">
-						© {new Date().getFullYear()} {config.appName}. .
+						© {new Date().getFullYear()} {config.appName}
 					</p>
 				</div>
 
 				<div className="flex flex-col gap-2">
-					<LocaleLink
-						href="https://blog.i-diplomat.com"
+					<a
+						href="https://www.i-diplomat.com/blog"
 						className="block"
 					>
 						{t("blog")}
+					</a>
+					<LocaleLink href="/legal/privacy-policy" className="block">
+						{t("privacyPolicy")}
+					</LocaleLink>
+					<LocaleLink href="/legal/terms" className="block">
+						{t("terms")}
+					</LocaleLink>
+					<LocaleLink href="/contact" className="block">
+						{t("contact")}
 					</LocaleLink>
 				</div>
-				{/* 
-				<div className="flex flex-col gap-2">
-					<LocaleLink href="/legal/privacy-policy" className="block">
-						Privacy policy
-					</LocaleLink>
-
-					<LocaleLink href="/legal/terms" className="block">
-						Terms and conditions
-					</LocaleLink>
-				</div> */}
 			</div>
 		</footer>
 	);

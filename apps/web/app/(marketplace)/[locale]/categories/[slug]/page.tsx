@@ -3,8 +3,8 @@ import { notFound } from "next/navigation";
 import { loadCategoryBySlug } from "../loader";
 
 export default async function CategoryPage({ params }: any) {
-	// Load category by slug
-	const category = await loadCategoryBySlug(params.slug);
+	const { locale, slug } = await params;
+	const category = await loadCategoryBySlug(slug);
 
 	// Handle category not found
 	if (!category) {
@@ -14,7 +14,6 @@ export default async function CategoryPage({ params }: any) {
 	// Load listings for this category
 	const { data: listings } = await getListings({
 		subCategories: [category.slug],
-		author: "1",
 		page: 1,
 		pageSize: 12,
 	});
@@ -37,7 +36,7 @@ export default async function CategoryPage({ params }: any) {
 							Category:{" "}
 						</span>
 						<a
-							href={`/${params.locale}/categories/${category.parent.slug}`}
+							href={`/${locale}/categories/${category.parent.slug}`}
 							className="text-primary hover:underline"
 						>
 							{category.parent.name}
@@ -68,7 +67,7 @@ export default async function CategoryPage({ params }: any) {
 								className="border rounded-lg overflow-hidden hover:shadow-md transition-shadow"
 							>
 								<a
-									href={`/${params.locale}/listings/${listing.id}`}
+									href={`/${locale}/listings/${listing.documentId}`}
 								>
 									{/* Listing image */}
 									<div className="aspect-square relative bg-muted">

@@ -12,6 +12,7 @@ import { Skeleton } from "@ui/components/skeleton";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
+import { formatShekels } from "../lib/format";
 import { SortFilter, type SortOption } from "./filters/SortFilter";
 import { SubcategoryChips } from "./filters/SubcategoryChips";
 
@@ -43,7 +44,7 @@ function ListingCard({
 			return t("free");
 		}
 		if (type === "sale" && price) {
-			return `₪${price}`;
+			return formatShekels(price);
 		}
 		if (type === "rent" && rental_price && rental_period) {
 			const periodMap = {
@@ -52,7 +53,7 @@ function ListingCard({
 				weekly: "week",
 				monthly: "month",
 			};
-			return `₪${rental_price}/${periodMap[rental_period]}`;
+			return `${formatShekels(rental_price)}/${periodMap[rental_period]}`;
 		}
 		return t("priceNotSet");
 	};

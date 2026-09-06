@@ -4,6 +4,11 @@ import { Input } from "@ui/components/input";
 import { Label } from "@ui/components/label";
 import { useTranslations } from "next-intl";
 import { useCallback, useEffect, useRef, useState } from "react";
+import {
+	PRICE_FILTER_CEILING,
+	UNSET_PRICE_RANGE,
+	displayPriceBound,
+} from "../../lib/format";
 
 interface PriceRangeFilterProps {
 	onChange: (range: [number, number]) => void;
@@ -16,84 +21,68 @@ interface PriceRangeFilterProps {
 
 export function PriceRangeFilter({
 	onChange,
-	initialRange = [0, 10000],
-	maxPrice = 10000,
+	initialRange = UNSET_PRICE_RANGE,
+	maxPrice = PRICE_FILTER_CEILING,
 	minPrice = 0,
 	currency = "₪",
 	label,
 }: PriceRangeFilterProps) {
 	const t = useTranslations("marketplace.filters");
 	const resolvedLabel = label ?? t("priceRange");
-	// Track if this is the first render
 	const isInitialMount = useRef(true);
-	// Keep the ref updated with the latest callback to avoid dependency issues
 	const onChangeRef = useRef(onChange);
-
-	// Store the last committed values to detect external changes
 	const lastCommittedRef = useRef<[number, number]>(initialRange);
 
-	// Store input values as strings to allow partial input
-	const [minInput, setMinInput] = useState<string>(String(initialRange[0]));
-	const [maxInput, setMaxInput] = useState<string>(String(initialRange[1]));
+	const [minInput, setMinInput] = useState<string>(
+		displayPriceBound(initialRange[0]),
+	);
+	const [maxInput, setMaxInput] = useState<string>(
+		displayPriceBound(initialRange[1]),
+	);
 
-	// Keep the ref updated
 	useEffect(() => {
 		onChangeRef.current = onChange;
 	}, [onChange]);
 
-	// Only update local state when initialRange changes from an external source
-	// (not from our own onChange callback)
 	useEffect(() => {
 		const [newMin, newMax] = initialRange;
 		const [lastMin, lastMax] = lastCommittedRef.current;
 
-		// Only update if the values have changed externally
 		if (newMin !== lastMin || newMax !== lastMax) {
-			setMinInput(String(newMin));
-			setMaxInput(String(newMax));
+			setMinInput(displayPriceBound(newMin));
+			setMaxInput(displayPriceBound(newMax));
 			lastCommittedRef.current = initialRange;
 		}
 	}, [initialRange]);
 
-	// Debounced onChange effect
 	useEffect(() => {
 		if (isInitialMount.current) {
 			isInitialMount.current = false;
 			return;
 		}
 
-		// Parse the current input values
-		const minValue = minInput === "" ? minPrice : Number.parseInt(minInput);
-		const maxValue = maxInput === "" ? maxPrice : Number.parseInt(maxInput);
+		const minValue = minInput === "" ? 0 : Number.parseInt(minInput, 10);
+		const maxValue = maxInput === "" ? 0 : Number.parseInt(maxInput, 10);
 
-		// Only call onChange if both values are valid numbers
-		if (!Number.isNaN(minValue) && !Number.isNaN(maxValue)) {
-			// Debounce the onChange call
-			const timer = setTimeout(() => {
-				// Constrain values before sending
-				const constrainedMin = Math.max(
-					minPrice,
-					Math.min(minValue, maxValue),
-				);
-				const constrainedMax = Math.min(
-					maxPrice,
-					Math.max(maxValue, minValue),
-				);
-
-				// Update the last committed values
-				lastCommittedRef.current = [constrainedMin, constrainedMax];
-
-				onChangeRef.current([constrainedMin, constrainedMax]);
-			}, 500);
-
-			return () => clearTimeout(timer);
+		if (Number.isNaN(minValue) || Number.isNaN(maxValue)) {
+			return;
 		}
+
+		const timer = setTimeout(() => {
+			const constrainedMin = Math.max(minPrice, minValue);
+			const constrainedMax =
+				maxValue > 0 ? Math.min(maxPrice, maxValue) : 0;
+
+			lastCommittedRef.current = [constrainedMin, constrainedMax];
+			onChangeRef.current([constrainedMin, constrainedMax]);
+		}, 500);
+
+		return () => clearTimeout(timer);
 	}, [minInput, maxInput, minPrice, maxPrice]);
 
 	const handleMinChange = useCallback(
 		(e: React.ChangeEvent<HTMLInputElement>) => {
 			const value = e.target.value;
-			// Allow empty string or valid number input
 			if (value === "" || /^\d+$/.test(value)) {
 				setMinInput(value);
 			}
@@ -104,7 +93,6 @@ export function PriceRangeFilter({
 	const handleMaxChange = useCallback(
 		(e: React.ChangeEvent<HTMLInputElement>) => {
 			const value = e.target.value;
-			// Allow empty string or valid number input
 			if (value === "" || /^\d+$/.test(value)) {
 				setMaxInput(value);
 			}
@@ -113,31 +101,45 @@ export function PriceRangeFilter({
 	);
 
 	const handleMinBlur = useCallback(() => {
-		// On blur, ensure we have a valid value
-		const value = minInput === "" ? minPrice : Number.parseInt(minInput);
-		if (!Number.isNaN(value)) {
-			const constrainedValue = Math.max(
-				minPrice,
-				Math.min(value, Number.parseInt(maxInput) || maxPrice),
-			);
-			setMinInput(String(constrainedValue));
-		} else {
-			setMinInput(String(minPrice));
+		if (minInput === "") {
+			setMinInput("");
+			return;
 		}
-	}, [minInput, maxInput, minPrice, maxPrice]);
+
+		const value = Number.parseInt(minInput, 10);
+		if (Number.isNaN(value)) {
+			setMinInput("");
+			return;
+		}
+
+		const parsedMax = Number.parseInt(maxInput, 10);
+		const constrainedValue = Math.max(
+			minPrice,
+			Number.isNaN(parsedMax) || parsedMax <= 0
+				? value
+				: Math.min(value, parsedMax),
+		);
+		setMinInput(String(constrainedValue));
+	}, [minInput, maxInput, minPrice]);
 
 	const handleMaxBlur = useCallback(() => {
-		// On blur, ensure we have a valid value
-		const value = maxInput === "" ? maxPrice : Number.parseInt(maxInput);
-		if (!Number.isNaN(value)) {
-			const constrainedValue = Math.min(
-				maxPrice,
-				Math.max(value, Number.parseInt(minInput) || minPrice),
-			);
-			setMaxInput(String(constrainedValue));
-		} else {
-			setMaxInput(String(maxPrice));
+		if (maxInput === "") {
+			setMaxInput("");
+			return;
 		}
+
+		const value = Number.parseInt(maxInput, 10);
+		if (Number.isNaN(value)) {
+			setMaxInput("");
+			return;
+		}
+
+		const parsedMin = Number.parseInt(minInput, 10);
+		const constrainedValue = Math.min(
+			maxPrice,
+			Math.max(value, Number.isNaN(parsedMin) ? minPrice : parsedMin),
+		);
+		setMaxInput(String(constrainedValue));
 	}, [minInput, maxInput, minPrice, maxPrice]);
 
 	return (
